@@ -1,10 +1,15 @@
 .cardList{
-	margin: 20px;
+	margin: 10px;
+	margin-right: 0px;
 	background-color: rgb(228, 225, 225);
 	width: 245px;
 	table-layout: fixed;
 	height: auto;
 	border-radius: 4px;
+}
+
+td{
+	vertical-align: top;
 }
 
 th{
