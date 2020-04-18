@@ -1,0 +1,20 @@
+.cardList{
+	background-color: rgb(228, 225, 225);
+	width: 245px;
+	table-layout: fixed;
+	height: auto;
+}
+
+th{
+	font-size: 0.9rem;
+	padding-top: 10px;
+	padding-left: 10px;
+}
+
+.add-card-text{
+	padding:10px;
+}
+
+.open-card:hover{
+	background-color: rgba(105, 105, 105, 0.349);
+}

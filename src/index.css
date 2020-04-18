@@ -11,3 +11,59 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.card{
+	width: 225px;
+	margin: 8px;
+}
+
+.card-body{
+	padding: 0.5rem;
+}
+
+.btn-add-card{
+	margin-left: 10px;
+	margin-bottom: 5px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.btn-close-add-card{
+	margin-bottom: 5px;
+	padding: 4px;
+	padding-left: 10px;
+	font-size: 1.3rem;
+	font-weight: 900;
+	background-color: rgba(255, 255, 255, 0);
+	border: rgba(255, 255, 255, 0);
+	color: rgba(61, 61, 61, 0.6);
+}
+
+.btn-close-add-card:hover{
+	background-color: rgba(255, 255, 255, 0);
+	color: rgba(61, 61, 61, 1);
+}
+
+.btn-add-another-card{
+	margin: 5px;
+	margin-bottom: 11px;
+	padding: 0;
+	padding-right: 20px;
+}
+
+.btn-add-another-card:hover{
+	text-decoration: none;
+	background-color: rgba(61, 61, 61, 0.31);
+}
+
+.textarea-add-card{
+	margin-top: -20px;
+	resize: none;
+	min-height:30px;
+	height: unset;
+	padding: 2px;
+	border: none;
+}
