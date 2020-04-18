@@ -7,18 +7,19 @@ const AddCard = ({ cards, addCard, changeShowAddAnother }) => {
 	const textArea = document.querySelector('textarea')
 	const textRowCount = textArea ? textArea.value.split("\n").length : 0
 	let textRowCountFinal = 0
-	if(textArea && textArea.value.match(/(.|[\r\n]){1,26}/g)){
+	if (textArea && textArea.value.match(/(.|[\r\n]){1,26}/g)) {
 		textRowCountFinal = textRowCount + textArea.value.match(/(.|[\r\n]){1,26}/g).length
 	}
-	const rows = textRowCountFinal-1
+	const rows = textRowCountFinal - 1
 	console.log(rows)
 	const createCard = (event) => {
 		event.preventDefault()
-		const newCard = {
-			text: cardText
+		if (cardText.length > 0) {
+			const newCard = {
+				text: cardText
+			}
+			addCard(newCard)
 		}
-		console.log(newCard.text)
-		addCard(newCard)
 	}
 
 	const handleTextChange = (event) => {

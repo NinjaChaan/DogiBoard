@@ -1,8 +1,10 @@
 .cardList{
+	margin: 20px;
 	background-color: rgb(228, 225, 225);
 	width: 245px;
 	table-layout: fixed;
 	height: auto;
+	border-radius: 4px;
 }
 
 th{
