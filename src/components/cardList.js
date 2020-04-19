@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+import {Droppable, Draggable } from 'react-beautiful-dnd'
 //import Card from './card'
 import CardDraggable from './cardDraggable'
 import Button from 'react-bootstrap/Button'
@@ -10,7 +10,7 @@ const CardList = ({ cards, innerRef, placeholder, showingAddAnother, changeShowA
 	return (
 		<tbody ref={innerRef}>
 			{cards.map((card, i) =>
-				<CardDraggable key={i} text={card.text} i={i} id={card.id} />
+				<CardDraggable key={card.id} text={card.text} i={i} id={card.id} />
 			)}
 			{placeholder}
 			<tr>
@@ -27,7 +27,7 @@ const CardList = ({ cards, innerRef, placeholder, showingAddAnother, changeShowA
 	)
 }
 
-const CardListContainer = ({ listTitle, cards, index, setCards }) => {
+const CardListContainer = ({ listTitle, cards, index, setCards, id, dragging}) => {
 	const [showingAddAnother, setShowingAddAnother] = useState(true)
 	//const [cards, setCards] = useState(cardList ?? [])
 	const [title, setTitle] = useState(listTitle)
@@ -44,7 +44,7 @@ const CardListContainer = ({ listTitle, cards, index, setCards }) => {
 	const handleKeyPress = (event) => {
 		if (event.key === 'Enter') {
 			event.preventDefault();
-			document.getElementById('listTitle').blur()
+			document.getElementById('listTitle'+id.toString()).blur()
 		}
 	}
 
@@ -56,46 +56,78 @@ const CardListContainer = ({ listTitle, cards, index, setCards }) => {
 		setTitle(event.target.value)
 	}
 
+	const focusTitle = () => {
+		const title = document.getElementById('listTitle'+id.toString())
+		title.focus()
+		title.value=''
+		title.value={title}
+		setListTitleClass('textarea-list-title-editing')
+	}
+
+	const unFocusTitle = () => {
+		document.getElementById('listTitle'+id.toString()).blur()
+		setListTitleClass('textarea-list-title')
+	}
+
+	if(dragging){
+		unFocusTitle()
+	}
+
 	return (
-		<td>
-			<table className='cardList'>
-				<thead>
-					<tr>
-						<td>
-							<textarea
-								value={title}
-								onChange={handleTextChange}
-								id='listTitle'
-								onBlur={() => setListTitleClass('textarea-list-title')}
-								className={listTitleClass}
-								maxLength={25}
-								spellCheck='false'
-								onKeyPress={handleKeyPress}
-								onClick={() => setListTitleClass('textarea-list-title-editing')}
-							>
-							</textarea>
-						</td>
-					</tr>
-				</thead>
+		<Draggable draggableId={'list-'+id.toString()} index={index}>
+			{(provided) => (
+				<td 
+				ref={provided.innerRef}
+					{...provided.draggableProps}>
+					
+					<table className='cardList'>
+						<thead >
+							<tr>
+								<td>
+									<div 
+									className='dragHandle' 
+									{...provided.dragHandleProps}
+									onClick={()=> focusTitle()}
+									onMouseDown={()=> unFocusTitle()}
+									>
 
-					{
-						<Droppable droppableId={index.toString()}>
-							{provided => (
-								<CardList cards={cards}
-									showingAddAnother={showingAddAnother}
-									changeShowAddAnother={changeShowAddAnother}
-									createCard={createCard}
-									innerRef={provided.innerRef}
-									placeholder={provided.placeholder}
-									{...provided.droppableProps}>
+									</div>
+									<textarea
+									
+										value={title}
+										onChange={handleTextChange}
+										id={'listTitle'+id.toString()}
+										onBlur={() => setListTitleClass('textarea-list-title')}
+										className={listTitleClass}
+										maxLength={25}
+										spellCheck='false'
+										onKeyPress={handleKeyPress}
+										onClick={() => focusTitle}
+									>
+									</textarea>
+								</td>
+							</tr>
+						</thead>
+
+						{
+							<Droppable droppableId={index.toString()} type="card">
+								{provided => (
+									<CardList cards={cards}
+										showingAddAnother={showingAddAnother}
+										changeShowAddAnother={changeShowAddAnother}
+										createCard={createCard}
+										innerRef={provided.innerRef}
+										placeholder={provided.placeholder}
+										{...provided.droppableProps}>
 
 
-								</CardList>
-							)}
-						</Droppable>
-					}
-			</table>
-		</td >
+									</CardList>
+								)}
+							</Droppable>
+						}
+					</table>
+				</td >
+			)}</Draggable>
 	)
 }
 

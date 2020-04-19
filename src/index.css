@@ -140,3 +140,11 @@ code {
 	border-radius: 4px;
 	background-color: rgb(255, 255, 255);
 }
+
+.dragHandle{
+	cursor: pointer;
+	position: relative;
+	height: 40px;
+	width: auto;
+	margin-bottom: -40px;
+}
