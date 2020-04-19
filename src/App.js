@@ -6,12 +6,7 @@ const App = () => {
 	return (
 		<div className="App">
 			<header className="App-header">
-				<table>
-					<tbody>
-						<ListTable />
-					</tbody>
-				</table>
-
+				<ListTable />
 			</header>
 		</div>
 	)

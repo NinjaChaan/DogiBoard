@@ -35,7 +35,7 @@ const AddItem = ({ cards, addItem, changeShowAddAnother, buttonText, defaultText
 
 	const handleSubmit = (event) => {
 		event.preventDefault()
-		addItem()
+		createItem()
 	}
 
 	const handleTextChange = (event) => {

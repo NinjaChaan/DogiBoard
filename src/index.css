@@ -77,9 +77,10 @@ code {
 
 .btn-add-another-list{
 	background-color: rgb(228, 225, 225);
-	width: 245px;
+	width: 240px;
 	margin-left: 10px;
 	margin-top: 10px;
+	margin-right: 5px;
 	padding: 5px;
 	padding-right: 92px;
 }

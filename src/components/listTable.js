@@ -123,43 +123,62 @@ const ListTable = ({ addList }) => {
 		}
 	}
 
+	function downHandler({ key }) {
+		console.log(key)
+		if (key === 'F1') {
+			debugger;
+		}
+	}
+
+	useEffect(() => {
+		window.addEventListener('keydown', downHandler);
+		return () => {
+			window.removeEventListener('keydown', downHandler);
+		};
+
+	}, []); // Empty array ensures that effect is only run on mount and unmount
+
 	return (
-		<DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
-			<Droppable droppableId={'main'} direction="horizontal" type="list">
-				{provided => (
-					<tr
-						ref={provided.innerRef}
-						{...provided.droppableProps}>
-						{
-							cardLists.map((list, i) =>
-								<CardListContainer key={list.id}
-									listTitle={list.text}
-									cards={list.cards}
-									index={i}
-									id={list.id}
-									setCards={(newcards) => updatecards(newcards, i)} />
-							)
-						}
+		<table style={{ width: (cardLists.length + 1) * 257 }}>
+			<tbody>
+				<DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
+					<Droppable droppableId={'main'} direction="horizontal" type="list">
+						{provided => (
+							<tr
+								ref={provided.innerRef}
+								{...provided.droppableProps}>
+								{
+									cardLists.map((list, i) =>
+										<CardListContainer key={list.id}
+											listTitle={list.text}
+											cards={list.cards}
+											index={i}
+											id={list.id}
+											setCards={(newcards) => updatecards(newcards, i)} />
+									)
+								}
 
-						{provided.placeholder}
-						<td>
-							{showingAddAnother
-								? <Button vertical-align={'baseline'} top='0' className='btn-add-another-list' variant='link' onClick={() => changeShowAddAnother(false)}>
-									<font size='4'>＋</font>Add another list
+								{provided.placeholder}
+								<td>
+									{showingAddAnother
+										? <Button vertical-align={'baseline'} top='0' className='btn-add-another-list' variant='link' onClick={() => changeShowAddAnother(false)}>
+											<font size='4'>＋</font>Add another list
 				 			</Button>
-								: <AddItem
-									addItem={createList}
-									buttonText='Add list'
-									defaultText='Enter a title for this list'
-									classType='list'
-									changeShowAddAnother={changeShowAddAnother} />
-							}
-						</td>
+										: <AddItem
+											addItem={createList}
+											buttonText='Add list'
+											defaultText='Enter a title for this list'
+											classType='list'
+											changeShowAddAnother={changeShowAddAnother} />
+									}
+								</td>
 
-					</tr>
-				)}
-			</Droppable>
-		</DragDropContext>
+							</tr>
+						)}
+					</Droppable>
+				</DragDropContext>
+			</tbody>
+		</table>
 	)
 }
 
