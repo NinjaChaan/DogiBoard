@@ -13,8 +13,7 @@ const AddItem = ({ cards, addItem, changeShowAddAnother, buttonText, defaultText
 	const rows = textRowCountFinal - 1
 	console.log(rows)
 
-	const createItem = (event) => {
-		event.preventDefault()
+	const createItem = () =>{
 		if (cardText.length > 0) {
 			let newCard = {}
 			if (classType === 'card') {
@@ -25,12 +24,18 @@ const AddItem = ({ cards, addItem, changeShowAddAnother, buttonText, defaultText
 			} else {
 				newCard = {
 					text: cardText,
-					cards: []
+					cards: [],
+					id: Math.floor(Math.random() * 999999)
 				}
 			}
 			addItem(newCard)
 			setCardText('')
 		}
+	}
+
+	const handleSubmit = (event) => {
+		event.preventDefault()
+		addItem()
 	}
 
 	const handleTextChange = (event) => {
@@ -45,13 +50,13 @@ const AddItem = ({ cards, addItem, changeShowAddAnother, buttonText, defaultText
 		if (event.key === 'Enter') {
 			event.preventDefault();
 			//document.getElementById('listTitle').blur()
-			createItem(event)
+			handleSubmit(event)
 		}
 	}
 
 	return (
 		<div className={`btn-add-another-${classType}`} >
-			<form onSubmit={createItem}>
+			<form onSubmit={handleSubmit}>
 				<div>
 					<br />
 					<div className='add-card-text'>
@@ -65,6 +70,7 @@ const AddItem = ({ cards, addItem, changeShowAddAnother, buttonText, defaultText
 							value={cardText}
 							onKeyPress={handleKeyPress}
 							onChange={handleTextChange}
+							onBlur = {()=>{createItem()}}							
 						/>
 					</div>
 				</div>
