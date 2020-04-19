@@ -23,6 +23,10 @@ code {
 	padding: 0.5rem;
 }
 
+.cardBody:hover{
+	cursor: pointer;
+}
+
 .div-add-card, .div-add-list{
 	margin-top: -5px;
 	margin-left: 1px;
@@ -126,12 +130,18 @@ code {
 	resize: none;
 	overflow: hidden;
 	overflow-wrap: break-word;
+	cursor: pointer;
+}
+
+.textarea-add-list:hover{
+	cursor: pointer;
 }
 
 .textarea-list-title{
 	padding-left: 5px;
 	background-color: rgba(255, 255, 255, 0);
 	border: none;
+	cursor: pointer;
 }
 
 .textarea-list-title-editing{
@@ -143,9 +153,24 @@ code {
 }
 
 .dragHandle{
-	cursor: pointer;
+	cursor: pointer !important;
 	position: relative;
 	height: 40px;
 	width: auto;
 	margin-bottom: -40px;
+}
+
+.window-overlay{
+	align-items: flex-start;
+	background-color: rgba(0,0,0,.64);
+	display: none;
+	height: 100%;
+	justify-content: center;
+	left: 0;
+	overflow-y: auto;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 20;
+	display: none;
 }

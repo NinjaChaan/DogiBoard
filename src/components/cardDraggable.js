@@ -3,6 +3,11 @@ import Card from 'react-bootstrap/Card'
 import { Draggable } from 'react-beautiful-dnd'
 
 const CardDraggable = ({ text, i, id }) => {
+
+	const openCardEditWindow = () => {
+		document.getElementById("window-overlay").style.display = 'flex'
+	}
+
 	return (
 		<Draggable draggableId={id.toString()} index={i}>
 			{(provided) => (
@@ -10,7 +15,8 @@ const CardDraggable = ({ text, i, id }) => {
 					{...provided.draggableProps}
 					{...provided.dragHandleProps}>
 					<td>
-						<Card body padding={'30px'}
+						<Card className='cardBody' body padding={'30px'}
+							onClick={openCardEditWindow}
 						>
 							<Card.Text>
 								{text}

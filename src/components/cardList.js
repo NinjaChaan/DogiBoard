@@ -76,7 +76,7 @@ const CardListContainer = ({ listTitle, cards, index, setCards, id, dragging}) =
 	return (
 		<Draggable draggableId={'list-'+id.toString()} index={index}>
 			{(provided) => (
-				<td 
+				<td className='draggableList'
 				ref={provided.innerRef}
 					{...provided.draggableProps}>
 					

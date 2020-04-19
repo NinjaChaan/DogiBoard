@@ -124,7 +124,6 @@ const ListTable = ({ addList }) => {
 	}
 
 	function downHandler({ key }) {
-		console.log(key)
 		if (key === 'F1') {
 			debugger;
 		}
