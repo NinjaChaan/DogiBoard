@@ -1,9 +1,14 @@
 import React, { useState } from 'react'
+import { connect } from 'react-redux'
+import { updateListTitle, updateCard, setSelectedCard } from '../actions/index'
 
-const TitleTextarea = ({ listTitle, id }) => {
+const mapStateToProps = (state) => {
+	//console.log('state at cardwindiw', state.selectedCard.text)
+	return { selectedCard: state.selectedCard.text }
+}
+
+const CardTitle = ({ selectedCard, id, dispatch, listId }) => {
 	const [listTitleClass, setListTitleClass] = useState('textarea-list-title')
-
-
 
 	const handleKeyPress = (event) => {
 		if (event.key === 'Enter') {
@@ -13,31 +18,37 @@ const TitleTextarea = ({ listTitle, id }) => {
 	}
 
 	const handleTextChange = (event) => {
-		console.log(event)
+		const titleElement = document.getElementById(`listTitle${id.toString()}`)
 		if (event.key === 'Enter') {
 			event.preventDefault()
 		}
-		//setTitle(event.target.value)
+		titleElement.value = event.target.value
+		console.log('update card', dispatch(updateCard({ text: titleElement.value, id, listId })))
+		const text = titleElement.value
+		const newSelection = {
+			text,
+			id,
+			listId
+		}
+
+		console.log(dispatch(setSelectedCard(newSelection)))
 	}
 
 	const focusTitle = () => {
 		const titleElement = document.getElementById(`listTitle${id.toString()}`)
 		titleElement.focus()
 		titleElement.value = ''
-		titleElement.value = { listTitle }
-		console.log(listTitleClass)
+		titleElement.value = { selectedCard }
 		setListTitleClass('textarea-list-title-editing')
 	}
 
 	const blurTitle = () => {
-		console.log('blurred')
 		setListTitleClass('textarea-list-title')
-		console.log('class ' + listTitleClass)
 	}
 
 	return (
 		<textarea
-			value={listTitle}
+			value={selectedCard}
 			onChange={handleTextChange}
 			id={`listTitle${id.toString()}`}
 			onFocus={focusTitle}
@@ -49,5 +60,4 @@ const TitleTextarea = ({ listTitle, id }) => {
 		/>
 	)
 }
-
-export default TitleTextarea
+export default connect(mapStateToProps, null)(CardTitle)

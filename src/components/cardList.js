@@ -3,13 +3,13 @@ import { Droppable, Draggable } from 'react-beautiful-dnd'
 import Button from 'react-bootstrap/Button'
 import CardDraggable from './cardDraggable'
 import AddItem from './addItem'
-import TitleTextarea from './titleTextarea'
+import ListTitle from './listTitle'
 import './cardList.css'
 
 
 const CardList = ({ cards, innerRef, placeholder, showingAddAnother, changeShowAddAnother, id }) => (
 	<tbody ref={innerRef}>
-		{cards.map((card, i) => <CardDraggable key={card.id} text={card.text} i={i} id={card.id} />)}
+		{cards.map((card, i) => <CardDraggable key={card.id} text={card.text} i={i} id={card.id} listId={id} />)}
 		{placeholder}
 		<tr>
 			<td>
@@ -72,9 +72,10 @@ const CardListContainer = ({
 										onClick={() => focusTitle()}
 										onMouseDown={() => unFocusTitle()}
 									/>
-									<TitleTextarea
+									<ListTitle
 										listTitle={listTitle}
 										id={id}
+										card={false}
 									/>
 									{/* <textarea
 

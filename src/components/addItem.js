@@ -22,7 +22,6 @@ const AddItem = ({
 			if (classType === 'card') {
 				newCard = {
 					text: cardText,
-					id: Math.floor(Math.random() * 999999),
 					listId: listId
 				}
 				changeShowAddAnother(true)

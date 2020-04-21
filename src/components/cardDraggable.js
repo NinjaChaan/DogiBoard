@@ -4,14 +4,15 @@ import { Draggable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
 import { setSelectedCard } from '../actions/index'
 
-const CardDraggable = ({ text, i, id, dispatch }) => {
+const CardDraggable = ({ text, i, id, listId, dispatch }) => {
 	const openCardEditWindow = () => {
 		const selectedCard = {
 			text,
-			id
+			id,
+			listId
 		}
 
-		dispatch(setSelectedCard(selectedCard))
+		console.log(dispatch(setSelectedCard(selectedCard)))
 
 		document.getElementById('window-overlay').style.display = 'flex'
 		document.getElementById('card-window').focus()
