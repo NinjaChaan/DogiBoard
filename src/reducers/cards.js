@@ -1,17 +1,14 @@
-const initialState = []
+const cards = []
 
-const cards = (state = initialState, action) => {
+const cardReducer = (state = cards, action) => {
 	switch (action.type) {
 		case 'ADD_CARD':
 			return state.concat(action.payload)
 		case 'SET_CARDS':
-			console.log('set action: ', action.payload)
 			return state.concat(action.payload)
 		default:
 			return state
 	}
 }
 
-export default cards
-
-//store.dispatch(setCards({cards:[{ text: 'aa', id: 2 }, { text: 'bb', id: 66 }]}));
+export default cardReducer

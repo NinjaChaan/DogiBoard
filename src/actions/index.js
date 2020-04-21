@@ -3,16 +3,30 @@ export const setSelectedCard = (payload) => ({
 	type: 'SET_SELECTED_CARD',
 	payload
 })
-export const addCard = ({ text }) => ({
+export const addCard = ({ text, listId }) => ({
 	type: 'ADD_CARD',
-	text,
 	payload: {
 		text,
+		id: nextTodoId++,
+		listId: listId
+	}
+})
+
+export const addList = ({ text }) => ({
+	type: 'ADD_LIST',
+	payload: {
+		text,
+		cards: [],
 		id: nextTodoId++
 	}
 })
 
-export const setCards = ({ cards }) => ({
+export const updateListOrder = (lists) => ({
+	type: 'UPDATE_LIST_ORDER',
+	payload: lists
+})
+
+export const setCards = (cards) => ({
 	type: 'SET_CARDS',
 	payload: cards
 })

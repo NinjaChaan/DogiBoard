@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux'
 
-import cards from './cards'
+import cardReducer from './cards'
 import selectedCard from './selectedCard'
+import listReducer from './lists'
 
 export default combineReducers({
-	cards,
-	selectedCard
+	cardReducer,
+	selectedCard,
+	listReducer
 })

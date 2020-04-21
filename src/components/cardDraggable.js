@@ -10,9 +10,8 @@ const CardDraggable = ({ text, i, id, dispatch }) => {
 			text,
 			id
 		}
-		// console.log('sending ', card)
 
-		console.log('sending ', dispatch(setSelectedCard(selectedCard)))
+		dispatch(setSelectedCard(selectedCard))
 
 		document.getElementById('window-overlay').style.display = 'flex'
 		document.getElementById('card-window').focus()

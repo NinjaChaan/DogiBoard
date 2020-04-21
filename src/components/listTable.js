@@ -1,36 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import Button from 'react-bootstrap/Button'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+import { connect } from 'react-redux'
 import AddItem from './addItem'
 import CardListContainer from './cardList'
+import { updateListOrder } from '../actions/index'
 
-const ListTable = () => {
-	const [cardLists, setCardLists] = useState([{
-		text: 'a',
-		cards: [{ text: 'kkk', id: 8998 }],
-		id: 8778
-	}, {
-		text: 'b',
-		cards: [{ text: 'lll', id: 9987 }, { text: 'laa', id: 97 }],
-		id: 8645
-	},
-	{
-		text: 'cards',
-		cards: [{ text: 'aa', id: 2 }, { text: 'bb', id: 66 }],
-		id: 43
-	}
-	])
 
+const mapStateToProps = (state) => {
+	console.log('state', state.listReducer)
+	return { lists: state.listReducer.lists }
+}
+
+const ListTable = ({ lists, dispatch }) => {
 	const [showingAddAnother, setShowingAddAnother] = useState(true)
 	const [dragging, setDragging] = useState(false)
 
 	const changeShowAddAnother = (show) => {
 		setShowingAddAnother(show)
-	}
-
-	const createList = (newList) => {
-		setCardLists(cardLists.concat(newList))
-		changeShowAddAnother(true)
 	}
 
 	const onDragEnd = (result) => {
@@ -53,15 +40,15 @@ const ListTable = () => {
 		}
 		if (type === 'list') {
 			if (source.droppableId === 'main' && destination.droppableId === 'main') {
-				const list = cardLists[source.index]
-				const newLists = Array.from(cardLists)
+				const list = lists[source.index]
+				const newLists = Array.from(lists)
 
 				newLists.splice(source.index, 1)
 				newLists.splice(destination.index, 0, list)
-				setCardLists(newLists)
+				dispatch(updateListOrder(newLists))
 			}
 		} else if (source.droppableId === destination.droppableId) {
-			const list = cardLists[source.droppableId]
+			const list = lists[source.droppableId]
 			const newCards = Array.from(list.cards)
 			newCards.splice(source.index, 1)
 			newCards.splice(destination.index, 0, list.cards[source.index])
@@ -71,14 +58,15 @@ const ListTable = () => {
 				cards: newCards
 			}
 
-			const newLists = Array.from(cardLists)
+			const newLists = Array.from(lists)
 			newLists.splice(source.droppableId, 1)
 			newLists.splice(source.droppableId, 0, newList)
 
-			setCardLists(newLists)
+			console.log('new lists', newLists)
+			console.log('sendind list', dispatch(updateListOrder(newLists)))
 		} else {
-			const sourceList = cardLists[source.droppableId]
-			const destinationList = cardLists[destination.droppableId]
+			const sourceList = lists[source.droppableId]
+			const destinationList = lists[destination.droppableId]
 			const newSourceCards = Array.from(sourceList.cards)
 			const newDestinationCards = Array.from(destinationList.cards)
 			newSourceCards.splice(source.index, 1)
@@ -94,33 +82,32 @@ const ListTable = () => {
 				cards: newDestinationCards
 			}
 
-			const newLists = Array.from(cardLists)
+			const newLists = Array.from(lists)
 			newLists.splice(source.droppableId, 1)
 			newLists.splice(source.droppableId, 0, newSourceList)
 			newLists.splice(destination.droppableId, 1)
 			newLists.splice(destination.droppableId, 0, newDestinationList)
-
-			setCardLists(newLists)
+			dispatch(updateListOrder(newLists))
 		}
 	}
 
 	const updatecards = (cards, index) => {
 		const newList = {
-			...cardLists[index],
+			...lists[index],
 			cards
 		}
 
-		const newLists = Array.from(cardLists)
+		const newLists = Array.from(lists)
 		newLists.splice(index, 1)
 		newLists.splice(index, 0, newList)
 
-		setCardLists(newLists)
+		dispatch(updateListOrder(newLists))
 	}
 
 	const onDragStart = () => {
 		if (!dragging) {
 			setDragging(true)
-			cardLists.map((list) => document.getElementById(`listTitle${list.id.toString()}`).blur())
+			lists.map((list) => document.getElementById(`listTitle${list.id.toString()}`).blur())
 		}
 	}
 
@@ -135,10 +122,10 @@ const ListTable = () => {
 		return () => {
 			window.removeEventListener('keydown', downHandler)
 		}
-	}, []) // Empty array ensures that effect is only run on mount and unmount
+	}, [])
 
 	return (
-		<table style={{ width: (cardLists.length + 1) * 257 }}>
+		<table style={{ width: (lists.length + 1) * 257 }}>
 			<tbody>
 				<DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
 					<Droppable droppableId="main" direction="horizontal" type="list">
@@ -148,7 +135,7 @@ const ListTable = () => {
 								{...provided.droppableProps}
 							>
 								{
-									cardLists.map((list, i) => (
+									lists.map((list, i) => (
 										<CardListContainer
 											key={list.id}
 											listTitle={list.text}
@@ -171,7 +158,6 @@ const ListTable = () => {
 										)
 										: (
 											<AddItem
-												addItem={createList}
 												buttonText="Add list"
 												defaultText="Enter a title for this list"
 												classType="list"
@@ -188,5 +174,4 @@ const ListTable = () => {
 		</table>
 	)
 }
-
-export default ListTable
+export default connect(mapStateToProps)(ListTable)

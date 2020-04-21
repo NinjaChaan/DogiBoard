@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
+import { addCard, addList } from '../actions/index'
 import './cardList.css'
 
 const AddItem = ({
-	addItem, changeShowAddAnother, buttonText, defaultText, classType, dispatch
+	listId, changeShowAddAnother, buttonText, defaultText, classType, dispatch
 }) => {
 	const [cardText, setCardText] = useState('')
 	const textArea = document.querySelector('textarea')
@@ -14,7 +15,6 @@ const AddItem = ({
 		textRowCountFinal = textRowCount + textArea.value.match(/(.|[\r\n]){1,26}/g).length
 	}
 	const rows = textRowCountFinal - 1
-	console.log(rows)
 
 	const createItem = () => {
 		if (cardText.length > 0) {
@@ -22,16 +22,19 @@ const AddItem = ({
 			if (classType === 'card') {
 				newCard = {
 					text: cardText,
-					id: Math.floor(Math.random() * 999999)
+					id: Math.floor(Math.random() * 999999),
+					listId: listId
 				}
+				changeShowAddAnother(true)
+				dispatch(addCard(newCard))
 			} else {
 				newCard = {
 					text: cardText,
-					cards: [],
-					id: Math.floor(Math.random() * 999999)
+					cards: []
 				}
+				changeShowAddAnother(true)
+				dispatch(addList(newCard))
 			}
-			addItem(newCard)
 			setCardText('')
 		}
 	}
@@ -47,7 +50,6 @@ const AddItem = ({
 	}
 
 	const handleTextChange = (event) => {
-		console.log(event)
 		if (event.key === 'Enter') {
 			event.preventDefault()
 		}

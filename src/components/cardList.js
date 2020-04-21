@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
-import { connect } from 'react-redux'
 import Button from 'react-bootstrap/Button'
 import CardDraggable from './cardDraggable'
 import AddItem from './addItem'
 import TitleTextarea from './titleTextarea'
 import './cardList.css'
 
-const CardList = ({ cards, innerRef, placeholder, showingAddAnother, changeShowAddAnother, createCard }) => (
+
+const CardList = ({ cards, innerRef, placeholder, showingAddAnother, changeShowAddAnother, id }) => (
 	<tbody ref={innerRef}>
 		{cards.map((card, i) => <CardDraggable key={card.id} text={card.text} i={i} id={card.id} />)}
 		{placeholder}
@@ -20,7 +20,7 @@ const CardList = ({ cards, innerRef, placeholder, showingAddAnother, changeShowA
 							Add another card
 						</Button>
 					)
-					: <AddItem addItem={createCard} changeShowAddAnother={changeShowAddAnother} buttonText="Add card" defaultText="Enter a title for this card" classType="card" />}
+					: <AddItem listId={id} changeShowAddAnother={changeShowAddAnother} buttonText="Add card" defaultText="Enter a title for this card" classType="card" />}
 			</td>
 		</tr>
 	</tbody>
@@ -52,7 +52,7 @@ const CardListContainer = ({
 	if (dragging) {
 		unFocusTitle()
 	}
-
+	//console.log('list ', id, ' cards: ', cards)
 	return (
 		<Draggable draggableId={`list-${id.toString()}`} index={index}>
 			{(provided) => (
@@ -95,6 +95,7 @@ const CardListContainer = ({
 						<Droppable droppableId={index.toString()} type="card">
 							{(provided) => (
 								<CardList
+									id={id}
 									cards={cards}
 									showingAddAnother={showingAddAnother}
 									changeShowAddAnother={changeShowAddAnother}
@@ -111,5 +112,4 @@ const CardListContainer = ({
 		</Draggable>
 	)
 }
-
-export default connect()(CardListContainer)
+export default CardListContainer
