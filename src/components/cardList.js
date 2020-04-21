@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
-// import Card from './card'
+import { connect } from 'react-redux'
 import Button from 'react-bootstrap/Button'
 import CardDraggable from './cardDraggable'
 import AddItem from './addItem'
+import TitleTextarea from './titleTextarea'
 import './cardList.css'
 
-const CardList = ({
-	cards, innerRef, placeholder, showingAddAnother, changeShowAddAnother, createCard
-}) => (
+const CardList = ({ cards, innerRef, placeholder, showingAddAnother, changeShowAddAnother, createCard }) => (
 	<tbody ref={innerRef}>
 		{cards.map((card, i) => <CardDraggable key={card.id} text={card.text} i={i} id={card.id} />)}
 		{placeholder}
@@ -31,9 +30,6 @@ const CardListContainer = ({
 	listTitle, cards, index, setCards, id, dragging
 }) => {
 	const [showingAddAnother, setShowingAddAnother] = useState(true)
-	// const [cards, setCards] = useState(cardList ?? [])
-	const [title, setTitle] = useState(listTitle)
-	const [listTitleClass, setListTitleClass] = useState('textarea-list-title')
 
 	const createCard = (newCard) => {
 		setCards(cards.concat(newCard))
@@ -43,32 +39,14 @@ const CardListContainer = ({
 		setShowingAddAnother(show)
 	}
 
-	const handleKeyPress = (event) => {
-		if (event.key === 'Enter') {
-			event.preventDefault()
-			document.getElementById(`listTitle${id.toString()}`).blur()
-		}
-	}
-
-	const handleTextChange = (event) => {
-		console.log(event)
-		if (event.key === 'Enter') {
-			event.preventDefault()
-		}
-		setTitle(event.target.value)
-	}
 
 	const focusTitle = () => {
-		const titleElement = document.getElementById(`listTitle${id.toString()}`)
-		titleElement.focus()
-		titleElement.value = ''
-		titleElement.value = { title: titleElement }
-		setListTitleClass('textarea-list-title-editing')
+		document.getElementById(`listTitle${id.toString()}`).focus()
 	}
 
 	const unFocusTitle = () => {
-		document.getElementById(`listTitle${id.toString()}`).blur()
-		setListTitleClass('textarea-list-title')
+		const titleElement = document.getElementById(`listTitle${id.toString()}`)
+		titleElement.blur()
 	}
 
 	if (dragging) {
@@ -94,7 +72,11 @@ const CardListContainer = ({
 										onClick={() => focusTitle()}
 										onMouseDown={() => unFocusTitle()}
 									/>
-									<textarea
+									<TitleTextarea
+										listTitle={listTitle}
+										id={id}
+									/>
+									{/* <textarea
 
 										value={title}
 										onChange={handleTextChange}
@@ -105,7 +87,7 @@ const CardListContainer = ({
 										spellCheck="false"
 										onKeyPress={handleKeyPress}
 										onClick={() => focusTitle}
-									/>
+									/> */}
 								</td>
 							</tr>
 						</thead>
@@ -130,4 +112,4 @@ const CardListContainer = ({
 	)
 }
 
-export default CardListContainer
+export default connect()(CardListContainer)

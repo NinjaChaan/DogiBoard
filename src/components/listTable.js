@@ -11,8 +11,13 @@ const ListTable = () => {
 		id: 8778
 	}, {
 		text: 'b',
-		cards: [{ text: 'lll', id: 9987 }],
+		cards: [{ text: 'lll', id: 9987 }, { text: 'laa', id: 97 }],
 		id: 8645
+	},
+	{
+		text: 'cards',
+		cards: [{ text: 'aa', id: 2 }, { text: 'bb', id: 66 }],
+		id: 43
 	}
 	])
 

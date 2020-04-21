@@ -1,10 +1,21 @@
 import React from 'react'
 import Card from 'react-bootstrap/Card'
 import { Draggable } from 'react-beautiful-dnd'
+import { connect } from 'react-redux'
+import { setSelectedCard } from '../actions/index'
 
-const CardDraggable = ({ text, i, id }) => {
+const CardDraggable = ({ text, i, id, dispatch }) => {
 	const openCardEditWindow = () => {
+		const selectedCard = {
+			text,
+			id
+		}
+		// console.log('sending ', card)
+
+		console.log('sending ', dispatch(setSelectedCard(selectedCard)))
+
 		document.getElementById('window-overlay').style.display = 'flex'
+		document.getElementById('card-window').focus()
 	}
 
 	return (
@@ -33,4 +44,5 @@ const CardDraggable = ({ text, i, id }) => {
 	)
 }
 
-export default CardDraggable
+
+export default connect(null, null)(CardDraggable)

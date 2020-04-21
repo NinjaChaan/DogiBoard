@@ -196,6 +196,7 @@ code {
 
 .card-window{
 	min-height: 400px;
+	pointer-events: auto;
 }
 
 .btn-close-card-window{

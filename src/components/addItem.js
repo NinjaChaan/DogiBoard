@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button'
+import { connect } from 'react-redux'
 import './cardList.css'
 
 const AddItem = ({
-	addItem, changeShowAddAnother, buttonText, defaultText, classType
+	addItem, changeShowAddAnother, buttonText, defaultText, classType, dispatch
 }) => {
 	const [cardText, setCardText] = useState('')
 	const textArea = document.querySelector('textarea')
@@ -38,6 +39,11 @@ const AddItem = ({
 	const handleSubmit = (event) => {
 		event.preventDefault()
 		createItem()
+		// dispatch({
+		// 	type: 'ADD_TODO',
+		// 	id: Math.floor(Math.random() * 999999),
+		// 	text: cardText
+		// })
 	}
 
 	const handleTextChange = (event) => {
@@ -85,4 +91,4 @@ const AddItem = ({
 	)
 }
 
-export default AddItem
+export default connect()(AddItem)
