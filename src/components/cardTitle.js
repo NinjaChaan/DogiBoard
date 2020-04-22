@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { updateListTitle, updateCard, setSelectedCard } from '../actions/index'
+import { updateCard, setSelectedCard } from '../actions/index'
 
 const mapStateToProps = (state) => {
 	//console.log('state at cardwindiw', state.selectedCard.text)
@@ -23,7 +23,6 @@ const CardTitle = ({ selectedCard, id, dispatch, listId }) => {
 			event.preventDefault()
 		}
 		titleElement.value = event.target.value
-		console.log('update card', dispatch(updateCard({ text: titleElement.value, id, listId })))
 		const text = titleElement.value
 		const newSelection = {
 			text,
@@ -44,6 +43,7 @@ const CardTitle = ({ selectedCard, id, dispatch, listId }) => {
 
 	const blurTitle = () => {
 		setListTitleClass('textarea-list-title')
+		console.log('update card', dispatch(updateCard({ text: document.getElementById(`listTitle${id.toString()}`).value, id, listId })))
 	}
 
 	return (
