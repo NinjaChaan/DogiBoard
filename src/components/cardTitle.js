@@ -1,24 +1,59 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { updateCard, setSelectedCard } from '../actions/index'
+import { updateCardTitle, setSelectedCard } from '../actions/index'
 
-const mapStateToProps = (state) => {
-	//console.log('state at cardwindiw', state.selectedCard.text)
-	return { selectedCard: state.selectedCard.text }
-}
+const mapStateToProps = (state) =>
+	// console.log('state at cardwindiw', state.selectedCard.text)
+	({ selectedCard: state.selectedCard })
 
-const CardTitle = ({ selectedCard, id, dispatch, listId }) => {
-	const [listTitleClass, setListTitleClass] = useState('textarea-list-title')
+
+const CardTitle = ({
+	selectedCard, id, dispatch, listId
+}) => {
+	const [listTitleClass, setListTitleClass] = useState('textarea-card-title')
+
+	const calculateHeight = () => {
+		const field = document.getElementById('cardTitle')
+		if (field) {
+			field.style.height = 'inherit'
+
+			// Get the computed styles for the element
+			const computed = window.getComputedStyle(field)
+
+			// Calculate the height
+			const height = parseInt(computed.getPropertyValue('border-top-width'), 10)
+				+ parseInt(computed.getPropertyValue('padding-top'), 10)
+				+ field.scrollHeight
+				+ parseInt(computed.getPropertyValue('padding-bottom'), 10)
+				+ parseInt(computed.getPropertyValue('border-bottom-width'), 10)
+
+			field.style.height = `${height}px`
+
+			if (field.scrollHeight > 168) {
+				field.style.overflow = 'auto'
+				if (document.activeElement === field) {
+					field.scrollTop = field.scrollHeight
+				} else {
+					field.scrollTop = 0
+				}
+			} else {
+				field.style.overflow = 'hidden'
+			}
+		}
+	}
+	setTimeout(calculateHeight(), 10)
+
 
 	const handleKeyPress = (event) => {
 		if (event.key === 'Enter') {
 			event.preventDefault()
-			document.getElementById(`listTitle${id.toString()}`).blur()
+			document.getElementById('cardTitle').blur()
 		}
 	}
 
 	const handleTextChange = (event) => {
-		const titleElement = document.getElementById(`listTitle${id.toString()}`)
+		calculateHeight()
+		const titleElement = document.getElementById('cardTitle')
 		if (event.key === 'Enter') {
 			event.preventDefault()
 		}
@@ -26,35 +61,35 @@ const CardTitle = ({ selectedCard, id, dispatch, listId }) => {
 		const text = titleElement.value
 		const newSelection = {
 			text,
-			id,
-			listId
+			description: selectedCard.description,
+			id: selectedCard.id,
+			listId: selectedCard.listId
 		}
-
-		console.log(dispatch(setSelectedCard(newSelection)))
+		console.log('set', dispatch(setSelectedCard(newSelection)))
 	}
 
 	const focusTitle = () => {
-		const titleElement = document.getElementById(`listTitle${id.toString()}`)
+		const titleElement = document.getElementById('cardTitle')
 		titleElement.focus()
 		titleElement.value = ''
 		titleElement.value = { selectedCard }
-		setListTitleClass('textarea-list-title-editing')
+		setListTitleClass('textarea-card-title-editing')
 	}
 
 	const blurTitle = () => {
-		setListTitleClass('textarea-list-title')
-		console.log('update card', dispatch(updateCard({ text: document.getElementById(`listTitle${id.toString()}`).value, id, listId })))
+		setListTitleClass('textarea-card-title')
+		console.log('update card', dispatch(updateCardTitle({ text: document.getElementById('cardTitle').value, id, listId })))
 	}
 
 	return (
 		<textarea
-			value={selectedCard}
+			value={selectedCard.text}
 			onChange={handleTextChange}
-			id={`listTitle${id.toString()}`}
+			id={'cardTitle'}
 			onFocus={focusTitle}
 			onBlur={blurTitle}
+			maxLength="200"
 			className={listTitleClass}
-			maxLength={25}
 			spellCheck="false"
 			onKeyPress={handleKeyPress}
 		/>

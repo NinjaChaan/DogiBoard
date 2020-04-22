@@ -7,9 +7,11 @@ import ListTitle from './listTitle'
 import './cardList.css'
 
 
-const CardList = ({ cards, innerRef, placeholder, showingAddAnother, changeShowAddAnother, id }) => (
+const CardList = ({
+	cards, innerRef, placeholder, showingAddAnother, changeShowAddAnother, id
+}) => (
 	<tbody ref={innerRef}>
-		{cards.map((card, i) => <CardDraggable key={card.id} text={card.text} i={i} id={card.id} listId={id} />)}
+		{cards.map((card, i) => <CardDraggable key={card.id} i={i} card={card} />)}
 		{placeholder}
 		<tr>
 			<td>
@@ -52,7 +54,7 @@ const CardListContainer = ({
 	if (dragging) {
 		unFocusTitle()
 	}
-	//console.log('list ', id, ' cards: ', cards)
+	// console.log('list ', id, ' cards: ', cards)
 	return (
 		<Draggable draggableId={`list-${id.toString()}`} index={index}>
 			{(provided) => (

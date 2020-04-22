@@ -5,6 +5,36 @@ import { updateListTitle } from '../actions/index'
 const ListTitle = ({ listTitle, id, dispatch }) => {
 	const [listTitleClass, setListTitleClass] = useState('textarea-list-title')
 	const [title, setTitle] = useState(listTitle)
+
+	const field = document.getElementById(`listTitle${id.toString()}`)
+	if (field) {
+		field.style.height = '30px'
+
+		// Get the computed styles for the element
+		const computed = window.getComputedStyle(field)
+
+		// Calculate the height
+		const height = parseInt(computed.getPropertyValue('border-top-width'), 10)
+			+ parseInt(computed.getPropertyValue('padding-top'), 10)
+			+ field.scrollHeight
+			+ parseInt(computed.getPropertyValue('padding-bottom'), 10)
+			+ parseInt(computed.getPropertyValue('border-bottom-width'), 10)
+		field.style.height = `${height}px`
+		
+
+		if (field.scrollHeight > 168) {
+			field.style.overflow = 'auto'
+			if (document.activeElement === field) {
+				field.scrollTop = field.scrollHeight
+			} else {
+				field.scrollTop = 0
+			}
+		} else {
+			field.style.overflow = 'hidden'
+		}
+	}
+
+
 	const handleKeyPress = (event) => {
 		if (event.key === 'Enter') {
 			event.preventDefault()

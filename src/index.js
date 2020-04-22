@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import App from './App'
 import store from './store/index'
 
-import { setSelectedCard } from "./actions/index";
+import { setSelectedCard } from './actions/index'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.css'
 

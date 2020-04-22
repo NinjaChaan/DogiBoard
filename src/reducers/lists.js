@@ -1,22 +1,18 @@
-import { act } from "react-dom/test-utils"
-import { updateCard } from "../actions"
-
 const initialState = {
-	lists: [
-		{
-			text: 'a',
-			cards: [{ text: 'kkk', id: 8998 }],
-			id: 8778
-		}, {
-			text: 'b',
-			cards: [{ text: 'lll', id: 9987 }, { text: 'laa', id: 97 }],
-			id: 8645
-		},
-		{
-			text: 'cards',
-			cards: [{ text: 'aa', id: 2 }, { text: 'bb', id: 66 }],
-			id: 43
-		}
+	lists: [{
+		text: 'a',
+		cards: [{ text: 'kkk', id: 0, listId: 0 }],
+		id: 0
+	}, {
+		text: 'b',
+		cards: [{ text: 'lll', id: 1, listId: 1 }, { text: 'laa', id: 27, listId: 1 }],
+		id: 1
+	},
+	{
+		text: 'cards',
+		cards: [{ text: 'aa', id: 3, listId: 2 }, { text: 'bb', id: 4, listId: 2 }],
+		id: 2
+	}
 	]
 }
 const listReducer = (state = initialState, action) => {
@@ -27,9 +23,9 @@ const listReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case 'ADD_LIST':
 			return { ...state, lists: state.lists.concat(action.payload) }
-		case 'UPDATE_CARD':
-			console.log('update card', action.payload)
-			const updatedCardList = state.lists.map((list, i) => {
+		case 'UPDATE_CARD_TITLE':
+			console.log('update card title', action.payload)
+			const updatedCardListT = state.lists.map((list, i) => {
 				if (list.id === action.payload.listId) {
 					const updatedCards = list.cards.map((card) => {
 						if (card.id === action.payload.id) {
@@ -42,7 +38,23 @@ const listReducer = (state = initialState, action) => {
 				}
 				return list
 			})
-			return { ...state, lists: updatedCardList }
+			return { ...state, lists: updatedCardListT }
+		case 'UPDATE_CARD_DESCRIPTION':
+			console.log('update card description', action.payload)
+			const updatedCardListD = state.lists.map((list, i) => {
+				if (list.id === action.payload.listId) {
+					const updatedCards = list.cards.map((card) => {
+						if (card.id === action.payload.id) {
+							return { ...card, description: action.payload.description }
+						}
+						return card
+					})
+					console.log('updated cards', updatedCards)
+					return { ...list, cards: updatedCards }
+				}
+				return list
+			})
+			return { ...state, lists: updatedCardListD }
 		case 'UPDATE_LIST_TITLE':
 			console.log('update list title', action.payload)
 			const updatedList = state.lists.map((list, i) => {

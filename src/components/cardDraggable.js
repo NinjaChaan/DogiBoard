@@ -4,22 +4,26 @@ import { Draggable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
 import { setSelectedCard } from '../actions/index'
 
-const CardDraggable = ({ text, i, id, listId, dispatch }) => {
+const CardDraggable = ({
+	text, i, card, dispatch
+}) => {
 	const openCardEditWindow = () => {
 		const selectedCard = {
-			text,
-			id,
-			listId
+			text: card.text,
+			description: card.description,
+			id: card.id,
+			listId: card.listId
 		}
 
 		console.log(dispatch(setSelectedCard(selectedCard)))
 
 		document.getElementById('window-overlay').style.display = 'flex'
 		document.getElementById('card-window').focus()
+		document.getElementById('description').value = card.description || ''
 	}
 
 	return (
-		<Draggable draggableId={id.toString()} index={i}>
+		<Draggable draggableId={card.id.toString()} index={i}>
 			{(provided) => (
 				<tr
 					ref={provided.innerRef}
@@ -34,7 +38,7 @@ const CardDraggable = ({ text, i, id, listId, dispatch }) => {
 							onClick={openCardEditWindow}
 						>
 							<Card.Text>
-								{text}
+								{card.text}
 							</Card.Text>
 						</Card>
 					</td>
@@ -43,6 +47,5 @@ const CardDraggable = ({ text, i, id, listId, dispatch }) => {
 		</Draggable>
 	)
 }
-
 
 export default connect(null, null)(CardDraggable)

@@ -8,13 +8,33 @@ const AddItem = ({
 	listId, changeShowAddAnother, buttonText, defaultText, classType, dispatch
 }) => {
 	const [cardText, setCardText] = useState('')
-	const textArea = document.querySelector('textarea')
-	const textRowCount = textArea ? textArea.value.split('\n').length : 0
-	let textRowCountFinal = 0
-	if (textArea && textArea.value.match(/(.|[\r\n]){1,26}/g)) {
-		textRowCountFinal = textRowCount + textArea.value.match(/(.|[\r\n]){1,26}/g).length
+	const field = document.getElementById('listTitle')
+	if (field) {
+		field.style.height = 'inherit'
+
+		// Get the computed styles for the element
+		const computed = window.getComputedStyle(field)
+
+		// Calculate the height
+		const height = parseInt(computed.getPropertyValue('border-top-width'), 10)
+			+ parseInt(computed.getPropertyValue('padding-top'), 10)
+			+ field.scrollHeight
+			+ parseInt(computed.getPropertyValue('padding-bottom'), 10)
+			+ parseInt(computed.getPropertyValue('border-bottom-width'), 10)
+
+		field.style.height = `${height}px`
+
+		if (field.scrollHeight > 168) {
+			field.style.overflow = 'auto'
+			if (document.activeElement === field) {
+				field.scrollTop = field.scrollHeight
+			} else {
+				field.scrollTop = 0
+			}
+		} else {
+			field.style.overflow = 'hidden'
+		}
 	}
-	const rows = textRowCountFinal - 1
 
 	const createItem = () => {
 		if (cardText.length > 0) {
@@ -22,7 +42,7 @@ const AddItem = ({
 			if (classType === 'card') {
 				newCard = {
 					text: cardText,
-					listId: listId
+					listId
 				}
 				changeShowAddAnother(true)
 				dispatch(addCard(newCard))
@@ -71,11 +91,11 @@ const AddItem = ({
 					<div className="add-card-text">
 						<textarea
 							id="listTitle"
-							autoFocus
 							className={`textarea-add-${classType}`}
+							autoFocus
 							spellCheck="false"
+							maxLength={classType === 'card' ? '200' : '25'}
 							placeholder={defaultText}
-							rows={cardText.length > 0 ? rows : 1}
 							value={cardText}
 							onKeyPress={handleKeyPress}
 							onChange={handleTextChange}

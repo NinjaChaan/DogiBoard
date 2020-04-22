@@ -1,229 +1,315 @@
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-
-.card{
-	width: 225px;
-	margin: 8px;
-	margin-left: 10px;
+.card {
+    width: 225px;
+    margin: 8px;
+    margin-left: 10px;
 }
 
-.card-body{
-	padding: 0.5rem;
+.card-body {
+    padding: 0.5rem;
 }
 
-.cardBody:hover{
-	cursor: pointer;
+.cardBody:hover {
+    cursor: pointer;
 }
 
-.div-add-card, .div-add-list{
-	margin-top: -5px;
-	margin-left: 1px;
+.div-add-card,
+.div-add-list {
+    margin-top: -5px;
+    margin-left: 1px;
 }
 
-.div-add-list{
-	margin-left: -4px;
+.div-add-list {
+    margin-left: -4px;
 }
 
-.div-add-card{
-	margin-bottom: -10px;
+.div-add-card {
+    margin-bottom: -10px;
 }
 
-.btn-add-card, .btn-add-list{
-	margin-left: 5px;
-	margin-bottom: 5px;
-	padding-top: 2px;
-	padding-bottom: 2px;
-	padding-left: 5px;
-	padding-right: 5px;
-}
-.btn-add-list{
-	margin-left: 10px;
+.btn-add-card,
+.btn-add-list {
+    margin-left: 5px;
+    margin-bottom: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
-.btn-close-add-card{
-	font-weight: bold;
-	margin-bottom: 5px;
-	margin-left: 5px;
-	padding: 4px;
-	font-size: 1.3rem;
-	font-weight: 900;
-	background: transparent;
-	border: none;
-	color: rgba(61, 61, 61, 0.6);
+.btn-add-list {
+    margin-left: 10px;
 }
 
-.btn-close-add-card:hover{
-	background: transparent;
-	color: rgba(61, 61, 61, 1);
-	transform: scale(1.1);
-}
-.btn-close-add-card:focus, .btn-close-add-card:active{
-	background: transparent !important;
-	color: rgba(61, 61, 61, 1);
-	border: none !important;
-	box-shadow: none !important;
-}
-
-.btn-add-another-card, .btn-add-another-list{
-	position: relative;
-	margin: 5px;
-	margin-top: -3px;
-	margin-bottom: 11px;
-	padding: 0;
-	padding-right: 20px;
-	border-radius: 4px;
+.btn-close-add-card {
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    padding: 4px;
+    font-size: 1.3rem;
+    font-weight: 900;
+    background: transparent;
+    border: none;
+    color: rgba(61, 61, 61, 0.6);
 }
 
-.btn-add-another-list{
-	background-color: rgb(228, 225, 225);
-	width: 240px;
-	margin-left: 10px;
-	margin-top: 10px;
-	margin-right: 5px;
-	padding: 5px;
-	padding-right: 92px;
+.btn-close-add-card:hover {
+    background: transparent;
+    color: rgba(61, 61, 61, 1);
+    transform: scale(1.1);
 }
 
-.btn-add-another-card:hover, .btn-add-another-list:hover{
-	text-decoration: none;
-	/* background-color: rgba(61, 61, 61, 0.31); */
+.btn-close-add-card:focus,
+.btn-close-add-card:active {
+    background: transparent !important;
+    color: rgba(61, 61, 61, 1);
+    border: none !important;
+    box-shadow: none !important;
 }
 
-.textarea-add-card, .textarea-add-list{
-	width: 223px;
-	color: rgb(0, 0, 0);
-	margin-top: -30px;
-	margin-right: 20px;
-	margin-left: -4px;
-	resize: none;
-	min-height:30px;
-	height: unset;
-	padding: 0.5rem;
-	border: none;
-	border-radius: 4px;
+.btn-add-another-card,
+.btn-add-another-list {
+    position: relative;
+    margin: 5px;
+    margin-top: -3px;
+    margin-bottom: 11px;
+    padding: 0;
+    padding-right: 20px;
+    border-radius: 4px;
 }
 
-.textarea-add-list{   
-	 padding-top: 0.4rem;
+.btn-add-another-list {
+    background-color: rgb(228, 225, 225);
+    width: 240px;
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-right: 5px;
+    padding: 5px;
+    padding-right: 92px;
+}
+
+.btn-add-another-card:hover,
+.btn-add-another-list:hover {
+    text-decoration: none;
+    /* background-color: rgba(61, 61, 61, 0.31); */
+}
+
+.textarea-add-card,
+.textarea-add-list {
+    width: 223px;
+    color: rgb(0, 0, 0);
+    margin-top: -30px;
+    margin-right: 20px;
+    margin-left: -4px;
+    resize: none;
+    min-height: 30px;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.textarea-add-list {
+    padding-top: 0.4rem;
     padding-left: 0.3rem;
     padding-right: 0.3rem;
-	margin-top: -25px;
-	margin-right: 5px;
-	margin-left: -4px;
-	font-weight: bold;
+    margin-top: -25px;
+    margin-right: 5px;
+    margin-left: -4px;
+    font-weight: bold;
 }
 
-.textarea-list-title, .textarea-list-title-editing{
-	height: 30px;
-	width: 223px;
-	font-size: 1rem;
-	font-weight: bold;
-	margin-top: 10px;
-	margin-left: 11px;
-	margin-bottom: 0px;
-	padding-right: 100px;
-	resize: none;
-	overflow: hidden;
-	overflow-wrap: break-word;
-	cursor: pointer;
+.textarea-add-list:hover {
+    cursor: pointer;
 }
 
-.textarea-add-list:hover{
-	cursor: pointer;
+.textarea-list-title,
+.textarea-list-title-editing {
+    min-height: 10px;
+    height: 30px;
+    width: 223px;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-left: 11px;
+    margin-bottom: 0px;
+    padding-right: 10px;
+    resize: none;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    cursor: pointer;
 }
 
-.textarea-list-title{
-	padding-left: 5px;
-	background-color: rgba(255, 255, 255, 0);
-	border: none;
-	cursor: pointer;
+.textarea-list-title {
+    padding-left: 5px;
+    background-color: rgba(255, 255, 255, 0);
+    border: 0px solid transparent !important;
+    cursor: pointer;
 }
 
-.textarea-list-title-editing{
-	padding: 5px;
-	padding-top: 0px;
-	border: 0px solid rgb(145, 145, 145) !important;
-	border-radius: 4px;
-	background-color: rgb(255, 255, 255);
+.textarea-list-title-editing {
+    padding-left: 5px;
+    padding-top: 0px;
+    border: 0px solid rgb(145, 145, 145) !important;
+    border-radius: 4px;
+    background-color: rgb(255, 255, 255);
 }
 
-.dragHandle{
-	cursor: pointer !important;
-	position: relative;
-	height: 40px;
-	width: auto;
-	margin-bottom: -40px;
+.textarea-card-title,
+.textarea-card-title-editing {
+    min-width: 35px;
+    width: 600px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-bottom: 0px;
+    padding: 5px;
+    padding-top: 3px;
+    padding-right: 50px;
+    border-radius: 4px;
+    resize: none;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    cursor: text;
 }
 
-.window-overlay{
-	align-items: flex-start;
-	background-color: rgba(0,0,0,.64);
-	display: none;
-	height: 100%;
-	justify-content: center;
-	left: 0;
-	overflow-y: auto;
-	position: fixed;
-	top: 0;
-	width: 100%;
-	z-index: 20;
-	display: none;
+.textarea-card-title {
+    background-color: rgba(255, 255, 255, 0);
+    border: 2px solid transparent !important;
 }
 
-.window{
-	display: block;
-	background-color: #f4f5f7;
-	border-radius: 2px;
-	display: none;
-	margin: 48px 0 80px;
-	overflow: hidden;
-	position: relative;
-	width: 500px;
-	z-index: 25;
+.textarea-card-title-editing {
+    background-color: rgb(255, 255, 255);
+    border: 2px solid rgb(145, 145, 145) !important;
 }
 
-.card-window{
-	min-height: 400px;
-	pointer-events: auto;
+.dragHandle {
+    cursor: pointer !important;
+    position: relative;
+    height: 40px;
+    width: auto;
+    margin-bottom: -40px;
 }
 
-.btn-close-card-window{
-	position: absolute;
-	top:0;
-	right: 0;
-	margin-right: 10px;
-	font-weight: bold;
-	margin-bottom: 5px;
-	margin-left: 5px;
-	padding: 4px;
-	font-size: 1.3rem;
-	font-weight: 900;
-	background: transparent;
-	border: none;
-	color: rgba(61, 61, 61, 0.6);
+.window-overlay {
+    align-items: flex-start;
+    background-color: rgba(0, 0, 0, .64);
+    display: none;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    overflow-y: auto;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 20;
+    display: none;
 }
 
-.btn-close-card-window:hover{
-	background: transparent;
-	color: rgba(61, 61, 61, 1);
-	transform: scale(1.2);
+.window {
+    display: block;
+    background-color: #f4f5f7;
+    border-radius: 2px;
+    display: none;
+    margin: 48px 0 80px;
+    overflow: hidden;
+    position: relative;
+    width: 700px;
+    z-index: 25;
 }
 
-.btn-close-card-window:active, .btn-close-card-window:focus{
-	background: transparent !important;
-	color: rgba(61, 61, 61, 1);
-	border: none !important;
-	box-shadow: none !important;
+.card-window {
+    min-height: 400px;
+    min-width: 700px;
+}
+
+.card-window-header {
+    min-height: 24px;
+    padding: 0 8px 20px 0px;
+    position: relative;
+    width: 552px;
+}
+
+.card-window-main {
+    min-height: 24px;
+    padding: 0 8px 8px 25px;
+    position: relative;
+    width: 552px;
+}
+
+.textarea-card-description {
+    width: 500px;
+    max-height: 170px;
+    background-color: rgba(143, 142, 142, 0.1);
+    resize: none;
+    border: 2px solid transparent !important;
+    border-radius: 0px;
+}
+
+.textarea-card-description:focus {
+    resize: none;
+    border: 2px solid rgb(145, 145, 145) !important;
+    border-radius: 4px;
+}
+
+.btn-save-description {
+    height: 30px;
+    padding-top: 2px !important;
+}
+
+.btn-close-description {
+    font-weight: bold;
+    margin-bottom: 1px;
+    margin-left: 5px;
+    padding: 4px;
+    font-size: 1.3rem;
+    font-weight: 900;
+    background: transparent;
+    border: none;
+    color: rgba(61, 61, 61, 0.6);
+}
+
+.btn-close-description:hover {
+    background: transparent;
+    color: rgba(61, 61, 61, 1);
+    transform: scale(1.1);
+}
+
+.btn-close-card-window {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-right: 15px;
+    margin-top: 10px;
+    padding: 4px;
+    font-size: 1.3rem;
+    font-weight: 900;
+    background: transparent;
+    border: none;
+    color: rgba(61, 61, 61, 0.6);
+}
+
+.btn-close-card-window:hover {
+    background: transparent;
+    color: rgba(61, 61, 61, 1);
+    transform: scale(1.2);
+}
+
+.btn-close-card-window:active,
+.btn-close-card-window:focus {
+    background: transparent !important;
+    color: rgba(61, 61, 61, 1);
+    border: none !important;
+    box-shadow: none !important;
 }
