@@ -4,21 +4,25 @@ import { updateCardTitle, setSelectedCard } from '../actions/index'
 
 const mapStateToProps = (state) =>
 	// console.log('state at cardwindiw', state.selectedCard.text)
-	({ selectedCard: state.selectedCard })
+	({
+		selectedCard: state.selectedCard,
+		text: state.selectedCard.text
+	})
 
 
-const CardTitle = ({
-	selectedCard, id, dispatch, listId
-}) => {
+const CardTitle = ({ selectedCard, text, id, dispatch, listId }) => {
 	const [listTitleClass, setListTitleClass] = useState('textarea-card-title')
 
 	const calculateHeight = () => {
 		const field = document.getElementById('cardTitle')
 		if (field) {
-			field.style.height = 'inherit'
-
+			field.style.height = '25px'
 			// Get the computed styles for the element
 			const computed = window.getComputedStyle(field)
+
+			if (field.value === '[object Object]') {
+				field.value = text
+			}
 
 			// Calculate the height
 			const height = parseInt(computed.getPropertyValue('border-top-width'), 10)
@@ -27,7 +31,7 @@ const CardTitle = ({
 				+ parseInt(computed.getPropertyValue('padding-bottom'), 10)
 				+ parseInt(computed.getPropertyValue('border-bottom-width'), 10)
 
-			field.style.height = `${height}px`
+			field.style.height = `${height - 10}px`
 
 			if (field.scrollHeight > 168) {
 				field.style.overflow = 'auto'
@@ -70,9 +74,11 @@ const CardTitle = ({
 
 	const focusTitle = () => {
 		const titleElement = document.getElementById('cardTitle')
+		const t = selectedCard.text
+		console.log('selected', t)
 		titleElement.focus()
-		titleElement.value = ''
-		titleElement.value = { selectedCard }
+		//titleElement.value = ''
+		titleElement.value = { t }
 		setListTitleClass('textarea-card-title-editing')
 	}
 
@@ -81,6 +87,7 @@ const CardTitle = ({
 		console.log('update card', dispatch(updateCardTitle({ text: document.getElementById('cardTitle').value, id, listId })))
 	}
 
+	console.log('selected', selectedCard.text)
 	return (
 		<textarea
 			value={selectedCard.text}
