@@ -1,6 +1,6 @@
 import React from 'react'
 import ListTable from './components/listTable'
-import CardWindow from './components/cardWindow'
+import CardWindow from './components/cardWindow/cardWindow'
 
 const App = () => (
 	<div className="App">

@@ -57,24 +57,35 @@ const listReducer = (state = initialState, action) => {
 			return { ...state, lists: updatedCardListD }
 		case 'UPDATE_LIST_TITLE':
 			console.log('update list title', action.payload)
-			const updatedList = state.lists.map((list, i) => {
+			const titleUpdatedLists = state.lists.map((list, i) => {
 				if (list.id === action.payload.listId) {
 					return { ...list, text: action.payload.text }
 				}
 				return list
 			})
-			return { ...state, lists: updatedList }
+			return { ...state, lists: titleUpdatedLists }
 		case 'UPDATE_LIST_ORDER':
 			return { ...state, lists: action.payload }
 		case 'ADD_CARD':
 			const newCards = listToUpdate.cards.concat(action.payload)
-			const updatedCards = state.lists.map((list, i) => {
+			const addCardupdatedLists = state.lists.map((list, i) => {
 				if (list.id === action.payload.listId) {
 					return { ...list, cards: newCards }
 				}
 				return list
 			})
-			return { ...state, lists: updatedCards }
+			return { ...state, lists: addCardupdatedLists }
+		case 'DELETE_CARD':
+			const cardss = listToUpdate.cards.filter((c) => c.id !== action.payload.id)
+			console.log('ccc', cardss)
+			const newLists = state.lists.map((list, i) => {
+				if (list.id === action.payload.listId) {
+					return { ...list, cards: cardss }
+				}
+				return list
+			})
+			console.log('dcards', newLists)
+			return { ...state, lists: newLists }
 		default:
 			return state
 	}

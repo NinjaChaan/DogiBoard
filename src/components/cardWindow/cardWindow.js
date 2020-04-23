@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import Button from 'react-bootstrap/Button'
 import CardTitle from './cardTitle'
 import CardDescription from './cardDescription'
-import cardDescription from './cardDescription'
+import CardAddTo from './cardAddTo'
+import CardActions from './cardActions'
 
 const mapStateToProps = (state) => {
 	console.log('state at cardwindiw', state.selectedCard)
@@ -50,6 +51,10 @@ const CardWindow = ({ selectedCard, dispatch }) => {
 							<h6 style={{ fontWeight: '600' }}>Description</h6>
 						</div>
 						<CardDescription />
+					</div>
+					<div className="card-window-sidebar">
+						<CardAddTo />
+						<CardActions card={selectedCard} closeCardWindow={closeCardWindow}/>
 					</div>
 				</div>
 			</div>

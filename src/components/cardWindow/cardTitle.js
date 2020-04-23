@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { updateCardTitle, setSelectedCard } from '../actions/index'
+import { updateCardTitle, setSelectedCard } from '../../actions/index'
 
 const mapStateToProps = (state) =>
 	// console.log('state at cardwindiw', state.selectedCard.text)
 	({
-		selectedCard: state.selectedCard,
-		text: state.selectedCard.text
+		selectedCard: state.selectedCard
 	})
 
 
-const CardTitle = ({ selectedCard, text, id, dispatch, listId }) => {
+const CardTitle = ({ selectedCard, id, dispatch, listId }) => {
 	const [listTitleClass, setListTitleClass] = useState('textarea-card-title')
 
 	const calculateHeight = () => {
@@ -21,7 +20,7 @@ const CardTitle = ({ selectedCard, text, id, dispatch, listId }) => {
 			const computed = window.getComputedStyle(field)
 
 			if (field.value === '[object Object]') {
-				field.value = text
+				field.value = selectedCard.text
 			}
 
 			// Calculate the height
@@ -45,7 +44,7 @@ const CardTitle = ({ selectedCard, text, id, dispatch, listId }) => {
 			}
 		}
 	}
-	setTimeout(calculateHeight(), 10)
+	calculateHeight()
 
 
 	const handleKeyPress = (event) => {

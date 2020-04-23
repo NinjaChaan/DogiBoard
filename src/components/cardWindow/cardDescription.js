@@ -1,14 +1,19 @@
 import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
-import { updateCardDescription } from '../actions/index'
+import { updateCardDescription } from '../../actions/index'
 
-const mapStateToProps = (state) =>
-	// console.log('state at cardwindiw', state.selectedCard.text)
-	({ selectedCard: state.selectedCard })
+const mapStateToProps = (state) => {
+	console.log('state at cardwindiw', state.selectedCard)
+	return (
+		({
+			selectedCard: state.selectedCard,
+			description: state.selectedCard.description
+		})
+	)
+}
 
-
-const CardDescription = ({ selectedCard, dispatch }) => {
+const CardDescription = ({ selectedCard, description, dispatch }) => {
 	const [descriptionText, setDescriptionText] = useState('')
 	const [oldText, setOldText] = useState(selectedCard.description)
 	const [showButtons, setShowButtons] = useState(false)
@@ -63,6 +68,7 @@ const CardDescription = ({ selectedCard, dispatch }) => {
 	const focus = () => {
 		setOldText(field.value)
 		setShowButtons(true)
+		console.log('descccc in focus', description)
 	}
 
 	const xButton = () => {
@@ -70,10 +76,11 @@ const CardDescription = ({ selectedCard, dispatch }) => {
 		field.value = oldText
 		setShowButtons(false)
 	}
-
+	console.log('descccc', selectedCard.description)
 	return (
 		<div>
 			<textarea
+				value={selectedCard.description}
 				id="description"
 				className="textarea-card-description"
 				onFocus={focus}

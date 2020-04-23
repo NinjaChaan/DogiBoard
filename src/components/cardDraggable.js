@@ -20,7 +20,7 @@ const CardDraggable = ({
 		document.getElementById('window-overlay').style.display = 'flex'
 		document.getElementById('card-window').focus()
 		document.getElementById('description').value = card.description || ''
-		document.getElementById('cardTitle').value = card.text || ''
+		// document.getElementById('cardTitle').value = card.text || ''
 	}
 
 	return (

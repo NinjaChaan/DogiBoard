@@ -1,14 +1,23 @@
 const selectedCard = {
 	text: 'henlo?',
-	id: 0
+	description: '',
+	id: 0,
+	listId: 0
 }
 
 const selectedCardReducer = (state = selectedCard, action) => {
 	switch (action.type) {
 		case 'SET_SELECTED_CARD':
 			console.log('set selected', action.payload)
-			return action.payload
-		default: return state
+			return {
+				...state,
+				text: action.payload.text,
+				id: action.payload.id,
+				listId: action.payload.listId,
+				description: action.payload.description
+			}
+		default:
+			return state
 	}
 }
 

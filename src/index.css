@@ -225,33 +225,57 @@ code {
     margin: 48px 0 80px;
     overflow: hidden;
     position: relative;
-    width: 700px;
+    width: 800px;
     z-index: 25;
 }
 
 .card-window {
     min-height: 400px;
-    min-width: 700px;
+    width: 100%;
 }
 
 .card-window-header {
     min-height: 24px;
     padding: 0 8px 20px 0px;
     position: relative;
-    width: 552px;
+    width: 500px;
 }
 
 .card-window-main {
+    float: left;
     min-height: 24px;
     padding: 0 8px 8px 25px;
     position: relative;
-    width: 552px;
+    width: 550px;
+}
+
+.card-window-sidebar {
+    float: right;
+    width: 250px;
+    padding: 0 20px 8px 20px;
+    position: relative;
+}
+
+.card-sidebar-module {
+    float: right;
+    width: 100%;
+    position: relative;
+}
+
+.btn-card-sidebar {
+    width: 100%;
+    background-color: rgb(228, 227, 227);
+    margin-bottom: 10px;
+}
+
+.btn-card-sidebar:hover {
+    background-color: rgb(212, 211, 211);
 }
 
 .textarea-card-description {
     width: 500px;
     max-height: 170px;
-    background-color: rgba(143, 142, 142, 0.1);
+    background-color: rgb(228, 227, 227);
     resize: none;
     border: 2px solid transparent !important;
     border-radius: 0px;
