@@ -19,6 +19,12 @@ code {
     padding: 0.5rem;
 }
 
+.card-body-checklist {
+    width: 400px;
+    border: 2px solid transparent !important;
+    margin-left: 0px !important;
+}
+
 .cardBody:hover {
     cursor: pointer;
 }
@@ -48,7 +54,8 @@ code {
 }
 
 .btn-add-list {
-    margin-left: 10px;
+    margin-left: 7px;
+    margin-bottom: 0px;
 }
 
 .btn-close-add-card {
@@ -78,7 +85,8 @@ code {
 }
 
 .btn-add-another-card,
-.btn-add-another-list {
+.btn-add-another-list,
+.btn-add-another-checklist {
     position: relative;
     margin: 5px;
     margin-top: -3px;
@@ -98,6 +106,18 @@ code {
     padding-right: 92px;
 }
 
+.btn-add-another-checklist {
+    background-color: rgba(228, 227, 227, 0.616);
+    width: 240px;
+    margin-left: 0px;
+    margin-top: 10px;
+    margin-right: 5px;
+    padding: 5px;
+    padding-left: 0px;
+    text-align: left;
+    padding-left: 10px !important;
+}
+
 .btn-add-another-card:hover,
 .btn-add-another-list:hover {
     text-decoration: none;
@@ -108,7 +128,7 @@ code {
 .textarea-add-list {
     width: 223px;
     color: rgb(0, 0, 0);
-    margin-top: -30px;
+    margin-top: 0px;
     margin-right: 20px;
     margin-left: -4px;
     resize: none;
@@ -123,9 +143,10 @@ code {
     padding-top: 0.4rem;
     padding-left: 0.3rem;
     padding-right: 0.3rem;
-    margin-top: -25px;
+    margin-top: 3px;
     margin-right: 5px;
-    margin-left: -4px;
+    margin-left: 3px;
+    margin-bottom: 10px;
     font-weight: bold;
 }
 
@@ -139,7 +160,7 @@ code {
     height: 30px;
     width: 223px;
     font-size: 1rem;
-    font-weight: bold;
+    font-weight: 600;
     margin-top: 10px;
     margin-left: 11px;
     margin-bottom: 0px;
@@ -161,6 +182,37 @@ code {
     padding-left: 5px;
     padding-top: 0px;
     border: 0px solid rgb(145, 145, 145) !important;
+    border-radius: 4px;
+    background-color: rgb(255, 255, 255);
+}
+
+.textarea-checklist-title,
+.textarea-checklist-title-editing {
+    min-height: 10px;
+    height: 30px;
+    width: 400px;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 10px;
+    margin-left: 0px;
+    margin-bottom: 0px;
+    padding-left: -2px !important;
+    padding-right: 10px;
+    resize: none;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    cursor: pointer;
+}
+
+.textarea-checklist-title {
+    background-color: rgba(255, 255, 255, 0);
+    border: 2px solid transparent !important;
+    cursor: pointer;
+}
+
+.textarea-checklist-title-editing {
+    padding-top: 0px;
+    border: 2px solid rgb(145, 145, 145) !important;
     border-radius: 4px;
     background-color: rgb(255, 255, 255);
 }
@@ -275,7 +327,7 @@ code {
 .textarea-card-description {
     width: 500px;
     max-height: 170px;
-    background-color: rgb(228, 227, 227);
+    background-color: rgba(228, 227, 227, 0.616);
     resize: none;
     border: 2px solid transparent !important;
     border-radius: 0px;
@@ -336,4 +388,67 @@ code {
     color: rgba(61, 61, 61, 1);
     border: none !important;
     box-shadow: none !important;
+}
+
+.textarea-checkItem-title,
+.textarea-checkItem-title-editing {
+    flex: 1 1 auto;
+    min-width: 35px;
+    min-height: 41px;
+    width: 400px;
+    font-size: 1rem;
+    /* font-weight: 600; */
+    margin-top: 8px;
+    margin-bottom: 8.5px;
+    margin-left: 0px;
+    padding: 8px;
+    padding-top: 8px;
+    padding-bottom: 5px;
+    border-radius: 4px;
+    resize: none;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    cursor: text;
+}
+
+.textarea-checkItem-title {
+    background-color: rgba(255, 255, 255, 0);
+    border: 2px solid transparent !important;
+}
+
+.textarea-checkItem-title-editing {
+    background-color: rgb(255, 255, 255);
+    border: 2px solid rgb(145, 145, 145) !important;
+}
+
+.textarea-add-checkList,
+.textarea-add-checkList-editing {
+    flex: 1 1 auto;
+    min-width: 35px;
+    min-height: 41px;
+    width: 400px;
+    font-size: 1rem;
+    /* font-weight: 600; */
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-left: 0px;
+    padding: 8px;
+    padding-top: 8px;
+    padding-bottom: 5px;
+    border-radius: 4px;
+    resize: none;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    cursor: text;
+}
+
+.textarea-add-checkList {
+    background-color: rgb(255, 255, 255);
+    border: 2px solid transparent !important;
+    border: 2px solid rgb(145, 145, 145) !important;
+}
+
+.textarea-add-checkList-editing {
+    background-color: rgb(255, 255, 255);
+    border: 2px solid rgb(145, 145, 145) !important;
 }

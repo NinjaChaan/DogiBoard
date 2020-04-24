@@ -5,6 +5,7 @@ import CardTitle from './cardTitle'
 import CardDescription from './cardDescription'
 import CardAddTo from './cardAddTo'
 import CardActions from './cardActions'
+import Checklist from './checklist'
 
 const mapStateToProps = (state) => {
 	console.log('state at cardwindiw', state.selectedCard)
@@ -33,7 +34,7 @@ const CardWindow = ({ selectedCard, dispatch }) => {
 	const handleChildClick = (e) => {
 		e.stopPropagation()
 	}
-	console.log('render desc', selectedCard.description)
+	console.log('render desc', selectedCard)
 	return (
 		<div id="window-overlay" className="window-overlay" onClick={closeCardWindow}>
 			<div id="card-window" className="window" style={{ display: 'block' }} tabIndex="0" onClick={handleChildClick}>
@@ -51,10 +52,13 @@ const CardWindow = ({ selectedCard, dispatch }) => {
 							<h6 style={{ fontWeight: '600' }}>Description</h6>
 						</div>
 						<CardDescription />
+						{selectedCard.checklist
+							? <Checklist selectedCard={selectedCard} />
+							: null}
 					</div>
 					<div className="card-window-sidebar">
-						<CardAddTo />
-						<CardActions card={selectedCard} closeCardWindow={closeCardWindow}/>
+						<CardAddTo selectedCard={selectedCard} />
+						<CardActions card={selectedCard} closeCardWindow={closeCardWindow} />
 					</div>
 				</div>
 			</div>

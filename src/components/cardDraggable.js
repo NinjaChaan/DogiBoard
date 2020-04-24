@@ -11,6 +11,7 @@ const CardDraggable = ({
 		const selectedCard = {
 			text: card.text,
 			description: card.description,
+			checklist: card.checklist,
 			id: card.id,
 			listId: card.listId
 		}

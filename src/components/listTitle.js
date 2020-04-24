@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { updateListTitle } from '../actions/index'
 
-const ListTitle = ({ listTitle, id, dispatch }) => {
-	const [listTitleClass, setListTitleClass] = useState('textarea-list-title')
+const ListTitle = ({ listTitle, id, dispatch, classType, updateFunction, autoFocus }) => {
+	const [listTitleClass, setListTitleClass] = useState(`textarea-${classType}-title`)
 	const [title, setTitle] = useState(listTitle)
 
-	const field = document.getElementById(`listTitle${id.toString()}`)
+	const field = document.getElementById(`${classType}Title${id.toString()}`)
 	if (field) {
 		field.style.height = '30px'
 
@@ -20,7 +20,6 @@ const ListTitle = ({ listTitle, id, dispatch }) => {
 			+ parseInt(computed.getPropertyValue('padding-bottom'), 10)
 			+ parseInt(computed.getPropertyValue('border-bottom-width'), 10)
 		field.style.height = `${height}px`
-		
 
 		if (field.scrollHeight > 168) {
 			field.style.overflow = 'auto'
@@ -38,7 +37,7 @@ const ListTitle = ({ listTitle, id, dispatch }) => {
 	const handleKeyPress = (event) => {
 		if (event.key === 'Enter') {
 			event.preventDefault()
-			document.getElementById(`listTitle${id.toString()}`).blur()
+			document.getElementById(`${classType}Title${id.toString()}`).blur()
 		}
 	}
 
@@ -50,23 +49,30 @@ const ListTitle = ({ listTitle, id, dispatch }) => {
 	}
 
 	const focusTitle = () => {
-		const titleElement = document.getElementById(`listTitle${id.toString()}`)
+		const titleElement = document.getElementById(`${classType}Title${id.toString()}`)
 		titleElement.focus()
 		titleElement.value = ''
 		titleElement.value = { listTitle }
-		setListTitleClass('textarea-list-title-editing')
+		setListTitleClass(`textarea-${classType}-title-editing`)
 	}
 
 	const blurTitle = () => {
-		setListTitleClass('textarea-list-title')
-		console.log('update list ', title, dispatch(updateListTitle({ text: title, id })))
+		setListTitleClass(`textarea-${classType}-title`)
+		if (classType === 'list') {
+			console.log('update list ', title, dispatch(updateListTitle({ text: title, id })))
+		} else {
+			const titleElement = document.getElementById(`${classType}Title${id.toString()}`)
+			console.log('updating', titleElement.value)
+			updateFunction(titleElement.value)
+		}
 	}
 
 	return (
 		<textarea
+			autoFocus={autoFocus}
 			value={title}
 			onChange={handleTextChange}
-			id={`listTitle${id.toString()}`}
+			id={`${classType}Title${id.toString()}`}
 			onFocus={focusTitle}
 			onBlur={blurTitle}
 			className={listTitleClass}

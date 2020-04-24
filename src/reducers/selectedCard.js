@@ -14,7 +14,8 @@ const selectedCardReducer = (state = selectedCard, action) => {
 				text: action.payload.text,
 				id: action.payload.id,
 				listId: action.payload.listId,
-				description: action.payload.description
+				description: action.payload.description,
+				checklist: action.payload.checklist
 			}
 		default:
 			return state

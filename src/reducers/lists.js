@@ -86,6 +86,21 @@ const listReducer = (state = initialState, action) => {
 			})
 			console.log('dcards', newLists)
 			return { ...state, lists: newLists }
+		case 'UPDATE_CHECKLIST':
+			console.log('update checklist', action.payload)
+			const checklistUpdatedLists = state.lists.map((list, i) => {
+				if (list.id === action.payload.listId) {
+					const updatedChecklist = list.cards.map((card) => {
+						if (card.id === action.payload.id) {
+							return { ...card, checklist: action.payload.checklist }
+						}
+						return card
+					})
+					return { ...list, cards: updatedChecklist }
+				}
+				return list
+			})
+			return { ...state, lists: checklistUpdatedLists }
 		default:
 			return state
 	}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { updateCardTitle, setSelectedCard } from '../../actions/index'
+import { setSelectedCard, updateChecklist } from '../../actions/index'
 
 const mapStateToProps = (state) =>
 	// console.log('state at cardwindiw', state.selectedCard.text)
@@ -9,18 +9,18 @@ const mapStateToProps = (state) =>
 	})
 
 
-const CardTitle = ({ selectedCard, id, dispatch, listId }) => {
-	const [listTitleClass, setListTitleClass] = useState('textarea-card-title')
+const CheckItemTitle = ({ selectedCard, checkItem, setEditing, dispatch }) => {
+	const [listTitleClass, setListTitleClass] = useState('textarea-checkItem-title')
 
 	const calculateHeight = () => {
-		const field = document.getElementById('cardTitle')
+		const field = document.getElementById('checkItemTitle')
 		if (field) {
 			field.style.height = '25px'
 			// Get the computed styles for the element
 			const computed = window.getComputedStyle(field)
 
 			if (field.value === '[object Object]') {
-				field.value = selectedCard.text
+				field.value = checkItem.text
 			}
 
 			// Calculate the height
@@ -50,56 +50,75 @@ const CardTitle = ({ selectedCard, id, dispatch, listId }) => {
 	const handleKeyPress = (event) => {
 		if (event.key === 'Enter') {
 			event.preventDefault()
-			document.getElementById('cardTitle').blur()
+			document.getElementById('checkItemTitle').blur()
 		}
 	}
 
 	const handleTextChange = (event) => {
 		calculateHeight()
-		const titleElement = document.getElementById('cardTitle')
+		const titleElement = document.getElementById('checkItemTitle')
 		if (event.key === 'Enter') {
 			event.preventDefault()
 		}
+		console.log(event.target.value)
 		titleElement.value = event.target.value
-		const text = titleElement.value
-		const newSelection = {
-			text,
+
+		const list = selectedCard.checklist
+
+		list.checkItems.map((item, i) => {
+			if (item === checkItem) {
+				item.text = titleElement.value
+			}
+		})
+
+		console.log('list', list)
+		const newCard = {
+			text: selectedCard.text,
 			description: selectedCard.description,
-			checklist: selectedCard.checklist,
+			checklist: list,
 			id: selectedCard.id,
 			listId: selectedCard.listId
 		}
-		console.log('set', dispatch(setSelectedCard(newSelection)))
+
+		const newChecklist = {
+			checklist: list,
+			id: selectedCard.id,
+			listId: selectedCard.listId
+		}
+
+		console.log(dispatch(setSelectedCard(newCard)))
+		console.log(dispatch(updateChecklist(newChecklist)))
 	}
 
 	const focusTitle = () => {
-		const titleElement = document.getElementById('cardTitle')
-		const t = selectedCard.text
+		const titleElement = document.getElementById('checkItemTitle')
+		const t = checkItem.text
 		console.log('selected', t)
 		titleElement.focus()
 		//titleElement.value = ''
 		titleElement.value = { t }
-		setListTitleClass('textarea-card-title-editing')
+		setListTitleClass('textarea-checkItem-title-editing')
 	}
 
 	const blurTitle = () => {
-		setListTitleClass('textarea-card-title')
-		console.log('update card', dispatch(updateCardTitle({ text: document.getElementById('cardTitle').value, id, listId })))
+		setEditing(false)
+		//console.log('update card', dispatch(updateCardTitle({ text: document.getElementById('cardTitle').value, id, listId })))
 	}
 
-	console.log('selected', selectedCard.text)
+	//console.log('selected', selectedCard.text)
 	return (
 		<textarea
-			value={selectedCard.text}
+			autoFocus={true}
+			value={checkItem.text}
 			onChange={handleTextChange}
-			id={'cardTitle'}
+			id={'checkItemTitle'}
 			onFocus={focusTitle}
 			onBlur={blurTitle}
 			maxLength="200"
-			className={listTitleClass}
+			className={'textarea-checkItem-title-editing'}
 			spellCheck="false"
 			onKeyPress={handleKeyPress}
 		/>
 	)
 }
-export default connect(mapStateToProps, null)(CardTitle)
+export default connect(mapStateToProps, null)(CheckItemTitle)

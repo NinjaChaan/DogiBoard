@@ -5,7 +5,7 @@ import { addCard, addList } from '../actions/index'
 import './cardList.css'
 
 const AddItem = ({
-	listId, changeShowAddAnother, buttonText, defaultText, classType, dispatch
+	listId, changeShowAddAnother, buttonText, defaultText, classType, dispatch, clickFunction
 }) => {
 	const [cardText, setCardText] = useState('')
 	const field = document.getElementById('listTitle')
@@ -46,13 +46,19 @@ const AddItem = ({
 				}
 				changeShowAddAnother(true)
 				dispatch(addCard(newCard))
-			} else {
+			} else if (classType === 'list') {
 				newCard = {
 					text: cardText,
 					cards: []
 				}
 				changeShowAddAnother(true)
 				dispatch(addList(newCard))
+			} else {
+				newCard = {
+					text: cardText,
+					id: Math.floor(Math.random() * 99999)
+				}
+				clickFunction(newCard)
 			}
 			setCardText('')
 		}
@@ -87,8 +93,7 @@ const AddItem = ({
 		<div className={`btn-add-another-${classType}`}>
 			<form onSubmit={handleSubmit}>
 				<div>
-					<br />
-					<div className="add-card-text">
+					<div className={`add-${classType}-text`}>
 						<textarea
 							id="listTitle"
 							className={`textarea-add-${classType}`}
@@ -105,7 +110,7 @@ const AddItem = ({
 				</div>
 				<div className={`div-add-${classType}`}>
 					<Button className={`btn-add-${classType}`} variant="success" type="submit">{buttonText}</Button>
-					<Button className="btn-close-add-card" variant="light" onClick={() => changeShowAddAnother(true)}>✕</Button>
+					<Button className="btn-close-add-card" variant="light" onMouseDown={() => changeShowAddAnother(true)}>✕</Button>
 				</div>
 			</form>
 		</div>
