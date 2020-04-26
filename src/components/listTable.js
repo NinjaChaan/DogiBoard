@@ -71,6 +71,7 @@ const ListTable = ({ lists, dispatch }) => {
 			const newDestinationCards = Array.from(destinationList.cards)
 			newSourceCards.splice(source.index, 1)
 			newDestinationCards.splice(destination.index, 0, sourceList.cards[source.index])
+			newDestinationCards[destination.index].listId = destinationList.id
 
 			const newSourceList = {
 				...sourceList,

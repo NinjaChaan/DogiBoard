@@ -15,6 +15,7 @@ const initialState = {
 	}
 	]
 }
+
 const listReducer = (state = initialState, action) => {
 	let listToUpdate = null
 	if (action.payload) {
