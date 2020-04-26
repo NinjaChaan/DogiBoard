@@ -20,7 +20,7 @@ const ListTitle = ({ listTitle, id, dispatch, classType, updateFunction, autoFoc
 			+ parseInt(computed.getPropertyValue('padding-bottom'), 10)
 			+ parseInt(computed.getPropertyValue('border-bottom-width'), 10)
 		field.style.height = `${height}px`
-
+		
 		if (field.scrollHeight > 168) {
 			field.style.overflow = 'auto'
 			if (document.activeElement === field) {

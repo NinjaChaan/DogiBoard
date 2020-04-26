@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import Button from 'react-bootstrap/Button'
 import CheckListDraggable from './checkListDraggable'
 import AddItem from '../addItem'
-import ListTitle from '../listTitle'
+import ChecklistTitle from './checkListTitle'
 import { setSelectedCard, updateChecklist } from '../../actions/index'
 
 const Checklist = ({ checkItems, createCard, innerRef, placeholder, showingAddAnother, changeShowAddAnother, id }) => {
@@ -31,7 +31,7 @@ const Checklist = ({ checkItems, createCard, innerRef, placeholder, showingAddAn
 								listId={id}
 								changeShowAddAnother={changeShowAddAnother}
 								buttonText="Add"
-								defaultText="Enter a description for this checklist"
+								defaultText="Enter a description for this checklist item"
 								classType="checkList"
 								clickFunction={createCard}
 							/>
@@ -71,6 +71,12 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 
 		console.log(dispatch(setSelectedCard(newCard)))
 		console.log(dispatch(updateChecklist(newChecklist)))
+		if (document.getElementById('checkListTitle')) {
+			setTimeout(() => {
+				console.log(document.getElementById('checkListTitle'))
+				document.getElementById('checkListTitle').focus()
+			}, 10)
+		}
 
 	}
 
@@ -160,7 +166,7 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 			<thead>
 				<tr>
 					<td>
-						<ListTitle
+						<ChecklistTitle
 							listTitle={selectedCard.checklist.text}
 							id={'0'}
 							card={false}

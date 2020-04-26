@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
 import { updateCardDescription } from '../../actions/index'
 
 const mapStateToProps = (state) => {
 	console.log('state at cardwindiw', state.selectedCard)
+	const description = state.selectedCard.description || ''
 	return (
 		({
 			selectedCard: state.selectedCard,
-			description: state.selectedCard.description
+			description
 		})
 	)
 }
@@ -18,13 +19,15 @@ const CardDescription = ({ selectedCard, description, dispatch }) => {
 	const [oldText, setOldText] = useState(selectedCard.description)
 	const [showButtons, setShowButtons] = useState(false)
 
+	useEffect(() => {
+		setDescriptionText(description)
+	}, [selectedCard])
+
 	const field = document.getElementById('description')
 	if (field) {
 		field.style.height = 'inherit'
-
 		// Get the computed styles for the element
 		const computed = window.getComputedStyle(field)
-
 		// Calculate the height
 		const height = parseInt(computed.getPropertyValue('border-top-width'), 10)
 			+ parseInt(computed.getPropertyValue('padding-top'), 10)
@@ -80,7 +83,7 @@ const CardDescription = ({ selectedCard, description, dispatch }) => {
 	return (
 		<div>
 			<textarea
-				value={selectedCard.description}
+				value={descriptionText}
 				id="description"
 				className="textarea-card-description"
 				onFocus={focus}

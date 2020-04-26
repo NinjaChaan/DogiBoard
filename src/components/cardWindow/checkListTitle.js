@@ -1,26 +1,32 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { setSelectedCard, updateChecklist } from '../../actions/index'
 
 const mapStateToProps = (state) =>
 	// console.log('state at cardwindiw', state.selectedCard.text)
 	({
-		selectedCard: state.selectedCard
+		selectedCard: state.selectedCard,
+		title: state.selectedCard.checklist.text
 	})
 
 
-const CheckItemTitle = ({ selectedCard, checkItem, setEditing, dispatch }) => {
-	const [listTitleClass, setListTitleClass] = useState('textarea-checkItem-title')
+const ChecklistTitle = ({ selectedCard, title, dispatch }) => {
+	const [titleText, setTitleText] = useState('Checklist')
+	const [listTitleClass, setListTitleClass] = useState('textarea-checklist-title')
+
+	useEffect(() => {
+		setTitleText(title)
+	}, [selectedCard])
 
 	const calculateHeight = () => {
-		const field = document.getElementById('checkItemTitle')
+		const field = document.getElementById('checlistTitle')
 		if (field) {
-			field.style.height = '25px'
+			field.style.height = '30px'
 			// Get the computed styles for the element
 			const computed = window.getComputedStyle(field)
 
 			if (field.value === '[object Object]') {
-				field.value = checkItem.text
+				field.value = title
 			}
 
 			// Calculate the height
@@ -30,7 +36,7 @@ const CheckItemTitle = ({ selectedCard, checkItem, setEditing, dispatch }) => {
 				+ parseInt(computed.getPropertyValue('padding-bottom'), 10)
 				+ parseInt(computed.getPropertyValue('border-bottom-width'), 10)
 
-			field.style.height = `${height - 10}px`
+			field.style.height = `${height}px`
 
 			if (field.scrollHeight > 168) {
 				field.style.overflow = 'auto'
@@ -50,27 +56,22 @@ const CheckItemTitle = ({ selectedCard, checkItem, setEditing, dispatch }) => {
 	const handleKeyPress = (event) => {
 		if (event.key === 'Enter') {
 			event.preventDefault()
-			//document.getElementById('checkItemTitle').blur()
+			document.getElementById('checlistTitle').blur()
 		}
 	}
 
 	const handleTextChange = (event) => {
 		calculateHeight()
-		const titleElement = document.getElementById('checkItemTitle')
+		const titleElement = document.getElementById('checlistTitle')
 		if (event.key === 'Enter') {
 			event.preventDefault()
 		}
 		console.log(event.target.value)
+		setTitleText(event.target.value)
 		//titleElement.value = event.target.value
 
 		const list = selectedCard.checklist
-
-		list.checkItems.map((item, i) => {
-			if (item === checkItem) {
-				item.text = titleElement.value
-			}
-		})
-
+		list.text = titleElement.value
 		console.log('list', list)
 		const newCard = {
 			text: selectedCard.text,
@@ -91,34 +92,33 @@ const CheckItemTitle = ({ selectedCard, checkItem, setEditing, dispatch }) => {
 	}
 
 	const focusTitle = () => {
-		const titleElement = document.getElementById('checkItemTitle')
-		const t = checkItem.text
+		const titleElement = document.getElementById('checlistTitle')
+		const t = selectedCard.checklist.text
 		console.log('selected', t)
 		titleElement.focus()
 		//titleElement.value = ''
 		titleElement.value = { t }
-		setListTitleClass('textarea-checkItem-title-editing')
+		setListTitleClass('textarea-checklist-title-editing')
 	}
 
 	const blurTitle = () => {
-		setEditing(false)
+		setListTitleClass('textarea-checklist-title')
 		//console.log('update card', dispatch(updateCardTitle({ text: document.getElementById('cardTitle').value, id, listId })))
 	}
 
 	//console.log('selected', selectedCard.text)
 	return (
 		<textarea
-			autoFocus={true}
-			value={checkItem.text}
+			value={titleText}
 			onChange={handleTextChange}
-			id={'checkItemTitle'}
+			id="checlistTitle"
 			onFocus={focusTitle}
 			onBlur={blurTitle}
 			maxLength="200"
-			className={'textarea-checkItem-title-editing'}
+			className={listTitleClass}
 			spellCheck="false"
 			onKeyPress={handleKeyPress}
 		/>
 	)
 }
-export default connect(mapStateToProps, null)(CheckItemTitle)
+export default connect(mapStateToProps, null)(ChecklistTitle)

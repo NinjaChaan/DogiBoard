@@ -156,15 +156,18 @@ code {
 
 .textarea-list-title,
 .textarea-list-title-editing {
-    min-height: 10px;
+    min-height: 34px;
     height: 30px;
     width: 223px;
     font-size: 1rem;
     font-weight: 600;
     margin-top: 10px;
-    margin-left: 11px;
+    margin-left: 10px;
+    margin-right: 10px;
     margin-bottom: 0px;
-    padding-right: 10px;
+    padding-top: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
     resize: none;
     overflow: hidden;
     overflow-wrap: break-word;
@@ -172,16 +175,13 @@ code {
 }
 
 .textarea-list-title {
-    padding-left: 5px;
     background-color: rgba(255, 255, 255, 0);
-    border: 0px solid transparent !important;
+    border: 2px solid transparent !important;
     cursor: pointer;
 }
 
 .textarea-list-title-editing {
-    padding-left: 5px;
-    padding-top: 0px;
-    border: 0px solid rgb(145, 145, 145) !important;
+    border: 2px solid rgb(145, 145, 145) !important;
     border-radius: 4px;
     background-color: rgb(255, 255, 255);
 }
@@ -205,12 +205,15 @@ code {
 }
 
 .textarea-checklist-title {
+    min-height: 30px;
     background-color: rgba(255, 255, 255, 0);
     border: 2px solid transparent !important;
     cursor: pointer;
 }
 
 .textarea-checklist-title-editing {
+    width: 500px;
+    min-height: 30px;
     padding-top: 0px;
     border: 2px solid rgb(145, 145, 145) !important;
     border-radius: 4px;
@@ -220,6 +223,7 @@ code {
 .textarea-card-title,
 .textarea-card-title-editing {
     min-width: 35px;
+    min-height: 37px;
     width: 600px;
     font-size: 1.2rem;
     font-weight: 600;
@@ -326,6 +330,7 @@ code {
 
 .textarea-card-description {
     width: 500px;
+    min-height: 50px;
     max-height: 170px;
     background-color: rgba(228, 227, 227, 0.616);
     resize: none;

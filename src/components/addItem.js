@@ -8,7 +8,7 @@ const AddItem = ({
 	listId, changeShowAddAnother, buttonText, defaultText, classType, dispatch, clickFunction
 }) => {
 	const [cardText, setCardText] = useState('')
-	const field = document.getElementById('listTitle')
+	const field = document.getElementById(`${classType}Title`)
 	if (field) {
 		field.style.height = 'inherit'
 
@@ -22,9 +22,9 @@ const AddItem = ({
 			+ parseInt(computed.getPropertyValue('padding-bottom'), 10)
 			+ parseInt(computed.getPropertyValue('border-bottom-width'), 10)
 
-		field.style.height = `${height}px`
+		field.style.height = `${height-16}px`
 
-		if (field.scrollHeight > 168) {
+		if (height > 168) {
 			field.style.overflow = 'auto'
 			if (document.activeElement === field) {
 				field.scrollTop = field.scrollHeight
@@ -95,11 +95,11 @@ const AddItem = ({
 				<div>
 					<div className={`add-${classType}-text`}>
 						<textarea
-							id="listTitle"
+							id={`${classType}Title`}
 							className={`textarea-add-${classType}`}
 							autoFocus
 							spellCheck="false"
-							maxLength={classType === 'card' ? '200' : '25'}
+							maxLength={classType === 'list' ? '25' : '200'}
 							placeholder={defaultText}
 							value={cardText}
 							onKeyPress={handleKeyPress}

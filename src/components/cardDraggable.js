@@ -15,12 +15,12 @@ const CardDraggable = ({
 			id: card.id,
 			listId: card.listId
 		}
-
+		document.getElementById('description').value = ''
 		console.log(dispatch(setSelectedCard(selectedCard)))
-
-		document.getElementById('window-overlay').style.display = 'flex'
-		document.getElementById('card-window').focus()
-		document.getElementById('description').value = card.description || ''
+		setTimeout(() => {
+			document.getElementById('window-overlay').style.display = 'flex'
+			document.getElementById('card-window').focus()
+		}, 10)
 		// document.getElementById('cardTitle').value = card.text || ''
 	}
 

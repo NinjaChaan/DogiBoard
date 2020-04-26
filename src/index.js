@@ -9,7 +9,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.css'
 
 window.store = store
-window.setSelectedCard = setSelectedCard
 render(
 	<Provider store={store}>
 		<App />

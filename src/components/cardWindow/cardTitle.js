@@ -10,6 +10,7 @@ const mapStateToProps = (state) =>
 
 
 const CardTitle = ({ selectedCard, id, dispatch, listId }) => {
+	const [titleText, setTitleText] = useState('')
 	const [listTitleClass, setListTitleClass] = useState('textarea-card-title')
 
 	const calculateHeight = () => {
