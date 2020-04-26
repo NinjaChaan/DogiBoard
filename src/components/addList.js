@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
-import { addCard, addList } from '../actions/index'
+import { addList } from '../actions/index'
 import './cardList.css'
 
-const AddItem = ({
-	listId, changeShowAddAnother, buttonText, defaultText, classType, dispatch, clickFunction
-}) => {
+const AddList = ({ listId, changeShowAddAnother, dispatch }) => {
 	const [cardText, setCardText] = useState('')
-	const field = document.getElementById(`${classType}Title`)
+	const field = document.getElementById('listTitle')
 	if (field) {
 		field.style.height = 'inherit'
 
@@ -22,7 +20,7 @@ const AddItem = ({
 			+ parseInt(computed.getPropertyValue('padding-bottom'), 10)
 			+ parseInt(computed.getPropertyValue('border-bottom-width'), 10)
 
-		field.style.height = `${height-16}px`
+		field.style.height = `${height - 14}px`
 
 		if (height > 168) {
 			field.style.overflow = 'auto'
@@ -39,29 +37,14 @@ const AddItem = ({
 	const createItem = () => {
 		if (cardText.length > 0) {
 			let newCard = {}
-			if (classType === 'card') {
-				newCard = {
-					text: cardText,
-					listId
-				}
-				changeShowAddAnother(true)
-				dispatch(addCard(newCard))
-			} else if (classType === 'list') {
-				newCard = {
-					text: cardText,
-					cards: []
-				}
-				changeShowAddAnother(true)
-				dispatch(addList(newCard))
-			} else {
-				newCard = {
-					text: cardText,
-					id: Math.floor(Math.random() * 99999)
-				}
-				clickFunction(newCard)
+			newCard = {
+				text: cardText,
+				cards: []
 			}
-			setCardText('')
+			changeShowAddAnother(true)
+			dispatch(addList(newCard))
 		}
+		setCardText('')
 	}
 
 	const handleSubmit = (event) => {
@@ -90,17 +73,17 @@ const AddItem = ({
 	}
 
 	return (
-		<div className={`btn-add-another-${classType}`}>
+		<div className="btn-add-another-list">
 			<form onSubmit={handleSubmit}>
 				<div>
-					<div className={`add-${classType}-text`}>
+					<div className="add-list-text">
 						<textarea
-							id={`${classType}Title`}
-							className={`textarea-add-${classType}`}
+							id="listTitle"
+							className="textarea-add-list"
 							autoFocus
 							spellCheck="false"
-							maxLength={classType === 'list' ? '25' : '200'}
-							placeholder={defaultText}
+							maxLength="25"
+							placeholder="Enter a title for this list"
 							value={cardText}
 							onKeyPress={handleKeyPress}
 							onChange={handleTextChange}
@@ -108,8 +91,8 @@ const AddItem = ({
 						/>
 					</div>
 				</div>
-				<div className={`div-add-${classType}`}>
-					<Button className={`btn-add-${classType}`} variant="success" type="submit">{buttonText}</Button>
+				<div className="div-add-list">
+					<Button className="btn-add-list" variant="success" type="submit">Add list</Button>
 					<Button className="btn-close-add-card" variant="light" onMouseDown={() => changeShowAddAnother(true)}>✕</Button>
 				</div>
 			</form>
@@ -117,4 +100,4 @@ const AddItem = ({
 	)
 }
 
-export default connect()(AddItem)
+export default connect()(AddList)

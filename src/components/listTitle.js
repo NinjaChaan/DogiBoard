@@ -8,7 +8,7 @@ const ListTitle = ({ listTitle, id, dispatch, classType, updateFunction, autoFoc
 
 	const field = document.getElementById(`${classType}Title${id.toString()}`)
 	if (field) {
-		field.style.height = '30px'
+		field.style.height = 'inherit'
 
 		// Get the computed styles for the element
 		const computed = window.getComputedStyle(field)

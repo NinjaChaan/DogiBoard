@@ -3,7 +3,7 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
 import Button from 'react-bootstrap/Button'
 import CheckListDraggable from './checkListDraggable'
-import AddItem from '../addItem'
+import AddChecklistItem from './addChecklistItem'
 import ChecklistTitle from './checkListTitle'
 import { setSelectedCard, updateChecklist } from '../../actions/index'
 
@@ -27,12 +27,9 @@ const Checklist = ({ checkItems, createCard, innerRef, placeholder, showingAddAn
 							</Button>
 						)
 						: (
-							<AddItem
+							<AddChecklistItem
 								listId={id}
 								changeShowAddAnother={changeShowAddAnother}
-								buttonText="Add"
-								defaultText="Enter a description for this checklist item"
-								classType="checkList"
 								clickFunction={createCard}
 							/>
 						)}

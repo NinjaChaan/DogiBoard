@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 import Button from 'react-bootstrap/Button'
 import CardDraggable from './cardDraggable'
-import AddItem from './addItem'
+import AddCard from './addCard'
 import ListTitle from './listTitle'
 import './cardList.css'
 
@@ -20,7 +20,7 @@ const CardList = ({ cards, innerRef, placeholder, showingAddAnother, changeShowA
 							Add another card
 						</Button>
 					)
-					: <AddItem listId={id} changeShowAddAnother={changeShowAddAnother} buttonText="Add card" defaultText="Enter a title for this card" classType="card" />}
+					: <AddCard listId={id} changeShowAddAnother={changeShowAddAnother} />}
 			</td>
 		</tr>
 	</tbody>

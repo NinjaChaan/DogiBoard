@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Button from 'react-bootstrap/Button'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
-import AddItem from './addItem'
+import AddList from './addList'
 import CardListContainer from './cardList'
 import { updateListOrder } from '../actions/index'
 
@@ -157,10 +157,7 @@ const ListTable = ({ lists, dispatch }) => {
 											</Button>
 										)
 										: (
-											<AddItem
-												buttonText="Add list"
-												defaultText="Enter a title for this list"
-												classType="list"
+											<AddList
 												changeShowAddAnother={changeShowAddAnother}
 											/>
 										)}
