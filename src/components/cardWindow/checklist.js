@@ -7,36 +7,39 @@ import AddChecklistItem from './addChecklistItem'
 import ChecklistTitle from './checkListTitle'
 import { setSelectedCard, updateChecklist } from '../../actions/index'
 
-const Checklist = ({ checkItems, createCard, innerRef, placeholder, showingAddAnother, changeShowAddAnother, id }) => {
-	console.log('in check', checkItems)
-	return (
-		<tbody ref={innerRef}>
-			{checkItems.map((item, i) => {
-				return (
+const Checklist = ({
+	checkItems, createCard, innerRef, placeholder, showingAddAnother, changeShowAddAnother, id
+}) => {
+	if (checkItems) {
+		console.log('in check', checkItems)
+		return (
+			<tbody ref={innerRef}>
+				{checkItems.map((item, i) => (
 					<CheckListDraggable key={item.id} i={i} checkItem={item} />
-				)
-			})}
-			{placeholder}
-			<tr>
-				<td>
-					{showingAddAnother
-						? (
-							<Button className="btn-add-another-checklist" variant="link" onClick={() => changeShowAddAnother(false)}>
-								<font size="4">＋</font>
-								Add checklist item
-							</Button>
-						)
-						: (
-							<AddChecklistItem
-								listId={id}
-								changeShowAddAnother={changeShowAddAnother}
-								clickFunction={createCard}
-							/>
-						)}
-				</td>
-			</tr>
-		</tbody>
-	)
+				))}
+				{placeholder}
+				<tr>
+					<td>
+						{showingAddAnother
+							? (
+								<Button className="btn-add-another-checklist" variant="link" onClick={() => changeShowAddAnother(false)}>
+									<font size="4">＋</font>
+									Add checklist item
+								</Button>
+							)
+							: (
+								<AddChecklistItem
+									listId={id}
+									changeShowAddAnother={changeShowAddAnother}
+									clickFunction={createCard}
+								/>
+							)}
+					</td>
+				</tr>
+			</tbody>
+		)
+	}
+	return (<></>)
 }
 
 const CheckListContainer = ({ selectedCard, id, dispatch }) => {
@@ -74,7 +77,6 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 				document.getElementById('checkListTitle').focus()
 			}, 10)
 		}
-
 	}
 
 	const onDragStart = () => {
@@ -157,25 +159,45 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 		console.log('sendind list', dispatch(updateChecklist(newChecklist)))
 	}
 
+	const deleteChecklist = () => {
+		const newChecklist = {
+			checklist: null,
+			id: selectedCard.id,
+			listId: selectedCard.listId
+		}
+		const newCard = {
+			text: selectedCard.text,
+			description: selectedCard.description,
+			checklist: null,
+			id: selectedCard.id,
+			listId: selectedCard.listId
+		}
+
+		console.log('new card', newCard)
+		console.log('sendind select', dispatch(setSelectedCard(newCard)))
+		console.log('sendind list', dispatch(updateChecklist(newChecklist)))
+	}
+
 	console.log('rendering checklist', selectedCard)
 	return (
 		<table className="cardList" style={{ backgroundColor: 'transparent', marginLeft: '0px' }}>
 			<thead>
 				<tr>
-					<td>
+					<td style={{ width: '500px' }}>
 						<ChecklistTitle
 							listTitle={selectedCard.checklist.text}
-							id={'0'}
+							id="0"
 							card={false}
 							classType="checklist"
 							updateFunction={updateChecklistFunc}
 							autoFocus={true}
 						/>
+						<Button className="btn-delete-checklist" variant="danger" onMouseDown={deleteChecklist}>✕</Button>
 					</td>
 				</tr>
 			</thead>
 			<DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
-				<Droppable droppableId={'0'} type="card">
+				<Droppable droppableId="0" type="card">
 					{(provided) => (
 						<Checklist
 							id={id}
