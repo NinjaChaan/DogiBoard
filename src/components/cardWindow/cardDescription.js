@@ -71,7 +71,6 @@ const CardDescription = ({ selectedCard, description, dispatch }) => {
 	const focus = () => {
 		setOldText(field.value)
 		setShowButtons(true)
-		console.log('descccc in focus', description)
 	}
 
 	const xButton = () => {
@@ -79,7 +78,6 @@ const CardDescription = ({ selectedCard, description, dispatch }) => {
 		field.value = oldText
 		setShowButtons(false)
 	}
-	console.log('descccc', selectedCard.description)
 	return (
 		<div>
 			<textarea

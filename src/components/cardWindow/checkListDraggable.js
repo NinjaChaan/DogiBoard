@@ -12,10 +12,11 @@ const mapStateToProps = (state) =>
 		selectedCard: state.selectedCard
 	})
 
-const CheckListDraggable = ({ i, checkItem, selectedCard, dispatch }) => {
+const CheckListDraggable = ({ i, checkItem, selectedCard, dispatch, calculateProgress }) => {
 	const [editing, setEditing] = useState(false)
 	const [dragging, setDragging] = useState(false)
 
+	console.log('calculateProgress', calculateProgress)
 	const toggleItemDone = () => {
 		console.log('toggle is', checkItem.done)
 		const newList = {
@@ -41,6 +42,8 @@ const CheckListDraggable = ({ i, checkItem, selectedCard, dispatch }) => {
 			id: selectedCard.id,
 			listId: selectedCard.listId
 		}
+
+		calculateProgress()
 
 		console.log('new lists', newChecklist)
 		console.log('new card', newCard)

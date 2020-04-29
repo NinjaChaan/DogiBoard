@@ -8,7 +8,6 @@ const CardDraggable = ({
 	text, i, card, dispatch
 }) => {
 	const openCardEditWindow = () => {
-		console.log('click desc', card.checklist)
 		const selectedCard = {
 			text: card.text,
 			description: card.description,

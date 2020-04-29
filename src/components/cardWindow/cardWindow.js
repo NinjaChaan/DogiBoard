@@ -34,7 +34,6 @@ const CardWindow = ({ selectedCard, dispatch }) => {
 	const handleChildClick = (e) => {
 		e.stopPropagation()
 	}
-	console.log('render desc', selectedCard)
 	return (
 		<div id="window-overlay" className="window-overlay" onClick={closeCardWindow}>
 			<div id="card-window" className="window" style={{ display: 'block' }} tabIndex="0" onClick={handleChildClick}>

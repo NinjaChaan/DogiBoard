@@ -9,7 +9,9 @@ const mapStateToProps = (state) =>
 	})
 
 
-const CardTitle = ({ selectedCard, id, dispatch, listId }) => {
+const CardTitle = ({
+	selectedCard, id, dispatch, listId
+}) => {
 	const [titleText, setTitleText] = useState('')
 	const [listTitleClass, setListTitleClass] = useState('textarea-card-title')
 
@@ -75,11 +77,8 @@ const CardTitle = ({ selectedCard, id, dispatch, listId }) => {
 
 	const focusTitle = () => {
 		const titleElement = document.getElementById('cardTitle')
-		const t = selectedCard.text
-		console.log('selected', t)
 		titleElement.focus()
-		//titleElement.value = ''
-		titleElement.value = { t }
+		titleElement.value = selectedCard.text
 		setListTitleClass('textarea-card-title-editing')
 	}
 
@@ -87,13 +86,11 @@ const CardTitle = ({ selectedCard, id, dispatch, listId }) => {
 		setListTitleClass('textarea-card-title')
 		console.log('update card', dispatch(updateCardTitle({ text: document.getElementById('cardTitle').value, id, listId })))
 	}
-
-	console.log('selected', selectedCard.text)
 	return (
 		<textarea
 			value={selectedCard.text}
 			onChange={handleTextChange}
-			id={'cardTitle'}
+			id="cardTitle"
 			onFocus={focusTitle}
 			onBlur={blurTitle}
 			maxLength="200"
