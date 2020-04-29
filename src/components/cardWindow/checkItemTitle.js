@@ -9,11 +9,11 @@ const mapStateToProps = (state) =>
 	})
 
 
-const CheckItemTitle = ({ selectedCard, checkItem, setEditing, dispatch }) => {
+const CheckItemTitle = ({ selectedCard, checkItem, setEditing, editing, dispatch }) => {
 	const [listTitleClass, setListTitleClass] = useState('textarea-checkItem-title')
 
 	const calculateHeight = () => {
-		const field = document.getElementById('checkItemTitle')
+		const field = document.getElementById(`checkItemTitle${checkItem.id}`)
 		if (field) {
 			field.style.height = '25px'
 			// Get the computed styles for the element
@@ -50,18 +50,15 @@ const CheckItemTitle = ({ selectedCard, checkItem, setEditing, dispatch }) => {
 	const handleKeyPress = (event) => {
 		if (event.key === 'Enter') {
 			event.preventDefault()
-			//document.getElementById('checkItemTitle').blur()
 		}
 	}
 
 	const handleTextChange = (event) => {
 		calculateHeight()
-		const titleElement = document.getElementById('checkItemTitle')
+		const titleElement = document.getElementById(`checkItemTitle${checkItem.id}`)
 		if (event.key === 'Enter') {
 			event.preventDefault()
 		}
-		console.log(event.target.value)
-		//titleElement.value = event.target.value
 
 		const list = selectedCard.checklist
 
@@ -91,33 +88,35 @@ const CheckItemTitle = ({ selectedCard, checkItem, setEditing, dispatch }) => {
 	}
 
 	const focusTitle = () => {
-		const titleElement = document.getElementById('checkItemTitle')
-		const t = checkItem.text
-		console.log('selected', t)
+		const titleElement = document.getElementById(`checkItemTitle${checkItem.id}`)
+		console.log('selected', checkItem.text)
 		titleElement.focus()
-		//titleElement.value = ''
-		titleElement.value = { t }
+		titleElement.value = checkItem.text
 		setListTitleClass('textarea-checkItem-title-editing')
 	}
 
 	const blurTitle = () => {
 		setEditing(false)
-		//console.log('update card', dispatch(updateCardTitle({ text: document.getElementById('cardTitle').value, id, listId })))
+		setListTitleClass('textarea-checkItem-title')
 	}
 
-	//console.log('selected', selectedCard.text)
+	console.log('checkitem done?', checkItem.done)
 	return (
 		<textarea
 			autoFocus={true}
 			value={checkItem.text}
 			onChange={handleTextChange}
-			id={'checkItemTitle'}
+			id={`checkItemTitle${checkItem.id}`}
 			onFocus={focusTitle}
 			onBlur={blurTitle}
 			maxLength="200"
-			className={'textarea-checkItem-title-editing'}
+			className={listTitleClass}
 			spellCheck="false"
 			onKeyPress={handleKeyPress}
+			style={{
+				textDecoration: checkItem.done ? 'line-through' : 'none',
+				color: checkItem.done ? 'rgba(61, 61, 61, 0.6)' : 'black'
+			}}
 		/>
 	)
 }

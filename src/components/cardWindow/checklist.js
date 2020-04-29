@@ -11,9 +11,9 @@ const Checklist = ({ checkItems, createCard, innerRef, placeholder, showingAddAn
 	console.log('in check', checkItems)
 	return (
 		<tbody ref={innerRef}>
-			{checkItems.map((card, i) => {
+			{checkItems.map((item, i) => {
 				return (
-					<CheckListDraggable key={card.id} i={i} card={card} />
+					<CheckListDraggable key={item.id} i={i} checkItem={item} />
 				)
 			})}
 			{placeholder}

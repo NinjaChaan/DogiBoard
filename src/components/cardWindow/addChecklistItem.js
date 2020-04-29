@@ -38,13 +38,14 @@ const AddChecklistItem = ({ changeShowAddAnother, clickFunction }) => {
 
 	const createItem = () => {
 		if (cardText.length > 0) {
-			let newCard = {}
+			let newCheckItem = {}
 
-			newCard = {
+			newCheckItem = {
 				text: cardText,
-				id: Math.floor(Math.random() * 99999)
+				id: Math.floor(Math.random() * 99999),
+				done: false
 			}
-			clickFunction(newCard)
+			clickFunction(newCheckItem)
 		}
 		setCardText('')
 	}

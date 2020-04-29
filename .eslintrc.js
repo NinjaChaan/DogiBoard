@@ -46,6 +46,7 @@ module.exports = {
 		'jsx-a11y/no-noninteractive-tabindex': 0,
 		'jsx-a11y/no-autofocus': 0,
 		'react/jsx-props-no-spreading': 0,
-		'no-case-declarations': 0
+		'no-case-declarations': 0,
+		'react/jsx-boolean-value': 0
 	}
 }
