@@ -52,7 +52,6 @@ const ChecklistTitle = ({ selectedCard, title, dispatch }) => {
 	}
 	calculateHeight()
 
-
 	const handleKeyPress = (event) => {
 		if (event.key === 'Enter') {
 			event.preventDefault()
@@ -68,17 +67,13 @@ const ChecklistTitle = ({ selectedCard, title, dispatch }) => {
 		}
 		console.log(event.target.value)
 		setTitleText(event.target.value)
-		//titleElement.value = event.target.value
 
 		const list = selectedCard.checklist
 		list.text = titleElement.value
 		console.log('list', list)
 		const newCard = {
-			text: selectedCard.text,
-			description: selectedCard.description,
-			checklist: list,
-			id: selectedCard.id,
-			listId: selectedCard.listId
+			...selectedCard,
+			checklist: list
 		}
 
 		const newChecklist = {
@@ -96,17 +91,14 @@ const ChecklistTitle = ({ selectedCard, title, dispatch }) => {
 		const t = selectedCard.checklist.text
 		console.log('selected', t)
 		titleElement.focus()
-		//titleElement.value = ''
 		titleElement.value = { t }
 		setListTitleClass('textarea-checklist-title-editing')
 	}
 
 	const blurTitle = () => {
 		setListTitleClass('textarea-checklist-title')
-		//console.log('update card', dispatch(updateCardTitle({ text: document.getElementById('cardTitle').value, id, listId })))
 	}
 
-	//console.log('selected', selectedCard.text)
 	return (
 		<textarea
 			value={titleText}

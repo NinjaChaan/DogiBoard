@@ -70,11 +70,8 @@ const CheckItemTitle = ({ selectedCard, checkItem, setEditing, editing, dispatch
 
 		console.log('list', list)
 		const newCard = {
-			text: selectedCard.text,
-			description: selectedCard.description,
-			checklist: list,
-			id: selectedCard.id,
-			listId: selectedCard.listId
+			...selectedCard,
+			checklist: list
 		}
 
 		const newChecklist = {

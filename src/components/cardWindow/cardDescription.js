@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
-import { updateCardDescription } from '../../actions/index'
+import { updateCardDescription, setSelectedCard } from '../../actions/index'
 
 const mapStateToProps = (state) => {
 	console.log('state at cardwindiw', state.selectedCard)
@@ -59,13 +59,12 @@ const CardDescription = ({ selectedCard, description, dispatch }) => {
 
 	const submitCardDescription = () => {
 		const updatedCard = {
-			text: selectedCard.text,
-			description: document.getElementById('description').value,
-			id: selectedCard.id,
-			listId: selectedCard.listId
+			...selectedCard,
+			description: document.getElementById('description').value
 		}
 		setShowButtons(false)
 		console.log('update card DESC', dispatch(updateCardDescription(updatedCard)))
+		console.log('set', dispatch(setSelectedCard(updatedCard)))
 	}
 
 	const focus = () => {

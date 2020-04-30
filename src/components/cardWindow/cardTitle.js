@@ -66,11 +66,8 @@ const CardTitle = ({
 		titleElement.value = event.target.value
 		const text = titleElement.value
 		const newSelection = {
-			text,
-			description: selectedCard.description,
-			checklist: selectedCard.checklist,
-			id: selectedCard.id,
-			listId: selectedCard.listId
+			...selectedCard,
+			text
 		}
 		console.log('set', dispatch(setSelectedCard(newSelection)))
 	}

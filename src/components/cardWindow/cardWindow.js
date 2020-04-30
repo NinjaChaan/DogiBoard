@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import Button from 'react-bootstrap/Button'
 import CardTitle from './cardTitle'
@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
 	return { selectedCard: state.selectedCard }
 }
 
-const CardWindow = ({ selectedCard, dispatch }) => {
+const CardWindow = ({ selectedCard }) => {
 	const closeCardWindow = () => {
 		document.getElementById('window-overlay').style.display = 'none'
 	}

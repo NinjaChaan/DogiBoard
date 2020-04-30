@@ -114,6 +114,7 @@ const ListTable = ({ lists, dispatch }) => {
 
 	function downHandler({ key }) {
 		if (key === 'F1') {
+			// eslint-disable-next-line no-debugger
 			debugger
 		}
 	}

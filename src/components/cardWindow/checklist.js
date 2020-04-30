@@ -60,11 +60,8 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 		const list = { text: selectedCard.checklist.text, checkItems: selectedCard.checklist.checkItems.concat(newCheckItem) }
 		console.log('list', list)
 		const newCard = {
-			text: selectedCard.text,
-			description: selectedCard.description,
-			checklist: list,
-			id: selectedCard.id,
-			listId: selectedCard.listId
+			...selectedCard,
+			checklist: list
 		}
 
 		const newChecklist = {
@@ -124,11 +121,8 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 				listId: selectedCard.listId
 			}
 			const newCard = {
-				text: selectedCard.text,
-				description: selectedCard.description,
-				checklist: newList,
-				id: selectedCard.id,
-				listId: selectedCard.listId
+				...selectedCard,
+				checklist: newList
 			}
 
 			console.log('new lists', newChecklist)
@@ -149,11 +143,8 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 			listId: selectedCard.listId
 		}
 		const newCard = {
-			text: selectedCard.text,
-			description: selectedCard.description,
-			checklist: newList,
-			id: selectedCard.id,
-			listId: selectedCard.listId
+			...selectedCard,
+			checklist: newList
 		}
 
 		console.log('new lists', newChecklist)
@@ -169,11 +160,8 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 			listId: selectedCard.listId
 		}
 		const newCard = {
-			text: selectedCard.text,
-			description: selectedCard.description,
-			checklist: null,
-			id: selectedCard.id,
-			listId: selectedCard.listId
+			...selectedCard,
+			checklist: null
 		}
 
 		console.log('new card', newCard)

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
 import { setSelectedCard, updateChecklist } from '../../actions/index'
@@ -7,11 +7,8 @@ const CardAddTo = ({ selectedCard, dispatch }) => {
 	const addChecklistPressed = () => {
 		const checklist = { text: 'Checklist', checkItems: [] }
 		const newCard = {
-			text: selectedCard.text,
-			description: selectedCard.description,
-			checklist,
-			id: selectedCard.id,
-			listId: selectedCard.listId
+			...selectedCard,
+			checklist
 		}
 
 		const newChecklist = {

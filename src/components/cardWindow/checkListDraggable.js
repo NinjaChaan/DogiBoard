@@ -36,11 +36,8 @@ const CheckListDraggable = ({ i, checkItem, selectedCard, dispatch, calculatePro
 			listId: selectedCard.listId
 		}
 		const newCard = {
-			text: selectedCard.text,
-			description: selectedCard.description,
-			checklist: newList,
-			id: selectedCard.id,
-			listId: selectedCard.listId
+			...selectedCard,
+			checklist: newList
 		}
 
 		calculateProgress()
