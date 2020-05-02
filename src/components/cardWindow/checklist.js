@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button'
 import CheckListDraggable from './checkListDraggable'
 import AddChecklistItem from './addChecklistItem'
 import ChecklistTitle from './checkListTitle'
+import ProgressBar from './progressBar'
 import { setSelectedCard, updateChecklist } from '../../actions/index'
 
 const Checklist = ({
@@ -89,7 +90,7 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 
 	const onDragEnd = (result) => {
 		const {
-			destination, source, draggableId, type
+			destination, source
 		} = result
 
 		if (dragging) {
@@ -179,92 +180,14 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 		setProgress(((finished / selectedCard.checklist.checkItems.length) * 100).toFixed(0))
 	}
 
-	const rgb2hsl = (color) => {
-		const r = color[0] / 255
-		const g = color[1] / 255
-		const b = color[2] / 255
-
-		const max = Math.max(r, g, b)
-		const min = Math.min(r, g, b)
-		let h = 0
-		let s = 0
-		const l = (max + min) / 2
-
-		if (max === min) {
-			h = 0
-			s = 0 // achromatic
-		} else {
-			const d = max - min
-			s = (l > 0.5 ? d / (2 - max - min) : d / (max + min))
-			switch (max) {
-				case r: h = (g - b) / d + (g < b ? 6 : 0); break
-				case g: h = (b - r) / d + 2; break
-				case b: h = (r - g) / d + 4; break
-				default: break
-			}
-			h /= 6
-		}
-
-		return [h, s, l]
-	}
-
-	const hsl2rgb = (color) => {
-		let l = color[2]
-
-		if (color[1] === 0) {
-			l = Math.round(l * 255)
-			return [l, l, l]
-		}
-		function hue2rgb(p, q, t) {
-			if (t < 0) t += 1
-			if (t > 1) t -= 1
-			if (t < 1 / 6) return p + (q - p) * 6 * t
-			if (t < 1 / 2) return q
-			if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6
-			return p
-		}
-
-		const s = color[1]
-		const q = (l < 0.5 ? l * (1 + s) : l + s - l * s)
-		const p = 2 * l - q
-		const r = hue2rgb(p, q, color[0] + 1 / 3)
-		const g = hue2rgb(p, q, color[0])
-		const b = hue2rgb(p, q, color[0] - 1 / 3)
-		return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)]
-	}
-
-	const _interpolateHSL = (color1, color2, factor) => {
-		const hsl1 = rgb2hsl(color1)
-		const hsl2 = rgb2hsl(color2)
-		for (let i = 0; i < 3; i += 1) {
-			hsl1[i] += factor * (hsl2[i] - hsl1[i])
-		}
-		return hsl2rgb(hsl1)
-	}
-
-	function perc2color(perc) {
-		let r; let g; let b = 0
-		// if (perc < 50) {
-		// 	r = 255
-		// 	g = Math.round(5.1 * perc)
-		// } else {
-		// 	g = 255
-		// 	r = Math.round(510 - 5.10 * perc)
-		// }
-		// r = Math.round(255 - 2.55 * perc)
-		// g = Math.round(2.55 * perc)
-		const res = _interpolateHSL([255, 0, 0], [0, 255, 0], perc / 100)
-		r = res[0]
-		g = res[1]
-		b = res[2]
-		const h = r * 0x10000 + g * 0x100 + b * 0x1
-		return `#${(`000000${h.toString(16)}`).slice(-6)}`
-	}
 	return (
-		<table className="cardList" style={{ backgroundColor: 'transparent', marginLeft: '0px' }}>
+		<table style={{
+			backgroundColor: 'transparent', marginLeft: '0px', marginTop: '10px', width: '100%'
+		}}
+		>
 			<thead>
-				<tr>
-					<td style={{ width: '500px' }}>
+				<tr className="container" style={{ display: 'block', width: '100%' }}>
+					<td className="row">
 						<ChecklistTitle
 							listTitle={selectedCard.checklist.text}
 							id="0"
@@ -273,25 +196,15 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 							updateFunction={updateChecklistFunc}
 							autoFocus={true}
 						/>
-						<Button className="btn-delete-checklist" variant="danger" onMouseDown={deleteChecklist}>✕</Button>
-						<div style={{ height: '20px', marginTop: '-15px' }}>
-							<span style={{ fontSize: '0.8rem' }}>
-								{`${progress !== 'NaN' ? progress : 0}%`}
-							</span>
-							<div className="div-checklist-progressbar-background">
-								<div
-									// className={['div-checklist-progressbar', progress > 25 && progress < 100 && 'div-checklist-progressbar-midway', progress === 100 && 'div-checklist-progressbar-complete']
-									// 	.filter((e) => !!e)
-									// 	.join(' ')}
-									className="div-checklist-progressbar"
-									style={{ width: `${progress}%`, backgroundColor: perc2color(progress).toString() }}
-								/>
-							</div>
-
-						</div>
+						<Button className="btn-delete-checklist " variant="danger" onMouseDown={deleteChecklist}>✕</Button>
 					</td>
 				</tr>
 			</thead>
+			<tr>
+				<td>
+					<ProgressBar progress={progress} />
+				</td>
+			</tr>
 
 			<DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
 				<Droppable droppableId="0" type="card">

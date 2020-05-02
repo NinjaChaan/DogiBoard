@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { setSelectedCard, updateChecklist } from '../../actions/index'
 
-const mapStateToProps = (state) =>
-	// console.log('state at cardwindiw', state.selectedCard.text)
-	({
-		selectedCard: state.selectedCard,
-		title: state.selectedCard.checklist.text
-	})
+const mapStateToProps = (state) => ({
+	selectedCard: state.selectedCard,
+	title: state.selectedCard.checklist.text
+})
 
 
 const ChecklistTitle = ({ selectedCard, title, dispatch }) => {
@@ -107,7 +105,7 @@ const ChecklistTitle = ({ selectedCard, title, dispatch }) => {
 			onFocus={focusTitle}
 			onBlur={blurTitle}
 			maxLength="200"
-			className={listTitleClass}
+			className={`${listTitleClass} col pl-0`}
 			spellCheck="false"
 			onKeyPress={handleKeyPress}
 		/>

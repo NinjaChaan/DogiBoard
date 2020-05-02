@@ -9,7 +9,9 @@ const mapStateToProps = (state) =>
 	})
 
 
-const CheckItemTitle = ({ selectedCard, checkItem, setEditing, editing, dispatch }) => {
+const CheckItemTitle = ({
+	selectedCard, checkItem, setEditing, editing, dispatch
+}) => {
 	const [listTitleClass, setListTitleClass] = useState('textarea-checkItem-title')
 
 	const calculateHeight = () => {

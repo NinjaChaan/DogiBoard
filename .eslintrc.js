@@ -47,6 +47,8 @@ module.exports = {
 		'jsx-a11y/no-autofocus': 0,
 		'react/jsx-props-no-spreading': 0,
 		'no-case-declarations': 0,
-		'react/jsx-boolean-value': 0
+		'react/jsx-boolean-value': 0,
+		'max-len': 0,
+		'no-plusplus': 0
 	}
 }

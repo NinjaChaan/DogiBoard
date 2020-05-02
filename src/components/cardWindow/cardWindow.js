@@ -44,20 +44,22 @@ const CardWindow = ({ selectedCard }) => {
 						listId={selectedCard.listId}
 					/>
 				</div>
-				<div className="card-window">
-					<Button className="btn-close-card-window" variant="light" onClick={closeCardWindow}>✕</Button>
-					<div className="card-window-main">
-						<div style={{ display: 'flex' }}>
-							<h6 style={{ fontWeight: '600' }}>Description</h6>
+				<Button className="btn-close-card-window" variant="light" onClick={closeCardWindow}>✕</Button>
+				<div className="container-lg">
+					<div className="row">
+						<div className="col-8 pl-4">
+							<div style={{ display: 'flex' }}>
+								<h6 style={{ fontWeight: '600' }}>Description</h6>
+							</div>
+							<CardDescription />
+							{selectedCard.checklist
+								? <Checklist selectedCard={selectedCard} />
+								: null}
 						</div>
-						<CardDescription />
-						{selectedCard.checklist
-							? <Checklist selectedCard={selectedCard} />
-							: null}
-					</div>
-					<div className="card-window-sidebar">
-						<CardAddTo selectedCard={selectedCard} />
-						<CardActions card={selectedCard} closeCardWindow={closeCardWindow} />
+						<div className="col">
+							<CardAddTo selectedCard={selectedCard} />
+							<CardActions card={selectedCard} closeCardWindow={closeCardWindow} />
+						</div>
 					</div>
 				</div>
 			</div>

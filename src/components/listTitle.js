@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { updateListTitle } from '../actions/index'
 
-const ListTitle = ({ listTitle, id, dispatch, classType, updateFunction, autoFocus }) => {
+const ListTitle = ({
+	listTitle, id, dispatch, classType, updateFunction, autoFocus
+}) => {
 	const [listTitleClass, setListTitleClass] = useState(`textarea-${classType}-title`)
 	const [title, setTitle] = useState(listTitle)
 
@@ -20,7 +22,7 @@ const ListTitle = ({ listTitle, id, dispatch, classType, updateFunction, autoFoc
 			+ parseInt(computed.getPropertyValue('padding-bottom'), 10)
 			+ parseInt(computed.getPropertyValue('border-bottom-width'), 10)
 		field.style.height = `${height}px`
-		
+
 		if (field.scrollHeight > 168) {
 			field.style.overflow = 'auto'
 			if (document.activeElement === field) {

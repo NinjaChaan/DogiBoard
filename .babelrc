@@ -1,0 +1,14 @@
+{
+    "presets": [
+        [
+            "@babel/preset-env",
+            {
+                "targets": {
+                    "browsers":["last 2 versions"],
+                    "node":"current"
+                }
+            }
+        ],["@babel/react"]
+    ],
+  "plugins": ["react-hot-loader/babel", "styled-components"]
+}

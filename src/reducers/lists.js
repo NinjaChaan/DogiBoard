@@ -26,7 +26,7 @@ const listReducer = (state = initialState, action) => {
 			return { ...state, lists: state.lists.concat(action.payload) }
 		case 'UPDATE_CARD_TITLE':
 			console.log('update card title', action.payload)
-			const updatedCardListT = state.lists.map((list, i) => {
+			const updatedCardListT = state.lists.map((list) => {
 				if (list.id === action.payload.listId) {
 					const updatedCards = list.cards.map((card) => {
 						if (card.id === action.payload.id) {
@@ -42,7 +42,7 @@ const listReducer = (state = initialState, action) => {
 			return { ...state, lists: updatedCardListT }
 		case 'UPDATE_CARD_DESCRIPTION':
 			console.log('update card description', action.payload)
-			const updatedCardListD = state.lists.map((list, i) => {
+			const updatedCardListD = state.lists.map((list) => {
 				if (list.id === action.payload.listId) {
 					const updatedCards = list.cards.map((card) => {
 						if (card.id === action.payload.id) {
@@ -58,7 +58,7 @@ const listReducer = (state = initialState, action) => {
 			return { ...state, lists: updatedCardListD }
 		case 'UPDATE_LIST_TITLE':
 			console.log('update list title', action.payload)
-			const titleUpdatedLists = state.lists.map((list, i) => {
+			const titleUpdatedLists = state.lists.map((list) => {
 				if (list.id === action.payload.listId) {
 					return { ...list, text: action.payload.text }
 				}
@@ -69,7 +69,7 @@ const listReducer = (state = initialState, action) => {
 			return { ...state, lists: action.payload }
 		case 'ADD_CARD':
 			const newCards = listToUpdate.cards.concat(action.payload)
-			const addCardupdatedLists = state.lists.map((list, i) => {
+			const addCardupdatedLists = state.lists.map((list) => {
 				if (list.id === action.payload.listId) {
 					return { ...list, cards: newCards }
 				}
@@ -79,7 +79,7 @@ const listReducer = (state = initialState, action) => {
 		case 'DELETE_CARD':
 			const cardss = listToUpdate.cards.filter((c) => c.id !== action.payload.id)
 			console.log('ccc', cardss)
-			const newLists = state.lists.map((list, i) => {
+			const newLists = state.lists.map((list) => {
 				if (list.id === action.payload.listId) {
 					return { ...list, cards: cardss }
 				}
@@ -89,7 +89,7 @@ const listReducer = (state = initialState, action) => {
 			return { ...state, lists: newLists }
 		case 'UPDATE_CHECKLIST':
 			console.log('update checklist', action.payload)
-			const checklistUpdatedLists = state.lists.map((list, i) => {
+			const checklistUpdatedLists = state.lists.map((list) => {
 				if (list.id === action.payload.listId) {
 					const updatedChecklist = list.cards.map((card) => {
 						if (card.id === action.payload.id) {

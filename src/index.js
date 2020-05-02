@@ -1,17 +1,14 @@
+import 'react-hot-loader/patch'
 import React from 'react'
-import { render } from 'react-dom'
-import { Provider } from 'react-redux'
+import ReactDOM from 'react-dom'
+import { AppContainer } from 'react-hot-loader'
 import App from './App'
-import store from './store/index'
-
-import { setSelectedCard } from './actions/index'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.css'
 
-window.store = store
-render(
-	<Provider store={store}>
+ReactDOM.render(
+	<AppContainer>
 		<App />
-	</Provider>,
+	</AppContainer>,
 	document.getElementById('root')
 )

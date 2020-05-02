@@ -1,18 +1,17 @@
 import React, { useState } from 'react'
-import Card from 'react-bootstrap/Card'
 import { Draggable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
 import Button from 'react-bootstrap/Button'
 import CheckItemTitle from './checkItemTitle'
 import { setSelectedCard, updateChecklist } from '../../actions/index'
 
-const mapStateToProps = (state) =>
-	// console.log('state at cardwindiw', state.selectedCard.text)
-	({
-		selectedCard: state.selectedCard
-	})
+const mapStateToProps = (state) => ({
+	selectedCard: state.selectedCard
+})
 
-const CheckListDraggable = ({ i, checkItem, selectedCard, dispatch, calculateProgress }) => {
+const CheckListDraggable = ({
+	i, checkItem, selectedCard, dispatch, calculateProgress
+}) => {
 	const [editing, setEditing] = useState(false)
 	const [dragging, setDragging] = useState(false)
 
@@ -69,49 +68,33 @@ const CheckListDraggable = ({ i, checkItem, selectedCard, dispatch, calculatePro
 					{...provided.draggableProps}
 					{...provided.dragHandleProps}
 				>
-					<td style={{ display: 'block', width: '500px' }}>
-						<div
-							className="dragHandle"
-							{...provided.dragHandleProps}
-							onClick={() => focusTitle()}
-							onMouseDown={() => unFocusTitle()}
-						/>
-						<div className="checklistToggle">
-							<Button
-								className={checkItem.done
-									? 'btn-checklistToggle-toggled'
-									: 'btn-checklistToggle'}
-								onMouseDown={toggleItemDone}
-							>
-								{checkItem.done ? '✓' : ''}
-							</Button>
+					<td className=" container" style={{ display: 'block', maxWidth: '500px', width: '100%' }}>
+						<div className="row">
+							<div
+								className="dragHandle"
+								{...provided.dragHandleProps}
+								onClick={() => focusTitle()}
+								onMouseDown={() => unFocusTitle()}
+							/>
+							<div className="">
+								<Button
+									style={{ marginTop: '10px' }}
+									className={checkItem.done
+										? 'btn-checklistToggle-toggled'
+										: 'btn-checklistToggle'}
+									onMouseDown={toggleItemDone}
+								>
+									{checkItem.done ? '✓' : ''}
+								</Button>
+							</div>
+							<div className="col pl-2 pr-0" style={{ width: '100%' }}>
+								<CheckItemTitle selectedCard={selectedCard} checkItem={checkItem} setEditing={setEditing} editing={editing} />
+							</div>
 						</div>
-						<div style={{ width: '100%' }}>
-							{/* <Card.Text>
-												{checkItem.text}
-											</Card.Text> */}
-							<CheckItemTitle selectedCard={selectedCard} checkItem={checkItem} setEditing={setEditing} editing={editing} />
-						</div>
-						{/* {editing
-							? <CheckItemTitle selectedCard={selectedCard} checkItem={checkItem} setEditing={setEditing} />
-							: (
-								// <Card
-								// 	className="card-body-checklist"
-								// 	body
-								// 	padding="30px"
-								// 	onClick={() => { setEditing(true) }}
-								// 	style={{ marginLeft: '0px !important', float: 'right' }}
-								// >
-
-
-								
-								// </Card>
-							)} */}
 					</td>
-				</tr >
-			)
-			}
-		</Draggable >
+				</tr>
+			)}
+		</Draggable>
 	)
 }
 

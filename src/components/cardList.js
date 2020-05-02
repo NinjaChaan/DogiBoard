@@ -7,7 +7,9 @@ import ListTitle from './listTitle'
 import './cardList.css'
 
 
-const CardList = ({ cards, innerRef, placeholder, showingAddAnother, changeShowAddAnother, id }) => (
+const CardList = ({
+	cards, innerRef, placeholder, showingAddAnother, changeShowAddAnother, id
+}) => (
 	<tbody ref={innerRef}>
 		{cards.map((card, i) => <CardDraggable key={card.id} i={i} card={card} />)}
 		{placeholder}
@@ -26,7 +28,9 @@ const CardList = ({ cards, innerRef, placeholder, showingAddAnother, changeShowA
 	</tbody>
 )
 
-const CardListContainer = ({ listTitle, cards, index, setCards, id, dragging }) => {
+const CardListContainer = ({
+	listTitle, cards, index, setCards, id, dragging
+}) => {
 	const [showingAddAnother, setShowingAddAnother] = useState(true)
 
 	const createCard = (newCard) => {

@@ -206,10 +206,12 @@ code {
 .textarea-checklist-title-editing {
     min-height: 10px;
     height: 30px;
-    width: 400px;
+    max-width: 500px;
+    width: 100%;
+    width: 100%;
     font-size: 1rem;
     font-weight: 600;
-    margin-top: 10px;
+    /* margin-top: 10px; */
     margin-left: 0px;
     margin-bottom: 0px;
     padding-left: -2px !important;
@@ -346,7 +348,7 @@ code {
 }
 
 .textarea-card-description {
-    width: 500px;
+    width: 100%;
     min-height: 50px;
     max-height: 170px;
     background-color: rgba(228, 227, 227, 0.616);
@@ -416,14 +418,15 @@ code {
 .textarea-checkItem-title-editing {
     flex: 1 1 auto;
     min-width: 35px;
-    min-height: 35px;
-    width: 463px;
+    min-height: 25px;
+    max-width: 463px;
+    width: 100%;
     font-size: 1rem;
     /* font-weight: 600; */
-    margin-top: 5px;
+    margin-top: 10px;
     margin-bottom: 0px;
-    margin-left: 10px;
-    padding-top: 4px;
+    /* margin-left: 10px; */
+    /* padding-top: 4px; */
     padding-left: 10px;
     padding-right: 5px;
     padding-bottom: 5px;
@@ -432,6 +435,7 @@ code {
     overflow: hidden;
     overflow-wrap: break-word;
     cursor: text;
+    max-height: 30px;
 }
 
 .textarea-checkItem-title {
@@ -450,7 +454,8 @@ code {
     min-width: 35px;
     min-height: 41px;
     height: 64px;
-    width: 500px;
+    max-width: 500px;
+    width: 100%;
     font-size: 1rem;
     /* font-weight: 600; */
     margin-top: 8px;
@@ -529,10 +534,12 @@ code {
 
 .btn-delete-checklist {
     position: relative;
-    top: -10px;
+    max-width: 25px;
+    max-height: 30px;
+    /* top: -10px;
     right: -75px;
     margin-right: 15px;
-    margin-top: 10px;
+    margin-top: 10px; */
     padding: 4px;
     padding-top: 0px;
     padding-bottom: 0px;
