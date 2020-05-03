@@ -99,7 +99,6 @@ const CheckItemTitle = ({
 		setListTitleClass('textarea-checkItem-title')
 	}
 
-	console.log('checkitem done?', checkItem.done)
 	return (
 		<textarea
 			autoFocus={true}

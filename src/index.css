@@ -418,18 +418,18 @@ code {
 .textarea-checkItem-title-editing {
     flex: 1 1 auto;
     min-width: 35px;
-    min-height: 25px;
+    min-height: 35px;
     max-width: 463px;
     width: 100%;
     font-size: 1rem;
     /* font-weight: 600; */
-    margin-top: 10px;
+    /* margin-top: 8px; */
     margin-bottom: 0px;
     /* margin-left: 10px; */
-    /* padding-top: 4px; */
+    padding-top: 1px;
     padding-left: 10px;
     padding-right: 5px;
-    padding-bottom: 5px;
+    padding-bottom: 3px;
     border-radius: 4px;
     resize: none;
     overflow: hidden;
@@ -505,6 +505,7 @@ code {
     width: 25px !important;
     height: 25px !important;
     padding: 0px;
+    margin-top: 5px;
     margin-bottom: 5px;
     background-color: transparent;
     box-shadow: none;
@@ -580,4 +581,21 @@ code {
 .div-checklist-progressbar-complete {
     transition: width .2s ease-in, background-color .4s ease-in;
     background-color: rgb(0, 216, 0);
+}
+
+.scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #0384fc lightGrey;
+    border-radius: 4px;
+}
+
+.scrollbar::-webkit-scrollbar {
+    width: 7px;
+    background-color: lightGrey;
+    border-radius: 4px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+    background-color: #0384fc;
+    border-radius: 4px;
 }

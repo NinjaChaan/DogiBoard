@@ -15,7 +15,6 @@ const CheckListDraggable = ({
 	const [editing, setEditing] = useState(false)
 	const [dragging, setDragging] = useState(false)
 
-	console.log('calculateProgress', calculateProgress)
 	const toggleItemDone = () => {
 		console.log('toggle is', checkItem.done)
 		const newList = {
@@ -67,6 +66,7 @@ const CheckListDraggable = ({
 					ref={provided.innerRef}
 					{...provided.draggableProps}
 					{...provided.dragHandleProps}
+					style={{ display: 'block', width: '100%' }}
 				>
 					<td className=" container" style={{ display: 'block', maxWidth: '500px', width: '100%' }}>
 						<div className="row">
@@ -78,7 +78,6 @@ const CheckListDraggable = ({
 							/>
 							<div className="">
 								<Button
-									style={{ marginTop: '10px' }}
 									className={checkItem.done
 										? 'btn-checklistToggle-toggled'
 										: 'btn-checklistToggle'}

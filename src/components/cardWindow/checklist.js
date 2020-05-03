@@ -17,13 +17,25 @@ const Checklist = ({
 
 	if (checkItems) {
 		return (
-			<tbody ref={innerRef}>
-				{checkItems.map((item, i) => (
-					<CheckListDraggable key={item.id} i={i} checkItem={item} calculateProgress={calculateProgress} />
-				))}
+			<tbody
+				id="checklistTable"
+				ref={innerRef}
+				className="scrollbar"
+				style={{
+					display: 'block',
+					overflow: 'auto',
+					maxHeight: '300px',
+				}}
+			>
+				{
+					checkItems.map((item, i) => (
+						<CheckListDraggable key={item.id} i={i} checkItem={item} calculateProgress={calculateProgress} />
+					))
+				}
 				{placeholder}
-				<tr>
-					<td>
+				<tr style={{ display: 'block', width: '100%' }}>
+					<td style={{ display: 'block', width: '100%' }} />
+					<div>
 						{showingAddAnother
 							? (
 								<Button className="btn-add-another-checklist" variant="link" onClick={() => changeShowAddAnother(false)}>
@@ -38,9 +50,10 @@ const Checklist = ({
 									clickFunction={createCard}
 								/>
 							)}
-					</td>
+					</div>
 				</tr>
 			</tbody>
+
 		)
 	}
 	return (<></>)
@@ -51,9 +64,19 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 	const [dragging, setDragging] = useState(false)
 	const [progress, setProgress] = useState(0)
 
+	function updateScroll() {
+		const element = document.getElementById('checklistTable')
+		element.scrollTop = element.scrollHeight
+		setTimeout(() => {
+			element.scrollTop = element.scrollHeight
+		}, 100)
+	}
+
 	const changeShowAddAnother = (show) => {
 		setShowingAddAnother(show)
+		updateScroll()
 	}
+
 	const createCard = (newCheckItem) => {
 		console.log('add list item', newCheckItem)
 		selectedCard.checklist.checkItems.concat(newCheckItem)
@@ -79,6 +102,7 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 				document.getElementById('checkListTitle').focus()
 			}, 10)
 		}
+		updateScroll()
 	}
 
 	const onDragStart = () => {
@@ -182,7 +206,7 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 
 	return (
 		<table style={{
-			backgroundColor: 'transparent', marginLeft: '0px', marginTop: '10px', width: '100%'
+			backgroundColor: 'transparent', marginLeft: '0px', marginTop: '10px', marginBottom: '10px', width: '100%'
 		}}
 		>
 			<thead>
@@ -223,6 +247,7 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 					)}
 				</Droppable>
 			</DragDropContext>
+
 		</table>
 	)
 }
