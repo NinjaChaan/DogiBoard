@@ -21,7 +21,7 @@ const CardAddTo = ({ selectedCard, dispatch }) => {
 		console.log(dispatch(updateChecklist(newChecklist)))
 	}
 	return (
-		<div className="card-sidebar-module">
+		<div className="card-sidebar-module col">
 			<h6 style={{ fontWeight: '600' }}>Add to card</h6>
 			{selectedCard.checklist
 				? null

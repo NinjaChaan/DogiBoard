@@ -206,7 +206,7 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 
 	return (
 		<table style={{
-			backgroundColor: 'transparent', marginLeft: '0px', marginTop: '10px', marginBottom: '10px', width: '100%'
+			backgroundColor: 'transparent', marginLeft: '0px', marginTop: '10px', width: '100%'
 		}}
 		>
 			<thead>

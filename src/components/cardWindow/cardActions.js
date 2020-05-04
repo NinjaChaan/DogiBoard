@@ -10,7 +10,7 @@ const CardActions = ({ card, closeCardWindow, dispatch }) => {
 	}
 
 	return (
-		<div className="card-sidebar-module">
+		<div className="card-sidebar-module col">
 			<h6 style={{ fontWeight: '600' }}>Actions</h6>
 			<Button className="btn-card-sidebar" variant="light">Move</Button>
 			<Button className="btn-card-sidebar" variant="light">Copy</Button>

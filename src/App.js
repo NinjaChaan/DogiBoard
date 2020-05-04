@@ -5,16 +5,17 @@ import ListTable from './components/listTable'
 import CardWindow from './components/cardWindow/cardWindow'
 import store from './store/index'
 import 'react-hot-loader/patch'
+import Page from './components/Page'
 
 
 const App = () => (
 	<Provider store={store}>
-		<div className="App">
-			<header className="App-header">
+		<Page>
+			<div style={{width: '100vw', overflow: 'auto', height: '100vh' }}>
 				<ListTable />
-				<CardWindow />
-			</header>
-		</div>
+			</div>
+			<CardWindow />
+		</Page>
 	</Provider>
 )
 
