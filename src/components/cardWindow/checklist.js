@@ -23,8 +23,8 @@ const Checklist = ({
 				className="scrollbar"
 				style={{
 					display: 'block',
-					overflow: 'auto',
-					maxHeight: '300px',
+					// overflow: 'auto',
+					// maxHeight: '300px',
 				}}
 			>
 				{

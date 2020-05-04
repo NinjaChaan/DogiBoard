@@ -2,8 +2,14 @@ import React, { useState } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
 import Button from 'react-bootstrap/Button'
+import styled from 'styled-components'
 import CheckItemTitle from './checkItemTitle'
+import { device } from '../../devices'
 import { setSelectedCard, updateChecklist } from '../../actions/index'
+
+const ItemContainer = styled.div`
+	
+`
 
 const mapStateToProps = (state) => ({
 	selectedCard: state.selectedCard
@@ -68,7 +74,7 @@ const CheckListDraggable = ({
 					{...provided.dragHandleProps}
 					style={{ display: 'block', width: '100%' }}
 				>
-					<td className=" container" style={{ display: 'block', maxWidth: '500px', width: '100%' }}>
+					<td className=" container mx-0" style={{ display: 'block', maxWidth: '500px', width: '100%' }}>
 						<div className="row">
 							<div
 								className="dragHandle"
