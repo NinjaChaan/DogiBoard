@@ -4,7 +4,7 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
 import AddList from './addList'
 import CardListContainer from './cardList'
-import { updateListOrder } from '../actions/index'
+import { updateListOrder } from '../redux/actions/index'
 
 
 const mapStateToProps = (state) => {

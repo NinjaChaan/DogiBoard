@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
-import { addCard } from '../actions/index'
+import { addCard } from '../redux/actions/index'
 import './cardList.css'
 
 const AddCard = ({ listId, changeShowAddAnother, dispatch }) => {

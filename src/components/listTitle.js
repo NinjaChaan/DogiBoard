@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { updateListTitle } from '../actions/index'
+import { updateListTitle } from '../redux/actions/index'
 
 const ListTitle = ({
 	listTitle, id, dispatch, classType, updateFunction, autoFocus

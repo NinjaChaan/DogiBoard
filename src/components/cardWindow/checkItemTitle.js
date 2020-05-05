@@ -1,16 +1,14 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { setSelectedCard, updateChecklist } from '../../actions/index'
+import { setSelectedCard, updateChecklist } from '../../redux/actions/index'
 
-const mapStateToProps = (state) =>
-	// console.log('state at cardwindiw', state.selectedCard.text)
-	({
-		selectedCard: state.selectedCard
-	})
+const mapStateToProps = (state) => ({
+	selectedCard: state.selectedCard
+})
 
 
 const CheckItemTitle = ({
-	selectedCard, checkItem, setEditing, editing, dispatch
+	selectedCard, checkItem, setEditing, dispatch
 }) => {
 	const [listTitleClass, setListTitleClass] = useState('textarea-checkItem-title')
 
@@ -64,7 +62,7 @@ const CheckItemTitle = ({
 
 		const list = selectedCard.checklist
 
-		list.checkItems.map((item, i) => {
+		list.checkItems.map((item) => {
 			if (item === checkItem) {
 				item.text = titleElement.value
 			}
@@ -101,7 +99,6 @@ const CheckItemTitle = ({
 
 	return (
 		<textarea
-			autoFocus={true}
 			value={checkItem.text}
 			onChange={handleTextChange}
 			id={`checkItemTitle${checkItem.id}`}

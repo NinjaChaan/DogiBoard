@@ -1,10 +1,24 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Button from 'react-bootstrap/Button'
 import '../cardList.css'
 
-const AddChecklistItem = ({ changeShowAddAnother, clickFunction }) => {
+const AddChecklistItem = ({ changeShowAddAnother, clickFunction, showingAddAnother }) => {
 	const [cardText, setCardText] = useState('')
 	const field = document.getElementById('checkListTitle')
+	let myRef = useRef(null)
+	const scrollToRef = () => {
+		// window.scrollTo(0, ref.current.offsetTop)
+		myRef.scrollIntoView({ behavior: 'smooth' })
+	}
+
+	useEffect(() => {
+		setTimeout(() => {
+			console.log("henlo?")
+			scrollToRef()
+			document.getElementById('checkListTitle').focus()
+		}, 100)
+	}, [showingAddAnother])
+
 	if (field) {
 		field.style.height = 'inherit'
 
@@ -38,6 +52,7 @@ const AddChecklistItem = ({ changeShowAddAnother, clickFunction }) => {
 
 	const createItem = () => {
 		if (cardText.length > 0) {
+			scrollToRef()
 			let newCheckItem = {}
 
 			newCheckItem = {
@@ -48,6 +63,8 @@ const AddChecklistItem = ({ changeShowAddAnother, clickFunction }) => {
 			clickFunction(newCheckItem)
 		}
 		setCardText('')
+
+		// scrollToTargetAdjusted()
 	}
 
 	const handleSubmit = (event) => {
@@ -76,10 +93,14 @@ const AddChecklistItem = ({ changeShowAddAnother, clickFunction }) => {
 	}
 
 	return (
-		<div className="btn-add-another-checkList">
+		<div
+			className="btn-add-another-checkList"
+		>
 			<div>
 				<div className="add-checkList-text">
 					<textarea
+						style={{ scrollMargin: '150px' }}
+						ref={(el) => { myRef = el }}
 						id="checkListTitle"
 						className="textarea-add-checkList"
 						autoFocus
@@ -93,10 +114,11 @@ const AddChecklistItem = ({ changeShowAddAnother, clickFunction }) => {
 					/>
 				</div>
 			</div>
-			<div className="div-add-checkList">
-				<Button className="btn-add-checkList" variant="success">Add item</Button>
+			<div id="add-checklist" className="div-add-checkList">
+				<Button className="btn-add-checkList" variant="success" onMouseDown={createItem}>Add item</Button>
 				<Button className="btn-close-add-checkList" variant="light" onMouseDown={() => changeShowAddAnother(true)}>✕</Button>
 			</div>
+			<div />
 		</div>
 	)
 }

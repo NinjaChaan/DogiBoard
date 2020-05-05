@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
-import { setSelectedCard, updateChecklist } from '../../actions/index'
+import { setSelectedCard, updateChecklist } from '../../redux/actions/index'
 
 const CardAddTo = ({ selectedCard, dispatch }) => {
 	const addChecklistPressed = () => {

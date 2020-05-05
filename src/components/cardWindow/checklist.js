@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
 import Button from 'react-bootstrap/Button'
@@ -6,14 +6,16 @@ import CheckListDraggable from './checkListDraggable'
 import AddChecklistItem from './addChecklistItem'
 import ChecklistTitle from './checkListTitle'
 import ProgressBar from './progressBar'
-import { setSelectedCard, updateChecklist } from '../../actions/index'
+import { setSelectedCard, updateChecklist } from '../../redux/actions/index'
 
 const Checklist = ({
 	checkItems, createCard, innerRef, placeholder, showingAddAnother, changeShowAddAnother, id, calculateProgress
 }) => {
+
 	useEffect(() => {
 		calculateProgress()
 	}, [checkItems])
+
 
 	if (checkItems) {
 		return (
@@ -38,7 +40,7 @@ const Checklist = ({
 					<div>
 						{showingAddAnother
 							? (
-								<Button className="btn-add-another-checklist" variant="link" onClick={() => changeShowAddAnother(false)}>
+								<Button className="btn-add-another-checklist" variant="link" onMouseDown={() => changeShowAddAnother(false)}>
 									<font size="4">＋</font>
 									Add checklist item
 								</Button>
@@ -48,6 +50,7 @@ const Checklist = ({
 									listId={id}
 									changeShowAddAnother={changeShowAddAnother}
 									clickFunction={createCard}
+									showingAddAnother={showingAddAnother}
 								/>
 							)}
 					</div>
@@ -74,7 +77,6 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 
 	const changeShowAddAnother = (show) => {
 		setShowingAddAnother(show)
-		updateScroll()
 	}
 
 	const createCard = (newCheckItem) => {
@@ -96,12 +98,12 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 
 		console.log(dispatch(setSelectedCard(newCard)))
 		console.log(dispatch(updateChecklist(newChecklist)))
-		if (document.getElementById('checkListTitle')) {
-			setTimeout(() => {
-				console.log(document.getElementById('checkListTitle'))
-				document.getElementById('checkListTitle').focus()
-			}, 10)
-		}
+		// if (document.getElementById('checkListTitle')) {
+		// 	setTimeout(() => {
+		// 		console.log(document.getElementById('checkListTitle'))
+		// 		document.getElementById('checkListTitle').focus()
+		// 	}, 10)
+		// }
 		updateScroll()
 	}
 

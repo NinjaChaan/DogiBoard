@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
-import { addList } from '../actions/index'
+import { addList } from '../redux/actions/index'
 import './cardList.css'
 
-const AddList = ({ listId, changeShowAddAnother, dispatch }) => {
+const AddList = ({ changeShowAddAnother, dispatch }) => {
 	const [cardText, setCardText] = useState('')
 	const field = document.getElementById('listTitle')
 	if (field) {

@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button'
 import styled from 'styled-components'
 import CheckItemTitle from './checkItemTitle'
 import { device } from '../../devices'
-import { setSelectedCard, updateChecklist } from '../../actions/index'
+import { setSelectedCard, updateChecklist } from '../../redux/actions/index'
 
 const ItemContainer = styled.div`
 	

@@ -86,6 +86,13 @@ const MainContainerLeft = styled.div`
 	}
 `
 
+const CardHeader = styled.div`
+	min-height: 24px;
+    padding: 0 8px 20px 0px;
+    position: relative;
+    width: 100%;
+`
+
 const mapStateToProps = (state) => {
 	console.log('state at cardwindiw', state.selectedCard)
 	return { selectedCard: state.selectedCard }
@@ -116,14 +123,14 @@ const CardWindowContainer = ({ selectedCard }) => {
 	return (
 		<WindowOverlay id="window-overlay" className="window-overlay" onClick={closeCardWindow}>
 			<CardWindow id="card-window" className="window row" tabIndex="0" onClick={handleChildClick}>
-				<div className="card-window-header col-10">
+				<CardHeader className="col-10">
 					<CardTitle
 						listTitle={selectedCard.text}
 						id={selectedCard.id}
 						listId={selectedCard.listId}
 					/>
-				</div>
-				<Button className="btn-close-card-window" variant="light" onClick={closeCardWindow}>✕</Button>
+				</CardHeader>
+				<Button className="btn-close-card-window" variant="light" onMouseDown={closeCardWindow}>✕</Button>
 				<div className="container-lg">
 					<CardWindowMain className="row">
 						<MainContainerLeft>
@@ -140,6 +147,7 @@ const CardWindowContainer = ({ selectedCard }) => {
 							<CardActions card={selectedCard} closeCardWindow={closeCardWindow} />
 						</SideBar>
 					</CardWindowMain>
+					<div style={{ height: '75px' }} />
 				</div>
 			</CardWindow>
 		</WindowOverlay>

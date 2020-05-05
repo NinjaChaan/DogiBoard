@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { setSelectedCard, updateChecklist } from '../../actions/index'
+import { setSelectedCard, updateChecklist } from '../../redux/actions/index'
 
 const mapStateToProps = (state) => ({
 	selectedCard: state.selectedCard,

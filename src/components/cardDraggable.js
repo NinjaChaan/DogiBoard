@@ -2,11 +2,9 @@ import React from 'react'
 import Card from 'react-bootstrap/Card'
 import { Draggable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
-import { setSelectedCard } from '../actions/index'
+import { setSelectedCard } from '../redux/actions/index'
 
-const CardDraggable = ({
-	text, i, card, dispatch
-}) => {
+const CardDraggable = ({ i, card, dispatch }) => {
 	const openCardEditWindow = () => {
 		const selectedCard = {
 			text: card.text,

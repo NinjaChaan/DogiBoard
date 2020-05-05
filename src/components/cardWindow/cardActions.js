@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
-import { deleteCard } from '../../actions/index'
+import { deleteCard } from '../../redux/actions/index'
 
 const CardActions = ({ card, closeCardWindow, dispatch }) => {
 	const deleteCardPressed = () => {

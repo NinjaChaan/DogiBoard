@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
-import { updateCardDescription, setSelectedCard } from '../../actions/index'
+import { updateCardDescription, setSelectedCard } from '../../redux/actions/index'
 
 const mapStateToProps = (state) => {
 	console.log('state at cardwindiw', state.selectedCard)

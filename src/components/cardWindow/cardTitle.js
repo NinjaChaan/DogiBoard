@@ -1,18 +1,15 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { updateCardTitle, setSelectedCard } from '../../actions/index'
+import { updateCardTitle, setSelectedCard } from '../../redux/actions/index'
 
-const mapStateToProps = (state) =>
-	// console.log('state at cardwindiw', state.selectedCard.text)
-	({
-		selectedCard: state.selectedCard
-	})
+const mapStateToProps = (state) => ({
+	selectedCard: state.selectedCard
+})
 
 
 const CardTitle = ({
 	selectedCard, id, dispatch, listId
 }) => {
-	const [titleText, setTitleText] = useState('')
 	const [listTitleClass, setListTitleClass] = useState('textarea-card-title')
 
 	const calculateHeight = () => {
