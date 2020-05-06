@@ -35,7 +35,7 @@ const CardInfo = ({ card }) => {
 	}, [card.checklist])
 
 	const Checklist = () => {
-		if (card.checklist) {
+		if (card.checklist && checksCount > 0) {
 			return (
 				<ChecklistArea allChecksDone={allChecksDone}>
 					<RiCheckboxLine style={{ marginBottom: '5px' }} />

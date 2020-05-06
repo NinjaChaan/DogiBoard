@@ -4,8 +4,7 @@ import Button from 'react-bootstrap/Button'
 import styled from 'styled-components'
 import CardTitle from './cardTitle'
 import CardDescription from './cardDescription'
-import CardAddTo from './cardAddTo'
-import CardActions from './cardActions'
+import CardSidebarModule from './cardSidebarModule'
 import Checklist from './checklist'
 import { device } from '../../devices'
 
@@ -81,8 +80,8 @@ const MainContainerLeft = styled.div`
 
 	/* If screen is at least mobileL */
 	@media ${device.mobileL} {
-		flex: 0 0 66.666667%;
-		max-width: 66.666667%;
+		flex: 0 0 80%;
+		max-width: 80%;
 	}
 `
 
@@ -143,8 +142,7 @@ const CardWindowContainer = ({ selectedCard }) => {
 								: null}
 						</MainContainerLeft>
 						<SideBar>
-							<CardAddTo selectedCard={selectedCard} />
-							<CardActions card={selectedCard} closeCardWindow={closeCardWindow} />
+							<CardSidebarModule selectedCard={selectedCard} closeCardWindow={closeCardWindow} />
 						</SideBar>
 					</CardWindowMain>
 					<div style={{ height: '75px' }} />

@@ -332,13 +332,9 @@ code {
     position: relative;
 }
 
-.card-sidebar-module {
-    float: right;
-    width: 100%;
-    position: relative;
-}
-
 .btn-card-sidebar {
+    display: flex;
+    justify-content: center;
     width: 100%;
     background-color: rgb(228, 227, 227);
     margin-bottom: 10px;
