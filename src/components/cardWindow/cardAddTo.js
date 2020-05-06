@@ -1,6 +1,7 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
+import { RiCheckboxLine } from 'react-icons/ri'
 import { setSelectedCard, updateChecklist } from '../../redux/actions/index'
 
 const CardAddTo = ({ selectedCard, dispatch }) => {
@@ -25,7 +26,13 @@ const CardAddTo = ({ selectedCard, dispatch }) => {
 			<h6 style={{ fontWeight: '600' }}>Add to card</h6>
 			{selectedCard.checklist
 				? null
-				: <Button className="btn-card-sidebar" variant="light" onClick={addChecklistPressed}>Checklist</Button>}
+				: (
+					<Button className="btn-card-sidebar" variant="light" onClick={addChecklistPressed}>
+						<RiCheckboxLine size="18" style={{ marginBottom: '3px' }} />
+						{' '}
+						Checklist
+					</Button>
+				)}
 			<Button className="btn-card-sidebar" variant="light">Members</Button>
 			<Button className="btn-card-sidebar" variant="light">Label</Button>
 		</div>

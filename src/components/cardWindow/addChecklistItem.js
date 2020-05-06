@@ -13,7 +13,6 @@ const AddChecklistItem = ({ changeShowAddAnother, clickFunction, showingAddAnoth
 
 	useEffect(() => {
 		setTimeout(() => {
-			console.log("henlo?")
 			scrollToRef()
 			document.getElementById('checkListTitle').focus()
 		}, 100)

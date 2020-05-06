@@ -2,6 +2,7 @@ import React from 'react'
 import Card from 'react-bootstrap/Card'
 import { Draggable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
+import CardInfo from './cardInfo'
 import { setSelectedCard } from '../redux/actions/index'
 
 const CardDraggable = ({ i, card, dispatch }) => {
@@ -37,9 +38,10 @@ const CardDraggable = ({ i, card, dispatch }) => {
 							padding="30px"
 							onClick={openCardEditWindow}
 						>
-							<Card.Text>
+							<Card.Text style={{ marginBottom: '0px' }}>
 								{card.text}
 							</Card.Text>
+							<CardInfo card={card} />
 						</Card>
 					</td>
 				</tr>
