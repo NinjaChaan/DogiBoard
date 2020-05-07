@@ -332,18 +332,6 @@ code {
     position: relative;
 }
 
-.btn-card-sidebar {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    background-color: rgb(228, 227, 227);
-    margin-bottom: 10px;
-}
-
-.btn-card-sidebar:hover {
-    background-color: rgb(212, 211, 211);
-}
-
 .textarea-card-description {
     width: 100%;
     min-height: 50px;

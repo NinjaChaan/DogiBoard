@@ -1,17 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
-import Button from 'react-bootstrap/Button'
+import styled, { css } from 'styled-components'
+import Button from '../Button'
 import CheckListDraggable from './checkListDraggable'
 import AddChecklistItem from './addChecklistItem'
 import ChecklistTitle from './checkListTitle'
 import ProgressBar from './progressBar'
 import { setSelectedCard, updateChecklist } from '../../redux/actions/index'
 
+const LinkButton = styled(Button)`
+	width: auto;
+	display: inline-block;
+	justify-content: left;
+	padding-bottom: 30px;
+`
+
 const Checklist = ({
 	checkItems, createCard, innerRef, placeholder, showingAddAnother, changeShowAddAnother, id, calculateProgress
 }) => {
-
 	useEffect(() => {
 		calculateProgress()
 	}, [checkItems])
@@ -36,24 +43,25 @@ const Checklist = ({
 				}
 				{placeholder}
 				<tr style={{ display: 'block', width: '100%' }}>
-					<td style={{ display: 'block', width: '100%' }} />
-					<div>
-						{showingAddAnother
-							? (
-								<Button className="btn-add-another-checklist" variant="link" onMouseDown={() => changeShowAddAnother(false)}>
-									<font size="4">＋</font>
-									Add checklist item
-								</Button>
-							)
-							: (
-								<AddChecklistItem
-									listId={id}
-									changeShowAddAnother={changeShowAddAnother}
-									clickFunction={createCard}
-									showingAddAnother={showingAddAnother}
-								/>
-							)}
-					</div>
+					<td style={{ display: 'block', width: '100%' }}>
+						<div>
+							{showingAddAnother
+								? (
+									<LinkButton link onMouseDown={() => changeShowAddAnother(false)}>
+										<font size="4">＋</font>
+										Add checklist item
+									</LinkButton>
+								)
+								: (
+									<AddChecklistItem
+										listId={id}
+										changeShowAddAnother={changeShowAddAnother}
+										clickFunction={createCard}
+										showingAddAnother={showingAddAnother}
+									/>
+								)}
+						</div>
+					</td>
 				</tr>
 			</tbody>
 
@@ -212,7 +220,7 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 		}}
 		>
 			<thead>
-				<tr className="container" style={{ display: 'block', width: '100%' }}>
+				<tr className="container" style={{ display: 'block', width: '100%', margin: '0px', padding: '0px' }}>
 					<td className="row">
 						<ChecklistTitle
 							listTitle={selectedCard.checklist.text}
@@ -222,16 +230,17 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 							updateFunction={updateChecklistFunc}
 							autoFocus={true}
 						/>
-						<Button className="btn-delete-checklist " variant="danger" onMouseDown={deleteChecklist}>✕</Button>
+						<Button warning className="col" style={{ maxWidth: '30px', margin: '0px', marginRight: '1rem', fontWeight: '900 !important' }} onMouseDown={deleteChecklist}>✕</Button>
 					</td>
 				</tr>
 			</thead>
-			<tr>
-				<td>
-					<ProgressBar progress={progress} />
-				</td>
-			</tr>
-
+			<tbody>
+				<tr>
+					<td>
+						<ProgressBar progress={progress} />
+					</td>
+				</tr>
+			</tbody>
 			<DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
 				<Droppable droppableId="0" type="card">
 					{(provided) => (

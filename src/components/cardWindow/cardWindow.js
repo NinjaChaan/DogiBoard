@@ -66,7 +66,14 @@ const SideBar = styled.div`
 	padding-right: 15px;
 	padding-left: 15px;
 	margin-top: 0px;
+	flex: 0 0 30%;
+	max-width: 30%;
   	}
+	/* If screen is at least laptop */
+	@media ${device.laptop} {
+		flex: 0 0 20%;
+		max-width: 20%;
+	}
 `
 
 const MainContainerLeft = styled.div`
@@ -77,9 +84,17 @@ const MainContainerLeft = styled.div`
 	flex: 0 0 100%;
 	max-width: 100%;
 	padding-left: 1.5rem !important;
-
+	/* ${(props) => props.theme.device.mobileL} {
+		flex: 0 0 80%;
+		max-width: 80%;
+	} */
 	/* If screen is at least mobileL */
 	@media ${device.mobileL} {
+		flex: 0 0 70%;
+		max-width: 70%;
+	}
+	/* If screen is at least laptop */
+	@media ${device.laptop} {
 		flex: 0 0 80%;
 		max-width: 80%;
 	}

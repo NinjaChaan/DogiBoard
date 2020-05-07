@@ -105,7 +105,7 @@ const ChecklistTitle = ({ selectedCard, title, dispatch }) => {
 			onFocus={focusTitle}
 			onBlur={blurTitle}
 			maxLength="200"
-			className={`${listTitleClass} col pl-0`}
+			className={`${listTitleClass} col px-3`}
 			spellCheck="false"
 			onKeyPress={handleKeyPress}
 		/>
