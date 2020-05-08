@@ -74,7 +74,7 @@ const CheckListDraggable = ({
 					{...provided.dragHandleProps}
 					style={{ display: 'block', width: '100%' }}
 				>
-					<td className=" container mx-0" style={{ display: 'block', maxWidth: '500px', width: '100%' }}>
+					<td className=" container mx-0" style={{ display: 'block', width: '100%' }}>
 						<div className="row">
 							<div
 								className="dragHandle"

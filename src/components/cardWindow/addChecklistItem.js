@@ -14,7 +14,6 @@ const AddChecklistItem = ({ changeShowAddAnother, clickFunction, showingAddAnoth
 	useEffect(() => {
 		setTimeout(() => {
 			scrollToRef()
-			document.getElementById('checkListTitle').focus()
 		}, 100)
 	}, [showingAddAnother])
 
@@ -62,7 +61,9 @@ const AddChecklistItem = ({ changeShowAddAnother, clickFunction, showingAddAnoth
 			clickFunction(newCheckItem)
 		}
 		setCardText('')
-
+		setTimeout(() => {
+			document.getElementById('checkListTitle').focus()
+		}, 100)
 		// scrollToTargetAdjusted()
 	}
 

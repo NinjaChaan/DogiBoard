@@ -404,7 +404,7 @@ code {
     flex: 1 1 auto;
     min-width: 35px;
     min-height: 35px;
-    max-width: 463px;
+    /* max-width: 463px; */
     width: 100%;
     font-size: 1rem;
     /* font-weight: 600; */
@@ -439,7 +439,7 @@ code {
     min-width: 35px;
     min-height: 41px;
     height: 64px;
-    max-width: 500px;
+    /* max-width: 500px; */
     width: 100%;
     font-size: 1rem;
     /* font-weight: 600; */
