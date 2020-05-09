@@ -79,10 +79,9 @@ const SideBar = styled.div`
 const MainContainerLeft = styled.div`
 	position: relative;
 	width: 100%;
-	padding-right: 15px;
-	padding-left: 15px;
 	flex: 0 0 100%;
 	max-width: 100%;
+	padding-right: 1.5rem !important;
 	padding-left: 1.5rem !important;
 	/* ${(props) => props.theme.device.mobileL} {
 		flex: 0 0 80%;
@@ -90,6 +89,7 @@ const MainContainerLeft = styled.div`
 	} */
 	/* If screen is at least mobileL */
 	@media ${device.mobileL} {
+		padding-right: 0px !important;
 		flex: 0 0 70%;
 		max-width: 70%;
 	}
