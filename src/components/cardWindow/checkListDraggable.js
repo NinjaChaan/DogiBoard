@@ -1,14 +1,34 @@
 import React, { useState } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
-import Button from 'react-bootstrap/Button'
 import styled from 'styled-components'
+import { isMobile } from 'react-device-detect'
+import Button from '../Button'
 import CheckItemTitle from './checkItemTitle'
 import { device } from '../../devices'
 import { setSelectedCard, updateChecklist } from '../../redux/actions/index'
 
-const ItemContainer = styled.div`
-	
+const CheckButton = styled(Button)`
+	color: ${(props) => (props.done && 'white') || 'transparent'};
+	background-color: ${(props) => (!props.done && 'transparent')};
+	border: 2px solid ${(props) => ((props.done && props.theme.colors.success.backgroundColor) || props.theme.colors.primary.backgroundColor)};
+	width: 25px;
+	height: 25px;
+	font-size: 1rem;
+	padding-bottom: 5px;
+	padding: 0;
+	&:hover{
+		color: ${() => (!isMobile && 'white')};
+		border: 2px solid ${(props) => (props.theme.colors.success.backgroundColor)};
+	}
+	&:focus{
+		border: 2px solid ${(props) => (props.theme.colors.success.backgroundColor)};
+		background-color: ${(props) => (!props.done && isMobile && 'transparent')};
+	}
+	&:active{
+		border: 2px solid ${(props) => (props.theme.colors.success.backgroundColor)};
+		background-color: ${(props) => (!props.done && isMobile && 'transparent')};
+	}
 `
 
 const mapStateToProps = (state) => ({
@@ -83,18 +103,21 @@ const CheckListDraggable = ({
 								onMouseDown={() => unFocusTitle()}
 							/>
 							<div className="">
-								<Button
-									className={checkItem.done
-										? 'btn-checklistToggle-toggled'
-										: 'btn-checklistToggle'}
+								<CheckButton
+									success
+									done={checkItem.done}
+									// className={checkItem.done
+									// 	? 'btn-checklistToggle-toggled'
+									// 	: 'btn-checklistToggle'}
 									onMouseDown={toggleItemDone}
 								>
-									{checkItem.done ? '✓' : ''}
-								</Button>
+									✓
+								</CheckButton>
 							</div>
 							<div className="col pl-2 pr-0" style={{ width: '100%' }}>
 								<CheckItemTitle selectedCard={selectedCard} checkItem={checkItem} setEditing={setEditing} editing={editing} />
 							</div>
+
 						</div>
 					</td>
 				</tr>

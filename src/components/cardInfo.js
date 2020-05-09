@@ -8,10 +8,10 @@ const ChecklistArea = styled.div`
 	border-radius: 4px;
 	background-color: #f7f5f5;
 	border: 2px solid transparent;
-	${(props) => props.allChecksDone && css`
+	/* ${(props) => props.allChecksDone && css`
 		border: 2px #3cbc3c solid;
 		`
-	}
+} */
 `
 const ChecklistText = styled.span`
 	position: relative;
@@ -38,7 +38,7 @@ const CardInfo = ({ card }) => {
 		if (card.checklist && checksCount > 0) {
 			return (
 				<ChecklistArea allChecksDone={allChecksDone}>
-					<RiCheckboxLine style={{ marginBottom: '5px' }} />
+					<RiCheckboxLine scale="1.1" color={allChecksDone ? '#02c102' : 'black'} style={{ marginBottom: '5px' }} />
 					<ChecklistText>
 						{`${doneChecksCount}/${checksCount}`}
 					</ChecklistText>

@@ -16,6 +16,18 @@ const theme = {
 				color: 'rgb(255, 255, 255)',
 			},
 		},
+		success: {
+			backgroundColor: 'rgb(40, 165, 70)',
+			color: 'rgb(255, 255, 255)',
+			hover: {
+				backgroundColor: 'rgb(25, 150, 55)',
+				color: 'rgb(255, 255, 255)',
+			},
+			focus: {
+				backgroundColor: 'rgb(15, 140, 45)',
+				color: 'rgb(255, 255, 255)',
+			},
+		},
 		light: {
 			backgroundColor: 'rgb(225, 225, 225)',
 			color: 'rgb(0, 0, 0)',

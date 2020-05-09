@@ -21,6 +21,7 @@ const Button = styled.button`
 
 	background-color: ${(props) =>
 		(props.primary && props.theme.colors.primary.backgroundColor)
+		|| (props.success && props.theme.colors.success.backgroundColor)
 		|| (props.warning && props.theme.colors.warning.backgroundColor)
 		|| (props.warning_light && !isMobile && props.theme.colors.warning_light.backgroundColor)
 		|| (props.warning_light && isMobile && props.theme.colors.warning.backgroundColor)
@@ -30,6 +31,7 @@ const Button = styled.button`
 	};
 	color: ${(props) =>
 		(props.primary && props.theme.colors.primary.color)
+		|| (props.success && props.theme.colors.success.color)
 		|| (props.warning && props.theme.colors.warning.color)
 		|| (props.warning_light && !isMobile && props.theme.colors.warning_light.color)
 		|| (props.warning_light && isMobile && props.theme.colors.warning.color)
@@ -41,6 +43,7 @@ const Button = styled.button`
 	&:hover {
 	background-color: ${(props) =>
 		(props.primary && props.theme.colors.primary.hover.backgroundColor)
+		|| (props.success && props.theme.colors.success.hover.backgroundColor)
 		|| (props.warning && props.theme.colors.warning.hover.backgroundColor)
 		|| (props.warning_light && !isMobile && props.theme.colors.warning_light.hover.backgroundColor)
 		|| (props.warning_light && isMobile && props.theme.colors.warning.hover.backgroundColor)
@@ -51,6 +54,7 @@ const Button = styled.button`
 
 	color: ${(props) =>
 		(props.primary && props.theme.colors.primary.hover.color)
+		|| (props.success && props.theme.colors.success.hover.color)
 		|| (props.warning && props.theme.colors.warning.hover.color)
 		|| (props.warning_light && !isMobile && props.theme.colors.warning_light.hover.color)
 		|| (props.warning_light && isMobile && props.theme.colors.warning.hover.color)
@@ -69,6 +73,7 @@ const Button = styled.button`
 	outline: none;
 	background-color: ${(props) =>
 		(props.primary && props.theme.colors.primary.focus.backgroundColor)
+		|| (props.success && props.theme.colors.success.focus.backgroundColor)
 		|| (props.warning && props.theme.colors.warning.focus.backgroundColor)
 		|| (props.warning_light && !isMobile && props.theme.colors.warning_light.focus.backgroundColor)
 		|| (props.warning_light && isMobile && props.theme.colors.warning.focus.backgroundColor)
@@ -79,6 +84,7 @@ const Button = styled.button`
 
 	color: ${(props) =>
 		(props.primary && props.theme.colors.primary.focus.color)
+		|| (props.success && props.theme.colors.success.focus.color)
 		|| (props.warning && props.theme.colors.warning.focus.color)
 		|| (props.warning_light && !isMobile && props.theme.colors.warning_light.focus.color)
 		|| (props.warning_light && isMobile && props.theme.colors.warning.focus.color)
