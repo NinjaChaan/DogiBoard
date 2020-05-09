@@ -14,7 +14,7 @@ const SidebarButton = ({
 }) => {
 	const riIcon = RI[iconName]
 	return (
-		<Button warning={variant === 'warning'} primary={variant === 'primary'} light={variant === 'light'} onClick={func} hoverColor={hoverColor} hoverText={hoverText}>
+		<Button warning={variant === 'warning'} warning_light={variant === 'warning_light'} primary={variant === 'primary'} light={variant === 'light'} onClick={func} hoverColor={hoverColor} hoverText={hoverText}>
 			<ButtonContainer>
 				{React.createElement(riIcon, { size: '18', style: { marginTop: '3px', marginLeft: '5px', marginRight: '5px' } })}
 				{text}

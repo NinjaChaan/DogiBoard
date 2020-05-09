@@ -230,7 +230,7 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 							updateFunction={updateChecklistFunc}
 							autoFocus={true}
 						/>
-						<Button warning className="col" style={{ maxWidth: '30px', margin: '0px', marginRight: '1rem', fontWeight: '900 !important' }} onMouseDown={deleteChecklist}>✕</Button>
+						<Button warning_light className="col" style={{ maxWidth: '30px', margin: '0px', marginRight: '1rem', fontWeight: '900 !important' }} onMouseDown={deleteChecklist}>✕</Button>
 					</td>
 				</tr>
 			</thead>

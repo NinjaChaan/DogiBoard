@@ -61,7 +61,7 @@ const CardSidebarModule = ({ selectedCard, closeCardWindow, dispatch }) => {
 				<h6 style={{ fontWeight: '600' }}>Actions</h6>
 				<SidebarButton variant="light" className="btn-card-sidebar" text="Move" iconName="RiFileTransferLine" />
 				<SidebarButton variant="light" className="btn-card-sidebar" text="Copy" iconName="RiFileCopy2Line" />
-				<SidebarButton variant="warning" className="btn-card-sidebar" func={deleteCardPressed} text="Delete" iconName="RiDeleteBin2Line" />
+				<SidebarButton variant="warning_light" className="btn-card-sidebar" func={deleteCardPressed} text="Delete" iconName="RiDeleteBin2Line" />
 			</SidebarModule>
 		</>
 	)

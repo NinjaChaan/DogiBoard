@@ -41,10 +41,22 @@ const theme = {
 			},
 		},
 		warning: {
-			backgroundColor: 'rgb(227, 227, 227)',
+			backgroundColor: 'rgb(225, 0, 0)',
+			color: 'rgb(255, 255, 255)',
+			hover: {
+				backgroundColor: 'rgb(210, 0, 0)',
+				color: 'rgb(255, 255, 255)',
+			},
+			focus: {
+				backgroundColor: 'rgb(200, 0, 0)',
+				color: 'rgb(255, 255, 255)',
+			}
+		},
+		warning_light: {
+			backgroundColor: 'rgb(225, 225, 225)',
 			color: 'rgb(0, 0, 0)',
 			hover: {
-				backgroundColor: 'rgb(227, 0, 0)',
+				backgroundColor: 'rgb(225, 0, 0)',
 				color: 'rgb(255, 255, 255)',
 			},
 			focus: {
