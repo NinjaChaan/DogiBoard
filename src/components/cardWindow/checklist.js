@@ -23,6 +23,12 @@ const Checklist = ({
 		calculateProgress()
 	}, [checkItems])
 
+	const addChecklistItemPressed = () => {
+		changeShowAddAnother(false)
+		setTimeout(() => {
+			document.getElementById('checklistItemTitle').focus()
+		}, 100)
+	}
 
 	if (checkItems) {
 		return (
@@ -47,7 +53,7 @@ const Checklist = ({
 						<div>
 							{showingAddAnother
 								? (
-									<LinkButton link onMouseDown={() => changeShowAddAnother(false)}>
+									<LinkButton link onMouseDown={addChecklistItemPressed}>
 										<font size="4">＋</font>
 										Add checklist item
 									</LinkButton>

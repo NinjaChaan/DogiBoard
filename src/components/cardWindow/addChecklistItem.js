@@ -4,7 +4,7 @@ import '../cardList.css'
 
 const AddChecklistItem = ({ changeShowAddAnother, clickFunction, showingAddAnother }) => {
 	const [cardText, setCardText] = useState('')
-	const field = document.getElementById('checkListTitle')
+	const field = document.getElementById('checklistItemTitle')
 	let myRef = useRef(null)
 	const scrollToRef = () => {
 		// window.scrollTo(0, ref.current.offsetTop)
@@ -51,6 +51,9 @@ const AddChecklistItem = ({ changeShowAddAnother, clickFunction, showingAddAnoth
 	const createItem = () => {
 		if (cardText.length > 0) {
 			scrollToRef()
+			setTimeout(() => {
+				document.getElementById('checklistItemTitle').focus()
+			}, 100)
 			let newCheckItem = {}
 
 			newCheckItem = {
@@ -61,9 +64,6 @@ const AddChecklistItem = ({ changeShowAddAnother, clickFunction, showingAddAnoth
 			clickFunction(newCheckItem)
 		}
 		setCardText('')
-		setTimeout(() => {
-			document.getElementById('checkListTitle').focus()
-		}, 100)
 		// scrollToTargetAdjusted()
 	}
 
@@ -88,7 +88,7 @@ const AddChecklistItem = ({ changeShowAddAnother, clickFunction, showingAddAnoth
 
 	const blur = () => {
 		console.log('blurred')
-		document.getElementById('checkListTitle').style.height = '64px !important'
+		document.getElementById('checklistItemTitle').style.height = '64px !important'
 		createItem()
 	}
 
@@ -101,7 +101,7 @@ const AddChecklistItem = ({ changeShowAddAnother, clickFunction, showingAddAnoth
 					<textarea
 						style={{ scrollMargin: '150px' }}
 						ref={(el) => { myRef = el }}
-						id="checkListTitle"
+						id="checklistItemTitle"
 						className="textarea-add-checkList"
 						autoFocus
 						spellCheck="false"
