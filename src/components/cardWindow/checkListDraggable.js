@@ -153,17 +153,17 @@ const CheckListDraggable = ({
 				>
 					<td
 						className="container mx-0"
-						// style={{ display: 'block', width: '100%' }}
+						style={{ width: 'inherit' }}
 						onMouseOver={hover}
 						onMouseLeave={unhover}
 					>
+						<div
+							className="dragHandle"
+							{...provided.dragHandleProps}
+							onClick={() => focusTitle()}
+							onMouseDown={() => unFocusTitle()}
+						/>
 						<div className="row">
-							<div
-								className="dragHandle"
-								{...provided.dragHandleProps}
-								onClick={() => focusTitle()}
-								onMouseDown={() => unFocusTitle()}
-							/>
 							<div className="">
 								<CheckButton
 									success
@@ -176,7 +176,7 @@ const CheckListDraggable = ({
 									✓
 								</CheckButton>
 							</div>
-							<div className="col pl-2 pr-2" style={{ width: '100%' }}>
+							<div className="col pl-2 pr-2" style={{ width: '100%', display: 'flex' }}>
 								<CheckItemTitle selectedCard={selectedCard} checkItem={checkItem} setEditing={setEditing} editing={editing} />
 							</div>
 							{hovering
