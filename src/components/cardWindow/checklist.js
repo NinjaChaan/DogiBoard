@@ -37,7 +37,7 @@ const Checklist = ({
 				ref={innerRef}
 				className="scrollbar"
 				style={{
-					display: 'block',
+					// display: 'block',
 					// overflow: 'auto',
 					// maxHeight: '300px',
 				}}

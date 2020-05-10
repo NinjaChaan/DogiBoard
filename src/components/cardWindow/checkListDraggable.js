@@ -149,11 +149,11 @@ const CheckListDraggable = ({
 					ref={provided.innerRef}
 					{...provided.draggableProps}
 					{...provided.dragHandleProps}
-					style={{ display: 'block', width: '100%' }}
+				// style={{ width: '100%' }}
 				>
 					<td
 						className="container mx-0"
-						style={{ display: 'block', width: '100%' }}
+						// style={{ display: 'block', width: '100%' }}
 						onMouseOver={hover}
 						onMouseLeave={unhover}
 					>

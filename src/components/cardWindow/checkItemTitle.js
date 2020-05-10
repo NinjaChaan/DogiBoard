@@ -32,9 +32,9 @@ const CheckItemTitle = ({
 				+ parseInt(computed.getPropertyValue('border-bottom-width'), 10)
 
 			field.style.height = `${height}px`
-			console.log("scrollHeight",field.offsetHeight )
-			console.log("height",field.style.height)
-			console.log("text",field.value)
+			console.log('scrollHeight', field.offsetHeight)
+			console.log('height', field.style.height)
+			console.log('text', field.value)
 
 			if (field.scrollHeight > 168) {
 				field.style.overflow = 'auto'
