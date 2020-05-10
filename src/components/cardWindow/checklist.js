@@ -217,7 +217,12 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 				finished += 1
 			}
 		})
-		setProgress(((finished / selectedCard.checklist.checkItems.length) * 100).toFixed(0))
+		const newProgress = ((finished / selectedCard.checklist.checkItems.length) * 100).toFixed(0)
+		if (newProgress === 'NaN') {
+			setProgress(0)
+		} else {
+			setProgress(newProgress)
+		}
 	}
 
 	return (
@@ -226,7 +231,12 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 		}}
 		>
 			<thead>
-				<tr className="container" style={{ display: 'block', width: '100%', margin: '0px', padding: '0px' }}>
+				<tr
+					className="container"
+					style={{
+						display: 'block', width: '100%', margin: '0px', padding: '0px'
+					}}
+				>
 					<td className="row">
 						<ChecklistTitle
 							listTitle={selectedCard.checklist.text}
@@ -236,7 +246,16 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 							updateFunction={updateChecklistFunc}
 							autoFocus={true}
 						/>
-						<Button warning_light className="col" style={{ maxWidth: '30px', margin: '0px', marginRight: '1rem', fontWeight: '900 !important' }} onMouseDown={deleteChecklist}>✕</Button>
+						<Button
+							warning_light
+							className="col"
+							style={{
+								maxWidth: '30px', margin: '0px', marginRight: '1rem', fontWeight: '900 !important'
+							}}
+							onMouseDown={deleteChecklist}
+						>
+							✕
+						</Button>
 					</td>
 				</tr>
 			</thead>

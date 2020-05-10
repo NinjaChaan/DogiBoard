@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/mouse-events-have-key-events */
 import React, { useState } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
@@ -11,7 +12,7 @@ import { setSelectedCard, updateChecklist } from '../../redux/actions/index'
 const CheckButton = styled(Button)`
 	color: ${(props) => (props.done && 'white') || 'transparent'};
 	background-color: ${(props) => (!props.done && 'transparent')};
-	border: 2px solid ${(props) => ((props.done && props.theme.colors.success.backgroundColor) || props.theme.colors.primary.backgroundColor)};
+	border: 2px solid ${(props) => props.theme.colors.success.backgroundColor};
 	width: 25px;
 	height: 25px;
 	font-size: 1rem;
@@ -31,6 +32,29 @@ const CheckButton = styled(Button)`
 	}
 `
 
+const OptionsButton = styled(CheckButton)`
+	color: black;
+	background-color: 'transparent';
+	max-width: 25px;
+	max-height: 25px;
+	font-size: 1rem;
+	padding-bottom: 5px;
+	padding: 0;
+	border: none;
+	&:hover{
+	border: none;
+		color: ${() => (!isMobile && 'white')};
+	}
+	&:focus{
+	border: none;
+		background-color: ${(props) => (!props.done && isMobile && 'transparent')};
+	}
+	&:active{
+	border: none;
+		background-color: ${(props) => (!props.done && isMobile && 'transparent')};
+	}
+`
+
 const mapStateToProps = (state) => ({
 	selectedCard: state.selectedCard
 })
@@ -40,6 +64,7 @@ const CheckListDraggable = ({
 }) => {
 	const [editing, setEditing] = useState(false)
 	const [dragging, setDragging] = useState(false)
+	const [hovering, setHovering] = useState(false)
 
 	const toggleItemDone = () => {
 		console.log('toggle is', checkItem.done)
@@ -72,6 +97,30 @@ const CheckListDraggable = ({
 		console.log('sendind list with done', dispatch(updateChecklist(newChecklist)))
 	}
 
+	const deleteCheckItem = () => {
+		const newList = {
+			text: selectedCard.checklist.text,
+			checkItems: selectedCard.checklist.checkItems.filter((item) => item !== checkItem)
+		}
+
+		const newChecklist = {
+			checklist: newList,
+			id: selectedCard.id,
+			listId: selectedCard.listId
+		}
+		const newCard = {
+			...selectedCard,
+			checklist: newList
+		}
+
+		console.log('new lists', newChecklist)
+		console.log('new card', newCard)
+		console.log('sendind select', dispatch(setSelectedCard(newCard)))
+		console.log('sendind list with done', dispatch(updateChecklist(newChecklist)))
+
+		calculateProgress()
+	}
+
 	const focusTitle = () => {
 		document.getElementById(`checkItemTitle${checkItem.id}`).focus()
 	}
@@ -79,6 +128,14 @@ const CheckListDraggable = ({
 	const unFocusTitle = () => {
 		const titleElement = document.getElementById(`checkItemTitle${checkItem.id}`)
 		titleElement.blur()
+	}
+
+	const hover = () => {
+		setHovering(true)
+	}
+
+	const unhover = () => {
+		setHovering(false)
 	}
 
 	if (dragging) {
@@ -94,7 +151,12 @@ const CheckListDraggable = ({
 					{...provided.dragHandleProps}
 					style={{ display: 'block', width: '100%' }}
 				>
-					<td className=" container mx-0" style={{ display: 'block', width: '100%' }}>
+					<td
+						className="container mx-0"
+						style={{ display: 'block', width: '100%' }}
+						onMouseOver={hover}
+						onMouseLeave={unhover}
+					>
 						<div className="row">
 							<div
 								className="dragHandle"
@@ -114,10 +176,12 @@ const CheckListDraggable = ({
 									✓
 								</CheckButton>
 							</div>
-							<div className="col pl-2 pr-0" style={{ width: '100%' }}>
+							<div className="col pl-2 pr-2" style={{ width: '100%' }}>
 								<CheckItemTitle selectedCard={selectedCard} checkItem={checkItem} setEditing={setEditing} editing={editing} />
 							</div>
-
+							{hovering
+								? <OptionsButton warning_light className="col" onMouseDown={deleteCheckItem}>✕</OptionsButton>
+								: <OptionsButton style={{ visibility: 'hidden' }} warning_light className="col" onMouseDown={deleteCheckItem}>✕</OptionsButton>}
 						</div>
 					</td>
 				</tr>

@@ -421,7 +421,6 @@ code {
     overflow: hidden;
     overflow-wrap: break-word;
     cursor: text;
-    max-height: 30px;
 }
 
 .textarea-checkItem-title {
