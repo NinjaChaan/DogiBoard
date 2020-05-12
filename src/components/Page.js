@@ -1,7 +1,11 @@
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
+import boardService from '../services/boards'
 import { device } from '../devices'
+import { setLists } from '../redux/actions/index'
 
-const Page = styled.div`
+const PageStyle = styled.div`
 display: flex;
 position: relative;
 
@@ -26,4 +30,18 @@ max-width: 200px;
 	max-width: 100%;
 }
 `
-export default Page
+const Page = ({ children, dispatch }) => {
+	const getAllHook = () => {
+		boardService.getAll().then((response) => {
+			console.log(dispatch(setLists(response[0].lists)))
+		})
+	}
+	useEffect(getAllHook, [])
+	return (
+		<PageStyle>
+			{children}
+		</PageStyle>
+	)
+}
+
+export default connect(null, null)(Page)

@@ -1,18 +1,19 @@
 const initialState = {
-	lists: [{
-		text: 'a',
-		cards: [{ text: 'kkk', id: 0, listId: 0 }],
-		id: 0
-	}, {
-		text: 'b',
-		cards: [{ text: 'lll', id: 1, listId: 1 }, { text: 'laa', id: 27, listId: 1 }],
-		id: 1
-	},
-	{
-		text: 'cards',
-		cards: [{ text: 'aa', id: 3, listId: 2 }, { text: 'bb', id: 4, listId: 2 }],
-		id: 2
-	}
+	lists: [
+		//{
+	// 	text: 'a',
+	// 	cards: [{ text: 'kkk', id: 0, listId: 0 }],
+	// 	id: 0
+	// }, {
+	// 	text: 'b',
+	// 	cards: [{ text: 'lll', id: 1, listId: 1 }, { text: 'laa', id: 27, listId: 1 }],
+	// 	id: 1
+	// },
+	// {
+	// 	text: 'cards',
+	// 	cards: [{ text: 'aa', id: 3, listId: 2 }, { text: 'bb', id: 4, listId: 2 }],
+	// 	id: 2
+	// }
 	]
 }
 
@@ -66,6 +67,8 @@ const listReducer = (state = initialState, action) => {
 			})
 			return { ...state, lists: titleUpdatedLists }
 		case 'UPDATE_LIST_ORDER':
+			return { ...state, lists: action.payload }
+		case 'SET_LISTS':
 			return { ...state, lists: action.payload }
 		case 'ADD_CARD':
 			const newCards = listToUpdate.cards.concat(action.payload)

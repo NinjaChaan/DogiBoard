@@ -78,6 +78,11 @@ export const updateListOrder = (lists) => ({
 	payload: lists
 })
 
+export const setLists = (lists) => ({
+	type: 'SET_LISTS',
+	payload: lists
+})
+
 export const setCards = (cards) => ({
 	type: 'SET_CARDS',
 	payload: cards
