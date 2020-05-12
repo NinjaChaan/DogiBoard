@@ -1,19 +1,19 @@
 const initialState = {
 	lists: [
-		//{
-	// 	text: 'a',
-	// 	cards: [{ text: 'kkk', id: 0, listId: 0 }],
-	// 	id: 0
-	// }, {
-	// 	text: 'b',
-	// 	cards: [{ text: 'lll', id: 1, listId: 1 }, { text: 'laa', id: 27, listId: 1 }],
-	// 	id: 1
-	// },
-	// {
-	// 	text: 'cards',
-	// 	cards: [{ text: 'aa', id: 3, listId: 2 }, { text: 'bb', id: 4, listId: 2 }],
-	// 	id: 2
-	// }
+		// {
+		// 	text: 'a',
+		// 	cards: [{ text: 'kkk', id: 0, listId: 0 }],
+		// 	id: 0
+		// }, {
+		// 	text: 'b',
+		// 	cards: [{ text: 'lll', id: 1, listId: 1 }, { text: 'laa', id: 27, listId: 1 }],
+		// 	id: 1
+		// },
+		// {
+		// 	text: 'cards',
+		// 	cards: [{ text: 'aa', id: 3, listId: 2 }, { text: 'bb', id: 4, listId: 2 }],
+		// 	id: 2
+		// }
 	]
 }
 

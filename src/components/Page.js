@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { connect } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { connect, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import boardService from '../services/boards'
 import { device } from '../devices'
@@ -31,12 +31,32 @@ max-width: 200px;
 }
 `
 const Page = ({ children, dispatch }) => {
+	const lists = useSelector((state) => state.listReducer.lists)
+	const [firstGot, setFirstGot] = useState(false)
+
 	const getAllHook = () => {
 		boardService.getAll().then((response) => {
 			console.log(dispatch(setLists(response[0].lists)))
+			setFirstGot(true)
 		})
 	}
 	useEffect(getAllHook, [])
+
+	useEffect(() => {
+		if (firstGot) {
+			console.log('sending lists', lists)
+
+			const updatedBoard = {
+				name: 'TestBoard',
+				lists
+			}
+
+			boardService.update('5ebab8e68a214a322436bfe9', updatedBoard).then((response) => {
+				console.log(response)
+			})
+		}
+	}, [lists])
+
 	return (
 		<PageStyle>
 			{children}
