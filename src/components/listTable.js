@@ -8,7 +8,7 @@ import { updateListOrder } from '../redux/actions/index'
 
 
 const mapStateToProps = (state) => {
-	console.log('state', state.listReducer)
+	// console.log('state', state.listReducer)
 	return { lists: state.listReducer.lists }
 }
 
@@ -140,7 +140,7 @@ const ListTable = ({ lists, dispatch }) => {
 									lists.map((list, i) => (
 										<CardListContainer
 											key={list.id}
-											listTitle={list.text}
+											listTitle={list.name}
 											cards={list.cards}
 											index={i}
 											id={list.id}

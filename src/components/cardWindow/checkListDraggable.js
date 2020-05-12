@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import { isMobile } from 'react-device-detect'
 import Button from '../Button'
 import CheckItemTitle from './checkItemTitle'
-import { device } from '../../devices'
 import { setSelectedCard, updateChecklist } from '../../redux/actions/index'
 
 const CheckButton = styled(Button)`
@@ -67,9 +66,8 @@ const CheckListDraggable = ({
 	const [hovering, setHovering] = useState(false)
 
 	const toggleItemDone = () => {
-		console.log('toggle is', checkItem.done)
 		const newList = {
-			text: selectedCard.checklist.text,
+			name: selectedCard.checklist.name,
 			checkItems: selectedCard.checklist.checkItems
 		}
 		checkItem.done = !checkItem.done
@@ -99,7 +97,7 @@ const CheckListDraggable = ({
 
 	const deleteCheckItem = () => {
 		const newList = {
-			text: selectedCard.checklist.text,
+			name: selectedCard.checklist.name,
 			checkItems: selectedCard.checklist.checkItems.filter((item) => item !== checkItem)
 		}
 

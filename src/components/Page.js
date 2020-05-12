@@ -32,18 +32,21 @@ max-width: 200px;
 `
 const Page = ({ children, dispatch }) => {
 	const lists = useSelector((state) => state.listReducer.lists)
-	const [firstGot, setFirstGot] = useState(false)
+	const [firstStateGotten, setFirstStateGotten] = useState(false)
 
+	// Get all data from mongodb at the start
 	const getAllHook = () => {
 		boardService.getAll().then((response) => {
-			console.log(dispatch(setLists(response[0].lists)))
-			setFirstGot(true)
+			dispatch(setLists(response[0].lists))
+			// console.log(dispatch(setLists(response[0].lists)))
+			setFirstStateGotten(true)
 		})
 	}
 	useEffect(getAllHook, [])
 
+	// If lists change in store, and first state has been loaded, send changes to mongodb
 	useEffect(() => {
-		if (firstGot) {
+		if (firstStateGotten) {
 			console.log('sending lists', lists)
 
 			const updatedBoard = {
@@ -51,7 +54,7 @@ const Page = ({ children, dispatch }) => {
 				lists
 			}
 
-			boardService.update('5ebab8e68a214a322436bfe9', updatedBoard).then((response) => {
+			boardService.update('5ebae66d8e142057446007d7', updatedBoard).then((response) => {
 				console.log(response)
 			})
 		}

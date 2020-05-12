@@ -8,14 +8,14 @@ import { setSelectedCard } from '../redux/actions/index'
 const CardDraggable = ({ i, card, dispatch }) => {
 	const openCardEditWindow = () => {
 		const selectedCard = {
-			text: card.text,
+			name: card.name,
 			description: card.description,
 			checklist: card.checklist,
 			id: card.id,
 			listId: card.listId
 		}
 		document.getElementById('description').value = ''
-		console.log(dispatch(setSelectedCard(selectedCard)))
+		dispatch(setSelectedCard(selectedCard))
 		setTimeout(() => {
 			document.getElementById('window-overlay').style.display = 'flex'
 			document.getElementById('card-window').focus()
@@ -39,7 +39,7 @@ const CardDraggable = ({ i, card, dispatch }) => {
 							onClick={openCardEditWindow}
 						>
 							<Card.Text style={{ marginBottom: '0px' }}>
-								{card.text}
+								{card.name}
 							</Card.Text>
 							<CardInfo card={card} />
 						</Card>

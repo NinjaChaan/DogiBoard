@@ -5,7 +5,7 @@ import { addList } from '../redux/actions/index'
 import './cardList.css'
 
 const AddList = ({ changeShowAddAnother, dispatch }) => {
-	const [cardText, setCardText] = useState('')
+	const [listName, setListName] = useState('')
 	const field = document.getElementById('listTitle')
 	if (field) {
 		field.style.height = 'inherit'
@@ -35,16 +35,16 @@ const AddList = ({ changeShowAddAnother, dispatch }) => {
 	}
 
 	const createItem = () => {
-		if (cardText.length > 0) {
-			let newCard = {}
-			newCard = {
-				text: cardText,
+		if (listName.length > 0) {
+			let newList = {}
+			newList = {
+				name: listName,
 				cards: []
 			}
 			changeShowAddAnother(true)
-			dispatch(addList(newCard))
+			dispatch(addList(newList))
 		}
-		setCardText('')
+		setListName('')
 	}
 
 	const handleSubmit = (event) => {
@@ -61,7 +61,7 @@ const AddList = ({ changeShowAddAnother, dispatch }) => {
 		if (event.key === 'Enter') {
 			event.preventDefault()
 		}
-		setCardText(event.target.value)
+		setListName(event.target.value)
 	}
 
 	const handleKeyPress = (event) => {
@@ -84,7 +84,7 @@ const AddList = ({ changeShowAddAnother, dispatch }) => {
 							spellCheck="false"
 							maxLength="25"
 							placeholder="Enter a title for this list"
-							value={cardText}
+							value={listName}
 							onKeyPress={handleKeyPress}
 							onChange={handleTextChange}
 							onBlur={() => { createItem() }}

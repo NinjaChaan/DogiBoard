@@ -4,29 +4,29 @@ let nextTodoId = store.getState().listReducer.lists.reduce((prev, current) => Ma
 console.log(nextTodoId)
 
 export const setSelectedCard = ({
-	text, id, listId, description, checklist
+	name, id, listId, description, checklist
 }) => ({
 	type: 'SET_SELECTED_CARD',
 	payload: {
-		text,
+		name,
 		description,
 		checklist,
 		id,
 		listId
 	}
 })
-export const addCard = ({ text, listId }) => ({
+export const addCard = ({ name, listId }) => ({
 	type: 'ADD_CARD',
 	payload: {
-		text,
+		name,
 		id: nextTodoId++,
 		listId
 	}
 })
-export const updateCardTitle = ({ text, id, listId }) => ({
+export const updateCardTitle = ({ name, id, listId }) => ({
 	type: 'UPDATE_CARD_TITLE',
 	payload: {
-		text,
+		name,
 		id,
 		listId
 	}
@@ -56,19 +56,19 @@ export const updateChecklist = ({ checklist, id, listId }) => ({
 	}
 })
 
-export const addList = ({ text }) => ({
+export const addList = ({ name }) => ({
 	type: 'ADD_LIST',
 	payload: {
-		text,
+		name,
 		cards: [],
 		id: nextTodoId++
 	}
 })
 
-export const updateListTitle = ({ text, id }) => ({
+export const updateListTitle = ({ name, id }) => ({
 	type: 'UPDATE_LIST_TITLE',
 	payload: {
-		text,
+		name,
 		listId: id
 	}
 })

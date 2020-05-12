@@ -1,17 +1,17 @@
 const initialState = {
 	lists: [
 		// {
-		// 	text: 'a',
-		// 	cards: [{ text: 'kkk', id: 0, listId: 0 }],
+		// 	name: 'a',
+		// 	cards: [{ name: 'kkk', id: 0, listId: 0 }],
 		// 	id: 0
 		// }, {
-		// 	text: 'b',
-		// 	cards: [{ text: 'lll', id: 1, listId: 1 }, { text: 'laa', id: 27, listId: 1 }],
+		// 	name: 'b',
+		// 	cards: [{ name: 'lll', id: 1, listId: 1 }, { name: 'laa', id: 27, listId: 1 }],
 		// 	id: 1
 		// },
 		// {
-		// 	text: 'cards',
-		// 	cards: [{ text: 'aa', id: 3, listId: 2 }, { text: 'bb', id: 4, listId: 2 }],
+		// 	name: 'cards',
+		// 	cards: [{ name: 'aa', id: 3, listId: 2 }, { name: 'bb', id: 4, listId: 2 }],
 		// 	id: 2
 		// }
 	]
@@ -31,7 +31,7 @@ const listReducer = (state = initialState, action) => {
 				if (list.id === action.payload.listId) {
 					const updatedCards = list.cards.map((card) => {
 						if (card.id === action.payload.id) {
-							return { ...card, text: action.payload.text }
+							return { ...card, name: action.payload.name }
 						}
 						return card
 					})
@@ -61,7 +61,7 @@ const listReducer = (state = initialState, action) => {
 			console.log('update list title', action.payload)
 			const titleUpdatedLists = state.lists.map((list) => {
 				if (list.id === action.payload.listId) {
-					return { ...list, text: action.payload.text }
+					return { ...list, name: action.payload.name }
 				}
 				return list
 			})

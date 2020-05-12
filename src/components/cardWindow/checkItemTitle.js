@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { setSelectedCard, updateChecklist } from '../../redux/actions/index'
 
 const InputField = styled.input`
+	min-height: 28px;
 	background-color: transparent;
 	border: none;
 	border-radius: 4px;
@@ -24,7 +25,7 @@ const CheckItemTitle = ({
 	selectedCard, checkItem, setEditing, dispatch
 }) => {
 	const [listTitleClass, setListTitleClass] = useState('textarea-checkItem-title')
-	const [title, setTitle] = useState(checkItem.text)
+	const [title, setTitle] = useState(checkItem.name)
 	const [editingTitle, setEditingTitle] = useState(false)
 
 	const calculateHeight = () => {
@@ -35,7 +36,7 @@ const CheckItemTitle = ({
 			const computed = window.getComputedStyle(field)
 
 			if (field.value === '[object Object]') {
-				field.value = checkItem.text
+				field.value = checkItem.name
 			}
 
 			// Calculate the height
@@ -46,9 +47,9 @@ const CheckItemTitle = ({
 				+ parseInt(computed.getPropertyValue('border-bottom-width'), 10)
 
 			field.style.height = `${height}px`
-			console.log('scrollHeight', field.scrollHeight)
-			console.log('height', field.style.height)
-			console.log('text', field.value)
+			// console.log('scrollHeight', field.scrollHeight)
+			// console.log('height', field.style.height)
+			// console.log('text', field.value)
 
 			if (field.scrollHeight > 168) {
 				field.style.overflow = 'auto'
@@ -84,18 +85,17 @@ const CheckItemTitle = ({
 	const focusTitle = () => {
 		setListTitleClass('textarea-checkItem-title-editing')
 		const titleElement = document.getElementById(`checkItemTitleInput${checkItem.id}`)
-		console.log('selected card', selectedCard)
-		console.log('selected item', checkItem)
-		console.log('selected text', checkItem.text)
+		// console.log('selected card', selectedCard)
+		// console.log('selected item', checkItem)
+		// console.log('selected text', checkItem.name)
 		setTimeout(() => {
 			titleElement.focus()
-			titleElement.value = checkItem.text
+			titleElement.value = checkItem.name
 			setEditingTitle(true)
 		}, 0)
 	}
 
 	const blurTitle = () => {
-		console.log('blurr item')
 		setEditing(false)
 		setListTitleClass('textarea-checkItem-title')
 		setEditingTitle(false)
@@ -105,12 +105,10 @@ const CheckItemTitle = ({
 
 		list.checkItems.map((item) => {
 			if (item === checkItem) {
-				console.log('blurr item text', titleElement.value)
-				item.text = titleElement.value
+				item.name = titleElement.value
 			}
 		})
 
-		console.log('list', list)
 		const newCard = {
 			...selectedCard,
 			checklist: list
@@ -168,6 +166,7 @@ const CheckItemTitle = ({
 				id={`checkItemTitleInput${checkItem.id}`}
 				onBlur={blurTitle}
 				value={title}
+				onChange={handleTextChange}
 			/>
 		</span>
 	)

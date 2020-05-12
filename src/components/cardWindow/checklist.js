@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import Button from '../Button'
 import CheckListDraggable from './checkListDraggable'
 import AddChecklistItem from './addChecklistItem'
@@ -97,7 +97,7 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 		console.log('add list item', newCheckItem)
 		selectedCard.checklist.checkItems.concat(newCheckItem)
 		console.log('selected card checklist', selectedCard)
-		const list = { text: selectedCard.checklist.text, checkItems: selectedCard.checklist.checkItems.concat(newCheckItem) }
+		const list = { name: selectedCard.checklist.name, checkItems: selectedCard.checklist.checkItems.concat(newCheckItem) }
 		console.log('list', list)
 		const newCard = {
 			...selectedCard,
@@ -153,7 +153,7 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 			newItems.splice(destination.index, 0, listItem)
 
 			const newList = {
-				text: selectedCard.checklist.text,
+				name: selectedCard.checklist.name,
 				checkItems: newItems
 			}
 			const newChecklist = {
@@ -173,9 +173,9 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 		}
 	}
 
-	const updateChecklistFunc = (text) => {
+	const updateChecklistFunc = (name) => {
 		const newList = {
-			text,
+			name,
 			checkItems: selectedCard.checklist.checkItems
 		}
 		const newChecklist = {
@@ -239,7 +239,7 @@ const CheckListContainer = ({ selectedCard, id, dispatch }) => {
 				>
 					<td className="row">
 						<ChecklistTitle
-							listTitle={selectedCard.checklist.text}
+							listTitle={selectedCard.checklist.name}
 							id="0"
 							card={false}
 							classType="checklist"

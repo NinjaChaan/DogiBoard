@@ -30,7 +30,7 @@ const CardSidebarModule = ({ selectedCard, closeCardWindow, dispatch }) => {
 	}
 
 	const addChecklistPressed = () => {
-		const checklist = { text: 'Checklist', checkItems: [] }
+		const checklist = { name: 'Checklist', checkItems: [] }
 		const newCard = {
 			...selectedCard,
 			checklist

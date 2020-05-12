@@ -61,7 +61,7 @@ const ListTitle = ({
 	const blurTitle = () => {
 		setListTitleClass(`textarea-${classType}-title`)
 		if (classType === 'list') {
-			console.log('update list ', title, dispatch(updateListTitle({ text: title, id })))
+			console.log('update list ', title, dispatch(updateListTitle({ name: title, id })))
 		} else {
 			const titleElement = document.getElementById(`${classType}Title${id.toString()}`)
 			console.log('updating', titleElement.value)

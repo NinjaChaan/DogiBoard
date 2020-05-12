@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { updateCardDescription, setSelectedCard } from '../../redux/actions/index'
 
 const mapStateToProps = (state) => {
-	console.log('state at cardwindiw', state.selectedCard)
+	// console.log('state at cardwindiw', state.selectedCard)
 	const description = state.selectedCard.description || ''
 	return (
 		({

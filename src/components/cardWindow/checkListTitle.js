@@ -4,7 +4,7 @@ import { setSelectedCard, updateChecklist } from '../../redux/actions/index'
 
 const mapStateToProps = (state) => ({
 	selectedCard: state.selectedCard,
-	title: state.selectedCard.checklist.text
+	title: state.selectedCard.checklist.name
 })
 
 
@@ -50,24 +50,10 @@ const ChecklistTitle = ({ selectedCard, title, dispatch }) => {
 	}
 	calculateHeight()
 
-	const handleKeyPress = (event) => {
-		if (event.key === 'Enter') {
-			event.preventDefault()
-			document.getElementById('checlistTitle').blur()
-		}
-	}
-
-	const handleTextChange = (event) => {
-		calculateHeight()
+	const submitChecklistTitle = () => {
 		const titleElement = document.getElementById('checlistTitle')
-		if (event.key === 'Enter') {
-			event.preventDefault()
-		}
-		console.log(event.target.value)
-		setTitleText(event.target.value)
-
 		const list = selectedCard.checklist
-		list.text = titleElement.value
+		list.name = titleElement.value
 		console.log('list', list)
 		const newCard = {
 			...selectedCard,
@@ -84,9 +70,26 @@ const ChecklistTitle = ({ selectedCard, title, dispatch }) => {
 		console.log(dispatch(updateChecklist(newChecklist)))
 	}
 
+	const handleKeyPress = (event) => {
+		if (event.key === 'Enter') {
+			event.preventDefault()
+			submitChecklistTitle()
+			document.getElementById('checlistTitle').blur()
+		}
+	}
+
+	const handleTextChange = (event) => {
+		calculateHeight()
+		if (event.key === 'Enter') {
+			event.preventDefault()
+		}
+		console.log(event.target.value)
+		setTitleText(event.target.value)
+	}
+
 	const focusTitle = () => {
 		const titleElement = document.getElementById('checlistTitle')
-		const t = selectedCard.checklist.text
+		const t = selectedCard.checklist.name
 		console.log('selected', t)
 		titleElement.focus()
 		titleElement.value = { t }

@@ -108,7 +108,7 @@ const CardHeader = styled.div`
 `
 
 const mapStateToProps = (state) => {
-	console.log('state at cardwindiw', state.selectedCard)
+	// console.log('state at cardwindiw', state.selectedCard)
 	return { selectedCard: state.selectedCard }
 }
 
@@ -139,7 +139,7 @@ const CardWindowContainer = ({ selectedCard }) => {
 			<CardWindow id="card-window" className="window row" tabIndex="0" onClick={handleChildClick}>
 				<CardHeader className="col-10">
 					<CardTitle
-						listTitle={selectedCard.text}
+						listTitle={selectedCard.name}
 						id={selectedCard.id}
 						listId={selectedCard.listId}
 					/>

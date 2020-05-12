@@ -1,5 +1,5 @@
 const selectedCard = {
-	text: 'henlo?',
+	name: 'henlo?',
 	description: '',
 	id: 0,
 	listId: 0
@@ -8,10 +8,9 @@ const selectedCard = {
 const selectedCardReducer = (state = selectedCard, action) => {
 	switch (action.type) {
 		case 'SET_SELECTED_CARD':
-			console.log('set selected', action.payload)
 			return {
 				...state,
-				text: action.payload.text,
+				name: action.payload.name,
 				id: action.payload.id,
 				listId: action.payload.listId,
 				description: action.payload.description,

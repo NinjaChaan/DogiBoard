@@ -39,7 +39,7 @@ const AddCard = ({ listId, changeShowAddAnother, dispatch }) => {
 			let newCard = {}
 
 			newCard = {
-				text: cardText,
+				name: cardText,
 				listId
 			}
 			changeShowAddAnother(true)

@@ -20,7 +20,7 @@ const CardTitle = ({
 			const computed = window.getComputedStyle(field)
 
 			if (field.value === '[object Object]') {
-				field.value = selectedCard.text
+				field.value = selectedCard.name
 			}
 
 			// Calculate the height
@@ -61,10 +61,10 @@ const CardTitle = ({
 			event.preventDefault()
 		}
 		titleElement.value = event.target.value
-		const text = titleElement.value
+		const name = titleElement.value
 		const newSelection = {
 			...selectedCard,
-			text
+			name
 		}
 		console.log('set', dispatch(setSelectedCard(newSelection)))
 	}
@@ -72,17 +72,17 @@ const CardTitle = ({
 	const focusTitle = () => {
 		const titleElement = document.getElementById('cardTitle')
 		titleElement.focus()
-		titleElement.value = selectedCard.text
+		titleElement.value = selectedCard.name
 		setListTitleClass('textarea-card-title-editing')
 	}
 
 	const blurTitle = () => {
 		setListTitleClass('textarea-card-title')
-		console.log('update card', dispatch(updateCardTitle({ text: document.getElementById('cardTitle').value, id, listId })))
+		console.log('update card', dispatch(updateCardTitle({ name: document.getElementById('cardTitle').value, id, listId })))
 	}
 	return (
 		<textarea
-			value={selectedCard.text}
+			value={selectedCard.name}
 			onChange={handleTextChange}
 			id="cardTitle"
 			onFocus={focusTitle}

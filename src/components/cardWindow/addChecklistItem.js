@@ -57,7 +57,7 @@ const AddChecklistItem = ({ changeShowAddAnother, clickFunction, showingAddAnoth
 			let newCheckItem = {}
 
 			newCheckItem = {
-				text: cardText,
+				name: cardText,
 				id: Math.floor(Math.random() * 99999),
 				done: false
 			}
