@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, Suspense } from 'react'
 import { connect } from 'react-redux'
 import Button from 'react-bootstrap/Button'
 import styled from 'styled-components'
 import CardTitle from './cardTitle'
 import CardDescription from './cardDescription'
 import CardSidebarModule from './cardSidebarModule'
-import Checklist from './checklist'
+const Checklist = React.lazy(() => import('./checklist'))
 import { device } from '../../devices'
 
 const CardWindowMain = styled.div`
@@ -153,7 +153,9 @@ const CardWindowContainer = ({ selectedCard }) => {
 							</div>
 							<CardDescription />
 							{selectedCard.checklist
-								? <Checklist selectedCard={selectedCard} />
+								? <Suspense fallback={<div>Loading...</div>}>
+									<Checklist selectedCard={selectedCard} />
+								</Suspense>
 								: null}
 						</MainContainerLeft>
 						<SideBar>

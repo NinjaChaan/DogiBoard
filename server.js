@@ -1,14 +1,31 @@
 require('dotenv').config()
 const path = require('path')
 const webpack = require('webpack')
+const spdy = require('spdy')
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const zlib = require('zlib')
+const compression = require('compression')
+const fs = require('fs')
+const expressStaticGzip = require('express-static-gzip')
 const config = require('./webpack.config')
 const Board = require('./models/board')
 
 const app = express()
 app.use(cors())
+
+app.use('/', expressStaticGzip('./', {
+	enableBrotli: true,
+	customCompressions: [{
+		encodingName: 'deflate',
+		fileExtension: 'zz'
+	}],
+	orderPreference: ['br']
+}))
+
+app.use(express.static('public'))
+
 app.use(express.json())
 morgan.token('data', (request) => JSON.stringify(request.body))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
@@ -90,12 +107,27 @@ app.put('/api/boards/:id', (request, response, next) => {
 		})
 		.catch((error) => next(error))
 })
+const options = {
+	key: fs.readFileSync(`${__dirname}/server.key`),
+	cert: fs.readFileSync(`${__dirname}/server.crt`)
+}
+console.log(options)
+
+spdy
+	.createServer(options, app)
+	.listen(3000, (error) => {
+		if (error) {
+			console.error(error)
+			return process.exit(1)
+		}
+		console.log('Listening at http://localhost:3000/')
+	})
 
 // eslint-disable-next-line consistent-return
-app.listen(3000, (err) => {
-	if (err) {
-		return console.error(err)
-	}
+// app.listen(3000, (err) => {
+// 	if (err) {
+// 		return console.error(err)
+// 	}
 
-	console.log('Listening at http://localhost:3000/')
-})
+// 	console.log('Listening at http://localhost:3000/')
+// })

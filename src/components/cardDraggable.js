@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import Card from 'react-bootstrap/Card'
 import { Draggable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
-import CardInfo from './cardInfo'
+const CardInfo = React.lazy(() => import('./cardInfo'))
 import { setSelectedCard } from '../redux/actions/index'
 
 const CardDraggable = ({ i, card, dispatch }) => {
@@ -41,7 +41,9 @@ const CardDraggable = ({ i, card, dispatch }) => {
 							<Card.Text style={{ marginBottom: '0px' }}>
 								{card.name}
 							</Card.Text>
-							<CardInfo card={card} />
+							<Suspense fallback={<div>Loading...</div>}>
+								<CardInfo card={card} />
+							</Suspense>
 						</Card>
 					</td>
 				</tr>

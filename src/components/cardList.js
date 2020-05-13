@@ -1,8 +1,8 @@
 /* eslint-disable no-shadow */
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 import Button from 'react-bootstrap/Button'
-import CardDraggable from './cardDraggable'
+const CardDraggable = React.lazy(() => import('./cardDraggable'))
 import AddCard from './addCard'
 import ListTitle from './listTitle'
 import './cardList.css'
@@ -11,23 +11,28 @@ import './cardList.css'
 const CardList = ({
 	cards, innerRef, placeholder, showingAddAnother, changeShowAddAnother, id
 }) => (
-	<tbody ref={innerRef}>
-		{cards.map((card, i) => <CardDraggable key={card.id} i={i} card={card} />)}
-		{placeholder}
-		<tr>
-			<td>
-				{showingAddAnother
-					? (
-						<Button className="btn-add-another-card" variant="link" onClick={() => changeShowAddAnother(false)}>
-							<font size="4">＋</font>
+		<tbody ref={innerRef}>
+			{cards.map((card, i) => (
+				<Suspense fallback={<div>Loading...</div>}>
+					<CardDraggable key={card.id} i={i} card={card} />
+				</Suspense>
+			))}
+
+			{placeholder}
+			<tr>
+				<td>
+					{showingAddAnother
+						? (
+							<Button className="btn-add-another-card" variant="link" onClick={() => changeShowAddAnother(false)}>
+								<font size="4">＋</font>
 							Add another card
-						</Button>
-					)
-					: <AddCard listId={id} changeShowAddAnother={changeShowAddAnother} />}
-			</td>
-		</tr>
-	</tbody>
-)
+							</Button>
+						)
+						: <AddCard listId={id} changeShowAddAnother={changeShowAddAnother} />}
+				</td>
+			</tr>
+		</tbody>
+	)
 
 const CardListContainer = ({
 	listTitle, cards, index, setCards, id, dragging

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import Button from '../Button'
-import CheckListDraggable from './checkListDraggable'
-import AddChecklistItem from './addChecklistItem'
+const CheckListDraggable = React.lazy(() => import('./checkListDraggable'))
+const AddChecklistItem = React.lazy(() => import('./addChecklistItem'))
 import ChecklistTitle from './checkListTitle'
 import ProgressBar from './progressBar'
 import { setSelectedCard, updateChecklist } from '../../redux/actions/index'
@@ -44,7 +44,9 @@ const Checklist = ({
 			>
 				{
 					checkItems.map((item, i) => (
-						<CheckListDraggable key={item.id} i={i} checkItem={item} calculateProgress={calculateProgress} />
+						<Suspense fallback={<div>Loading...</div>}>
+							<CheckListDraggable key={item.id} i={i} checkItem={item} calculateProgress={calculateProgress} />
+						</Suspense>
 					))
 				}
 				{placeholder}
@@ -59,12 +61,14 @@ const Checklist = ({
 									</LinkButton>
 								)
 								: (
-									<AddChecklistItem
-										listId={id}
-										changeShowAddAnother={changeShowAddAnother}
-										clickFunction={createCard}
-										showingAddAnother={showingAddAnother}
-									/>
+									<Suspense fallback={<div>Loading...</div>}>
+										<AddChecklistItem
+											listId={id}
+											changeShowAddAnother={changeShowAddAnother}
+											clickFunction={createCard}
+											showingAddAnother={showingAddAnother}
+										/>
+									</Suspense>
 								)}
 						</div>
 					</td>
