@@ -5,26 +5,14 @@ const spdy = require('spdy')
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
-const zlib = require('zlib')
-const compression = require('compression')
+const shrinkRay = require('shrink-ray-current')
 const fs = require('fs')
-const expressStaticGzip = require('express-static-gzip')
 const config = require('./webpack.config')
 const Board = require('./models/board')
 
 const app = express()
 app.use(cors())
-
-app.use('/', expressStaticGzip('./', {
-	enableBrotli: true,
-	customCompressions: [{
-		encodingName: 'deflate',
-		fileExtension: 'zz'
-	}],
-	orderPreference: ['br']
-}))
-
-app.use(express.static('public'))
+app.use(shrinkRay())
 
 app.use(express.json())
 morgan.token('data', (request) => JSON.stringify(request.body))
@@ -36,6 +24,22 @@ app.use(require('webpack-dev-middleware')(compiler, {
 }))
 
 app.use(require('webpack-hot-middleware')(compiler))
+
+// app.use(express.static('public', {
+// 	etag: true, // Just being explicit about the default.
+// 	lastModified: true, // Just being explicit about the default.
+// 	setHeaders: (res, path) => {
+// 		const hashRegExp = new RegExp('\\.[0-9a-f]{8}\\.')
+
+// 		if (path.endsWith('.html')) {
+// 			// All of the project's HTML files end in .html
+// 			res.setHeader('Cache-Control', 'no-cache')
+// 		} else if (hashRegExp.test(path)) {
+// 			// If the RegExp matched, then we have a versioned URL.
+// 			res.setHeader('Cache-Control', 'max-age=31536000')
+// 		}
+// 	},
+// }))
 
 app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname, 'index.html'))
