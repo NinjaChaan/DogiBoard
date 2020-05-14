@@ -1,6 +1,5 @@
 import React from 'react'
 import { ThemeProvider } from 'styled-components'
-import device from './devices'
 
 const theme = {
 	colors: {
@@ -83,7 +82,6 @@ const theme = {
 		medium: '2em',
 		large: '3em'
 	},
-	device: { ...device }
 }
 
 const Theme = ({ children }) => (

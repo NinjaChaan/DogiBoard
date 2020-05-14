@@ -1,12 +1,19 @@
 /* eslint-disable no-shadow */
 import React, { useState, Suspense } from 'react'
+import styled from 'styled-components'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
-import Button from 'react-bootstrap/Button'
-const CardDraggable = React.lazy(() => import('./cardDraggable'))
+import Button from './Button'
 import AddCard from './addCard'
 import ListTitle from './listTitle'
 import './cardList.css'
+const CardDraggable = React.lazy(() => import('./cardDraggable'))
 
+const LinkButton = styled(Button)`
+	width: auto;
+	display: inline-block;
+	justify-content: left;
+	padding-bottom: 30px;
+`
 
 const CardList = ({
 	cards, innerRef, placeholder, showingAddAnother, changeShowAddAnother, id
@@ -20,13 +27,13 @@ const CardList = ({
 
 			{placeholder}
 			<tr>
-				<td>
+				<td style={{ paddingTop: '5px' }}>
 					{showingAddAnother
 						? (
-							<Button className="btn-add-another-card" variant="link" onClick={() => changeShowAddAnother(false)}>
+							<LinkButton link style={{ marginBottom: '0px', height: '48px' }} className="btn-add-another-card" variant="link" onClick={() => changeShowAddAnother(false)}>
 								<font size="4">＋</font>
 							Add another card
-							</Button>
+							</LinkButton>
 						)
 						: <AddCard listId={id} changeShowAddAnother={changeShowAddAnother} />}
 				</td>
@@ -74,6 +81,7 @@ const CardListContainer = ({
 							<tr>
 								<td>
 									<div
+										aria-label="Edit title"
 										className="dragHandle"
 										{...provided.dragHandleProps}
 										onClick={() => focusTitle()}

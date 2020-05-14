@@ -5,8 +5,8 @@ import styled from 'styled-components'
 import CardTitle from './cardTitle'
 import CardDescription from './cardDescription'
 import CardSidebarModule from './cardSidebarModule'
-const Checklist = React.lazy(() => import('./checklist'))
 import { device } from '../../devices'
+const Checklist = React.lazy(() => import('./checklist'))
 
 const CardWindowMain = styled.div`
 	display: flex;
@@ -83,10 +83,7 @@ const MainContainerLeft = styled.div`
 	max-width: 100%;
 	padding-right: 1.5rem !important;
 	padding-left: 1.5rem !important;
-	/* ${(props) => props.theme.device.mobileL} {
-		flex: 0 0 80%;
-		max-width: 80%;
-	} */
+	
 	/* If screen is at least mobileL */
 	@media ${device.mobileL} {
 		padding-right: 0px !important;

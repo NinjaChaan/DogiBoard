@@ -2,6 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const BrotliPlugin = require('brotli-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 module.exports = {
 	devtool: 'cheap-module-eval-source-map',
@@ -16,6 +17,7 @@ module.exports = {
 		publicPath: '/static/'
 	},
 	plugins: [
+		new BundleAnalyzerPlugin(),
 		new webpack.HotModuleReplacementPlugin(),
 		
 		 new CompressionPlugin({
@@ -38,6 +40,9 @@ module.exports = {
 		 minRatio: 0.7
 		 })
 	],
+	  resolve: {
+		extensions: [ '.mjs', '.js', '.jsx', '.json' ]
+	  },
 	module: {
 		rules: [{
 			test: /\.js$/,

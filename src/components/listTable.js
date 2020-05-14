@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import Button from 'react-bootstrap/Button'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
-import AddList from './addList'
 import CardListContainer from './cardList'
 import { updateListOrder } from '../redux/actions/index'
+const AddList = React.lazy(() => import('./addList'))
 
 
 const mapStateToProps = (state) => {
@@ -159,9 +159,11 @@ const ListTable = ({ lists, dispatch }) => {
 											</Button>
 										)
 										: (
-											<AddList
-												changeShowAddAnother={changeShowAddAnother}
-											/>
+											<Suspense fallback={<div>Loading...</div>}>
+												<AddList
+													changeShowAddAnother={changeShowAddAnother}
+												/>
+											</Suspense>
 										)}
 								</td>
 

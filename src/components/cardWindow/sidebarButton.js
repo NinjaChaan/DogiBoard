@@ -1,6 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
-import * as RI from 'react-icons/ri'
+import {
+	RiCheckboxLine,
+	RiUserAddLine,
+	RiBookmark2Line,
+	RiFileTransferLine,
+	RiFileCopy2Line,
+	RiDeleteBin2Line
+} from 'react-icons/ri'
 import Button from '../Button'
 
 const ButtonContainer = styled.div`
@@ -12,7 +19,29 @@ const ButtonContainer = styled.div`
 const SidebarButton = ({
 	iconName, func, text, hoverColor, hoverText, variant
 }) => {
-	const riIcon = RI[iconName]
+	let riIcon
+	switch (iconName) {
+		case 'RiCheckboxLine':
+			riIcon = RiCheckboxLine
+			break
+		case 'RiUserAddLine':
+			riIcon = RiUserAddLine
+			break
+		case 'RiBookmark2Line':
+			riIcon = RiBookmark2Line
+			break
+		case 'RiFileTransferLine':
+			riIcon = RiFileTransferLine
+			break
+		case 'RiFileCopy2Line':
+			riIcon = RiFileCopy2Line
+			break
+		case 'RiDeleteBin2Line':
+			riIcon = RiDeleteBin2Line
+			break
+		default:
+			break
+	}
 	return (
 		<Button warning={variant === 'warning'} warning_light={variant === 'warning_light'} primary={variant === 'primary'} light={variant === 'light'} onClick={func} hoverColor={hoverColor} hoverText={hoverText}>
 			<ButtonContainer>

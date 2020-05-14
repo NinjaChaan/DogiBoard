@@ -3,11 +3,11 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import Button from '../Button'
-const CheckListDraggable = React.lazy(() => import('./checkListDraggable'))
-const AddChecklistItem = React.lazy(() => import('./addChecklistItem'))
 import ChecklistTitle from './checkListTitle'
 import ProgressBar from './progressBar'
 import { setSelectedCard, updateChecklist } from '../../redux/actions/index'
+const CheckListDraggable = React.lazy(() => import('./checkListDraggable'))
+const AddChecklistItem = React.lazy(() => import('./addChecklistItem'))
 
 const LinkButton = styled(Button)`
 	width: auto;

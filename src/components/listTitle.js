@@ -71,6 +71,7 @@ const ListTitle = ({
 
 	return (
 		<textarea
+			aria-label="Title of the list"
 			autoFocus={autoFocus}
 			value={title}
 			onChange={handleTextChange}

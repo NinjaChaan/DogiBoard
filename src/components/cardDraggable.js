@@ -2,8 +2,8 @@ import React, { Suspense } from 'react'
 import Card from 'react-bootstrap/Card'
 import { Draggable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
-const CardInfo = React.lazy(() => import('./cardInfo'))
 import { setSelectedCard } from '../redux/actions/index'
+const CardInfo = React.lazy(() => import('./cardInfo'))
 
 const CardDraggable = ({ i, card, dispatch }) => {
 	const openCardEditWindow = () => {
