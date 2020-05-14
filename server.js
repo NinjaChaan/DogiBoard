@@ -25,6 +25,7 @@ app.use(require('webpack-dev-middleware')(compiler, {
 
 app.use(require('webpack-hot-middleware')(compiler))
 
+// BUILD
 app.use(express.static('build', {
 	etag: true, // Just being explicit about the default.
 	lastModified: true, // Just being explicit about the default.
@@ -41,6 +42,7 @@ app.use(express.static('build', {
 	},
 }))
 
+// DEV
 // app.get('/', (req, res) => {
 // 	res.sendFile(path.join(__dirname, 'index.html'))
 // })

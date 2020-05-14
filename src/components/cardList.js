@@ -30,7 +30,7 @@ const CardList = ({
 				<td style={{ paddingTop: '5px' }}>
 					{showingAddAnother
 						? (
-							<LinkButton link style={{ marginBottom: '0px', height: '48px' }} className="btn-add-another-card" variant="link" onClick={() => changeShowAddAnother(false)}>
+							<LinkButton link_transparent style={{ marginBottom: '0px', height: '48px' }} className="btn-add-another-card" variant="link" onClick={() => changeShowAddAnother(false)}>
 								<font size="4">＋</font>
 							Add another card
 							</LinkButton>

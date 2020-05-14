@@ -2,6 +2,7 @@
 /* eslint-disable indent */
 import styled from 'styled-components'
 import { isMobile } from 'react-device-detect'
+import { RiGitBranchLine } from 'react-icons/ri'
 
 // eslint-disable-next-line import/prefer-default-export
 const Button = styled.button`
@@ -19,15 +20,18 @@ const Button = styled.button`
 	
 
 	background-color: ${(props) =>
-		(props.primary && props.theme.colors.primary.backgroundColor)
+		(props.nobr && 'rgba(0,0,0,0) !important')
+		|| (props.primary && props.theme.colors.primary.backgroundColor)
 		|| (props.success && props.theme.colors.success.backgroundColor)
 		|| (props.warning && props.theme.colors.warning.backgroundColor)
 		|| (props.warning_light && !isMobile && props.theme.colors.warning_light.backgroundColor)
 		|| (props.warning_light && isMobile && props.theme.colors.warning.backgroundColor)
 		|| (props.light && props.theme.colors.light.backgroundColor)
 		|| (props.link && props.theme.colors.link.backgroundColor)
+		|| (props.link_transparent && props.theme.colors.link_transparent.backgroundColor)
 		|| props.theme.colors.primary.backgroundColor
 	};
+	
 	color: ${(props) =>
 		(props.primary && props.theme.colors.primary.color)
 		|| (props.success && props.theme.colors.success.color)
@@ -36,6 +40,7 @@ const Button = styled.button`
 		|| (props.warning_light && isMobile && props.theme.colors.warning.color)
 		|| (props.light && props.theme.colors.light.color)
 		|| (props.link && props.theme.colors.link.color)
+		|| (props.link_transparent && props.theme.colors.link_transparent.color)
 		|| props.theme.colors.primary.color
 	};
 	
@@ -48,6 +53,7 @@ const Button = styled.button`
 		|| (props.warning_light && isMobile && props.theme.colors.warning.hover.backgroundColor)
 		|| (props.light && props.theme.colors.light.hover.backgroundColor)
 		|| (props.link && props.theme.colors.link.hover.backgroundColor)
+		|| (props.link_transparent && props.theme.colors.link_transparent.hover.backgroundColor)
 		|| (props.theme.colors.primary.hover.backgroundColor)
 	};
 
@@ -59,6 +65,7 @@ const Button = styled.button`
 		|| (props.warning_light && isMobile && props.theme.colors.warning.hover.color)
 		|| (props.light && props.theme.colors.light.hover.color)
 		|| (props.link && props.theme.colors.link.hover.color)
+		|| (props.link_transparent && props.theme.colors.link_transparent.hover.color)
 		|| (props.theme.colors.primary.hover.color)
 	};
 		outline: none;
@@ -78,6 +85,7 @@ const Button = styled.button`
 		|| (props.warning_light && isMobile && props.theme.colors.warning.focus.backgroundColor)
 		|| (props.light && props.theme.colors.light.focus.backgroundColor)
 		|| (props.link && props.theme.colors.link.focus.backgroundColor)
+		|| (props.link_transparent && props.theme.colors.link_transparent.focus.backgroundColor)
 		|| (props.theme.colors.primary.focus.backgroundColor)
 	};
 
@@ -89,6 +97,7 @@ const Button = styled.button`
 		|| (props.warning_light && isMobile && props.theme.colors.warning.focus.color)
 		|| (props.light && props.theme.colors.light.focus.color)
 		|| (props.link && props.theme.colors.link.focus.color)
+		|| (props.link_transparent && props.theme.colors.link_transparent.focus.color)
 		|| (props.theme.colors.primary.focus.color)
 	};
 }

@@ -8,6 +8,7 @@ import {
 	RiFileCopy2Line,
 	RiDeleteBin2Line
 } from 'react-icons/ri'
+// import * as RI from 'react-icons/ri'
 import Button from '../Button'
 
 const ButtonContainer = styled.div`
@@ -19,6 +20,7 @@ const ButtonContainer = styled.div`
 const SidebarButton = ({
 	iconName, func, text, hoverColor, hoverText, variant
 }) => {
+	// const riIcon = RI[iconName]
 	let riIcon
 	switch (iconName) {
 		case 'RiCheckboxLine':

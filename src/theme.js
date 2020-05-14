@@ -51,6 +51,18 @@ const theme = {
 				color: 'rgb(0, 75, 230)',
 			},
 		},
+		link_transparent: {
+			backgroundColor: 'rgba(0, 0, 0, 0)',
+			color: 'rgb(0, 100, 255)',
+			hover: {
+				backgroundColor: 'rgba(210, 210, 210, 0.3)',
+				color: 'rgb(0, 75, 230)',
+			},
+			focus: {
+				backgroundColor: 'rgba(0, 0, 0, 0)',
+				color: 'rgb(0, 55, 210)',
+			},
+		},
 		warning: {
 			backgroundColor: 'rgb(225, 0, 0)',
 			color: 'rgb(255, 255, 255)',
