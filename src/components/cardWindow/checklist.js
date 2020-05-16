@@ -44,7 +44,7 @@ const Checklist = ({
 			>
 				{
 					checkItems.map((item, i) => (
-						<Suspense fallback={<div>Loading...</div>}>
+						<Suspense key={i} fallback={<tr><td><div>Loading...</div></td></tr>}>
 							<CheckListDraggable key={item.id} i={i} checkItem={item} calculateProgress={calculateProgress} />
 						</Suspense>
 					))

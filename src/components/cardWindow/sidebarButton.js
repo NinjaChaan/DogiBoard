@@ -18,7 +18,7 @@ const ButtonContainer = styled.div`
 `
 
 const SidebarButton = ({
-	iconName, func, text, hoverColor, hoverText, variant
+	iconName, func, text, hoverColor, hoverText, variant, id
 }) => {
 	// const riIcon = RI[iconName]
 	let riIcon
@@ -45,7 +45,7 @@ const SidebarButton = ({
 			break
 	}
 	return (
-		<Button warning={variant === 'warning'} warning_light={variant === 'warning_light'} primary={variant === 'primary'} light={variant === 'light'} onClick={func} hoverColor={hoverColor} hoverText={hoverText}>
+		<Button id={id} warning={variant === 'warning'} warning_light={variant === 'warning_light'} primary={variant === 'primary'} light={variant === 'light'} onClick={func} hoverColor={hoverColor} hoverText={hoverText}>
 			<ButtonContainer>
 				{React.createElement(riIcon, { size: '18', style: { marginTop: '3px', marginLeft: '5px', marginRight: '5px' } })}
 				{text}

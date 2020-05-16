@@ -20,7 +20,7 @@ const CardList = ({
 }) => (
 		<tbody ref={innerRef}>
 			{cards.map((card, i) => (
-				<Suspense fallback={<div>Loading...</div>}>
+				<Suspense key={i} fallback={<tr><td><div>Loading...</div></td></tr>}>
 					<CardDraggable key={card.id} i={i} card={card} />
 				</Suspense>
 			))}

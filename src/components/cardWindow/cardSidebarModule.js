@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useState, createRef } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { setSelectedCard, updateChecklist, deleteCard } from '../../redux/actions/index'
 import SidebarButton from './sidebarButton'
+import Dropdown from '../Dropdown'
+import Button from '../Button'
 import { device } from '../../devices'
 
 const SidebarModule = styled.div`	
@@ -24,6 +26,10 @@ const SidebarModule = styled.div`
 `
 
 const CardSidebarModule = ({ selectedCard, closeCardWindow, dispatch }) => {
+	const [showLabelMenu, setShowLabelMenu] = useState(false)
+
+	const label = createRef()
+
 	const deleteCardPressed = () => {
 		dispatch(deleteCard(selectedCard))
 		closeCardWindow()
@@ -55,7 +61,14 @@ const CardSidebarModule = ({ selectedCard, closeCardWindow, dispatch }) => {
 						<SidebarButton variant="light" className="btn-card-sidebar" func={addChecklistPressed} text="Checklist" iconName="RiCheckboxLine" />
 					)}
 				<SidebarButton variant="light" className="btn-card-sidebar" func={addChecklistPressed} text="Members" iconName="RiUserAddLine" />
-				<SidebarButton variant="light" className="btn-card-sidebar" func={addChecklistPressed} text="Label" iconName="RiBookmark2Line" />
+				<SidebarButton id="labelButton" variant="light" className="btn-card-sidebar" func={() => { setShowLabelMenu(!showLabelMenu) }} text="Label" iconName="RiBookmark2Line" />
+
+				<Dropdown show={showLabelMenu || false} setShowMenu={setShowLabelMenu} parentId="labelButton">
+					<Button> Menu item 1 </Button>
+					<Button> Menu item 2 </Button>
+					<Button> Menu item 3 </Button>
+				</Dropdown>
+
 			</SidebarModule>
 			<SidebarModule className="col">
 				<h6 style={{ fontWeight: '600' }}>Actions</h6>

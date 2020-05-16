@@ -26,26 +26,26 @@ app.use(require('webpack-dev-middleware')(compiler, {
 app.use(require('webpack-hot-middleware')(compiler))
 
 // BUILD
-app.use(express.static('build', {
-	etag: true, // Just being explicit about the default.
-	lastModified: true, // Just being explicit about the default.
-	setHeaders: (res, path) => {
-		const hashRegExp = new RegExp('\\.[0-9a-f]{8}\\.')
+// app.use(express.static('build', {
+// 	etag: true, // Just being explicit about the default.
+// 	lastModified: true, // Just being explicit about the default.
+// 	setHeaders: (res, path) => {
+// 		const hashRegExp = new RegExp('\\.[0-9a-f]{8}\\.')
 
-		if (path.endsWith('.html')) {
-			// All of the project's HTML files end in .html
-			res.setHeader('Cache-Control', 'no-cache')
-		} else if (hashRegExp.test(path)) {
-			// If the RegExp matched, then we have a versioned URL.
-			res.setHeader('Cache-Control', 'max-age=31536000')
-		}
-	},
-}))
+// 		if (path.endsWith('.html')) {
+// 			// All of the project's HTML files end in .html
+// 			res.setHeader('Cache-Control', 'no-cache')
+// 		} else if (hashRegExp.test(path)) {
+// 			// If the RegExp matched, then we have a versioned URL.
+// 			res.setHeader('Cache-Control', 'max-age=31536000')
+// 		}
+// 	},
+// }))
 
 // DEV
-// app.get('/', (req, res) => {
-// 	res.sendFile(path.join(__dirname, 'index.html'))
-// })
+app.get('/', (req, res) => {
+	res.sendFile(path.join(__dirname, 'index.html'))
+})
 
 
 app.get('/info', (request, response, next) => {
