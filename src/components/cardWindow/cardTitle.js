@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { updateCardTitle, setSelectedCard } from '../../redux/actions/index'
+import { updateCard, setSelectedCard } from '../../redux/actions/index'
 
 const mapStateToProps = (state) => ({
 	selectedCard: state.selectedCard
@@ -78,7 +78,7 @@ const CardTitle = ({
 
 	const blurTitle = () => {
 		setListTitleClass('textarea-card-title')
-		console.log('update card', dispatch(updateCardTitle({ name: document.getElementById('cardTitle').value, id, listId })))
+		console.log('update card', dispatch(updateCard({ name: document.getElementById('cardTitle').value, id, listId })))
 	}
 	return (
 		<textarea

@@ -39,6 +39,7 @@ const Page = ({ children, dispatch }) => {
 		boardService.getAll().then((response) => {
 			dispatch(setLists(response[0].lists))
 			// console.log(dispatch(setLists(response[0].lists)))
+			console.log('loaded lists', response[0].lists)
 			setFirstStateGotten(true)
 		})
 	}

@@ -1,34 +1,32 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 const DropdownMenu = styled.div`
 	display: inline-table;
 	position: absolute;
 	z-index: 2000;
-	background-color: #b2b2b2;
+	background-color: rgb(175, 175, 175);
 	padding: 10px;
 	border-radius: 4px;
 
-	 transform-origin: top center;
+	transform-origin: top center;
   
-	transition: ease-in 0.1s;
-	-webkit-transition: ease-in 0.1s;
+	transition: transform ease-out 0.2s, max-height ease-out 0.2s, opacity ease-out 0.1s 0.1s;
+	-webkit-transition: transform ease-out 0.2s, max-height ease-out 0.2s, opacity ease-out 0.1s 0.1s;
 	/* transition: ease-in 0.2s;
 	-webkit-transition: ease-in 0.2s;*/
+	opacity: 0;
 	transform: scaleY(0);
 	max-height: 0; 
 
+	width: ${(props) => props.width}px;
 
 	&.show{
+		opacity: 1;
 		-webkit-transition: all 0.2s cubic-bezier(.39,.45,.7,1.5);
 		-moz-transition: all 0.2s cubic-bezier(.39,.45,.7,1.5);
 		-o-transition: all 0.2s cubic-bezier(.39,.45,.7,1.5);
 		transition: all 0.2s cubic-bezier(.39,.45,.7,1.5);
-		
-		/* -webkit-transition: all 0.2s cubic-bezier(.39,.45,.44,1.32);
-		-moz-transition: all 0.2s cubic-bezier(.39,.45,.44,1.32);
-		-o-transition: all 0.2s cubic-bezier(.39,.45,.44,1.32);
-		transition: all 0.2s cubic-bezier(.39,.45,.44,1.32); */
 		height: auto;
 		max-height: 100%;
 		transform: scaleY(1);
@@ -60,9 +58,11 @@ const Dropdown = ({
 	children, show, setShowMenu, parentId
 }) => {
 	const menu = useRef()
+	const [width, setWidth] = useState(0)
 
 	const handleClick = (e) => {
 		const parent = document.getElementById(parentId)
+		setWidth(parent.scrollWidth)
 		if (menu.current.contains(e.target) || parent.contains(e.target)) {
 			// inside click
 			return
@@ -77,9 +77,8 @@ const Dropdown = ({
 			document.removeEventListener('mousedown', handleClick)
 		}
 	}, [])
-
 	return (
-		<DropdownMenu className={show && 'show'} ref={menu}>
+		<DropdownMenu width={width} className={show && 'show'} ref={menu}>
 			{children}
 		</DropdownMenu>
 	)

@@ -8,11 +8,7 @@ const CardInfo = React.lazy(() => import('./cardInfo'))
 const CardDraggable = ({ i, card, dispatch }) => {
 	const openCardEditWindow = () => {
 		const selectedCard = {
-			name: card.name,
-			description: card.description,
-			checklist: card.checklist,
-			id: card.id,
-			listId: card.listId
+			...card
 		}
 		document.getElementById('description').value = ''
 		dispatch(setSelectedCard(selectedCard))

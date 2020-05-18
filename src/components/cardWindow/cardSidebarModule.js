@@ -1,11 +1,27 @@
-import React, { useState, createRef } from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import { setSelectedCard, updateChecklist, deleteCard } from '../../redux/actions/index'
+import {
+	RiBug2Line,
+	RiStarLine,
+	RiCloseLine,
+	RiToolsLine
+} from 'react-icons/ri'
+import { MdBugReport, MdStar } from 'react-icons/md'
+import { IconContext } from 'react-icons'
+import {
+	setSelectedCard, updateChecklist, updateCard, deleteCard
+} from '../../redux/actions/index'
 import SidebarButton from './sidebarButton'
 import Dropdown from '../Dropdown'
 import Button from '../Button'
 import { device } from '../../devices'
+
+const ButtonContainer = styled.div`
+width: 100%;
+display: flex;
+justify-content: left;
+`
 
 const SidebarModule = styled.div`	
     float: right;
@@ -25,14 +41,36 @@ const SidebarModule = styled.div`
   	}
 `
 
+const LabelDropdownButton = styled(Button)`
+	padding-top: 4px;
+	border: 3px solid transparent;
+
+	&:hover{
+		border: 3px solid transparent;
+	}
+
+	&.selected{
+		border: 3px solid #fff;
+	}
+`
+
 const CardSidebarModule = ({ selectedCard, closeCardWindow, dispatch }) => {
 	const [showLabelMenu, setShowLabelMenu] = useState(false)
 
-	const label = createRef()
+	console.log('selected label', selectedCard)
 
 	const deleteCardPressed = () => {
 		dispatch(deleteCard(selectedCard))
 		closeCardWindow()
+	}
+
+	const updateCardLabelPressed = (label) => {
+		const newCard = {
+			...selectedCard,
+			label
+		}
+		console.log(dispatch(updateCard(newCard)))
+		console.log(dispatch(setSelectedCard(newCard)))
 	}
 
 	const addChecklistPressed = () => {
@@ -64,9 +102,32 @@ const CardSidebarModule = ({ selectedCard, closeCardWindow, dispatch }) => {
 				<SidebarButton id="labelButton" variant="light" className="btn-card-sidebar" func={() => { setShowLabelMenu(!showLabelMenu) }} text="Label" iconName="RiBookmark2Line" />
 
 				<Dropdown show={showLabelMenu || false} setShowMenu={setShowLabelMenu} parentId="labelButton">
-					<Button> Menu item 1 </Button>
-					<Button> Menu item 2 </Button>
-					<Button> Menu item 3 </Button>
+					<IconContext.Provider value={{ size: 18, style: { marginTop: '3px', marginLeft: '5px', marginRight: '5px' } }}>
+						<LabelDropdownButton className={selectedCard.label || 'selected'} light onClick={() => updateCardLabelPressed(null)}>
+							<ButtonContainer>
+								{React.createElement(RiCloseLine, {})}
+								No label
+							</ButtonContainer>
+						</LabelDropdownButton>
+						<LabelDropdownButton className={selectedCard.label === 'feature' && 'selected'} light onClick={() => updateCardLabelPressed('feature')}>
+							<ButtonContainer>
+								{React.createElement(MdStar, { fill: '#fab000' })}
+								Feature
+							</ButtonContainer>
+						</LabelDropdownButton>
+						<LabelDropdownButton className={selectedCard.label === 'bug' && 'selected'} light onClick={() => updateCardLabelPressed('bug')}>
+							<ButtonContainer>
+								{React.createElement(MdBugReport, { size: 22, fill: 'crimson', style: { marginTop: '2px', marginLeft: '3px', marginRight: '3px' } })}
+								Bug
+							</ButtonContainer>
+						</LabelDropdownButton>
+						<LabelDropdownButton className={selectedCard.label === 'chore' && 'selected'} light onClick={() => updateCardLabelPressed('chore')}>
+							<ButtonContainer>
+								{React.createElement(RiToolsLine, {})}
+								Chore
+							</ButtonContainer>
+						</LabelDropdownButton>
+					</IconContext.Provider>
 				</Dropdown>
 
 			</SidebarModule>

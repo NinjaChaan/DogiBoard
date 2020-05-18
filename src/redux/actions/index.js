@@ -3,16 +3,30 @@ import store from '../store/index'
 let nextTodoId = store.getState().listReducer.lists.reduce((prev, current) => Math.max(prev, current.cards.reduce((prevC, curC) => Math.max(prevC, curC.id), 0)), 0) + 1
 console.log(nextTodoId)
 
-export const setSelectedCard = ({
-	name, id, listId, description, checklist
-}) => ({
+// export const setSelectedCard = ({
+// 	name, id, listId, description, checklist, label
+// }) => ({
+// 	type: 'SET_SELECTED_CARD',
+// 	payload: {
+// 		name,
+// 		description,
+// 		checklist,
+// 		id,
+// 		listId,
+// 		label
+// 	}
+// })
+
+export const setSelectedCard = (selectedCard) => ({
 	type: 'SET_SELECTED_CARD',
 	payload: {
-		name,
-		description,
-		checklist,
-		id,
-		listId
+		...selectedCard
+	}
+})
+export const updateCard = (updatedCard) => ({
+	type: 'UPDATE_CARD',
+	payload: {
+		...updatedCard
 	}
 })
 export const addCard = ({ name, listId }) => ({
@@ -23,14 +37,14 @@ export const addCard = ({ name, listId }) => ({
 		listId
 	}
 })
-export const updateCardTitle = ({ name, id, listId }) => ({
-	type: 'UPDATE_CARD_TITLE',
-	payload: {
-		name,
-		id,
-		listId
-	}
-})
+// export const updateCardTitle = ({ name, id, listId }) => ({
+// 	type: 'UPDATE_CARD_TITLE',
+// 	payload: {
+// 		name,
+// 		id,
+// 		listId
+// 	}
+// })
 export const deleteCard = ({ id, listId }) => ({
 	type: 'DELETE_CARD',
 	payload: {
@@ -38,14 +52,22 @@ export const deleteCard = ({ id, listId }) => ({
 		listId
 	}
 })
-export const updateCardDescription = ({ description, id, listId }) => ({
-	type: 'UPDATE_CARD_DESCRIPTION',
-	payload: {
-		description,
-		id,
-		listId
-	}
-})
+// export const updateCardDescription = ({ description, id, listId }) => ({
+// 	type: 'UPDATE_CARD_DESCRIPTION',
+// 	payload: {
+// 		description,
+// 		id,
+// 		listId
+// 	}
+// })
+// export const updateCardLabel = ({ label, id, listId }) => ({
+// 	type: 'UPDATE_CARD_LABEL',
+// 	payload: {
+// 		label,
+// 		id,
+// 		listId
+// 	}
+// })
 
 export const updateChecklist = ({ checklist, id, listId }) => ({
 	type: 'UPDATE_CHECKLIST',

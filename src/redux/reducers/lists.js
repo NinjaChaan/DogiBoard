@@ -17,6 +17,42 @@ const initialState = {
 	]
 }
 
+const updateCardInsideLists = (state, cardId, listId, updated) => {
+	const updatedCardList = state.lists.map((list) => {
+		if (list.id === listId) {
+			const updatedCards = list.cards.map((card) => {
+				if (card.id === cardId) {
+					return { ...card, ...updated }
+				}
+				return card
+			})
+			console.log('updated cards', updatedCards)
+			return { ...list, cards: updatedCards }
+		}
+		return list
+	})
+
+	return updatedCardList
+}
+
+const replaceCardInsideLists = (state, cardId, listId, replaceCard) => {
+	const updatedCardList = state.lists.map((list) => {
+		if (list.id === listId) {
+			const updatedCards = list.cards.map((card) => {
+				if (card.id === cardId) {
+					return replaceCard
+				}
+				return card
+			})
+			console.log('updated cards', updatedCards)
+			return { ...list, cards: updatedCards }
+		}
+		return list
+	})
+
+	return updatedCardList
+}
+
 const listReducer = (state = initialState, action) => {
 	let listToUpdate = null
 	if (action.payload) {
@@ -25,38 +61,51 @@ const listReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case 'ADD_LIST':
 			return { ...state, lists: state.lists.concat(action.payload) }
-		case 'UPDATE_CARD_TITLE':
-			console.log('update card title', action.payload)
-			const updatedCardListT = state.lists.map((list) => {
-				if (list.id === action.payload.listId) {
-					const updatedCards = list.cards.map((card) => {
-						if (card.id === action.payload.id) {
-							return { ...card, name: action.payload.name }
-						}
-						return card
-					})
-					console.log('updated cards', updatedCards)
-					return { ...list, cards: updatedCards }
-				}
-				return list
-			})
-			return { ...state, lists: updatedCardListT }
-		case 'UPDATE_CARD_DESCRIPTION':
-			console.log('update card description', action.payload)
-			const updatedCardListD = state.lists.map((list) => {
-				if (list.id === action.payload.listId) {
-					const updatedCards = list.cards.map((card) => {
-						if (card.id === action.payload.id) {
-							return { ...card, description: action.payload.description }
-						}
-						return card
-					})
-					console.log('updated cards', updatedCards)
-					return { ...list, cards: updatedCards }
-				}
-				return list
-			})
-			return { ...state, lists: updatedCardListD }
+
+		case 'UPDATE_CARD':
+			console.log('update card', action.payload)
+			return {
+				...state,
+				lists: replaceCardInsideLists(
+					state,
+					action.payload.id,
+					action.payload.listId,
+					action.payload
+				)
+			}
+		// case 'UPDATE_CARD_TITLE':
+		// 	console.log('update card title', action.payload)
+		// 	return {
+		// 		...state,
+		// 		lists: updateCardInsideLists(
+		// 			state,
+		// 			action.payload.id,
+		// 			action.payload.listId,
+		// 			{ name: action.payload.name }
+		// 		)
+		// 	}
+		// case 'UPDATE_CARD_DESCRIPTION':
+		// 	console.log('update card description', action.payload)
+		// 	return {
+		// 		...state,
+		// 		lists: updateCardInsideLists(
+		// 			state,
+		// 			action.payload.id,
+		// 			action.payload.listId,
+		// 			{ description: action.payload.description }
+		// 		)
+		// 	}
+		// case 'UPDATE_CARD_LABEL':
+		// 	console.log('update card description', action.payload)
+		// 	return {
+		// 		...state,
+		// 		lists: updateCardInsideLists(
+		// 			state,
+		// 			action.payload.id,
+		// 			action.payload.listId,
+		// 			{ label: action.payload.label }
+		// 		)
+		// 	}
 		case 'UPDATE_LIST_TITLE':
 			console.log('update list title', action.payload)
 			const titleUpdatedLists = state.lists.map((list) => {
@@ -92,19 +141,15 @@ const listReducer = (state = initialState, action) => {
 			return { ...state, lists: newLists }
 		case 'UPDATE_CHECKLIST':
 			console.log('update checklist', action.payload)
-			const checklistUpdatedLists = state.lists.map((list) => {
-				if (list.id === action.payload.listId) {
-					const updatedChecklist = list.cards.map((card) => {
-						if (card.id === action.payload.id) {
-							return { ...card, checklist: action.payload.checklist }
-						}
-						return card
-					})
-					return { ...list, cards: updatedChecklist }
-				}
-				return list
-			})
-			return { ...state, lists: checklistUpdatedLists }
+			return {
+				...state,
+				lists: updateCardInsideLists(
+					state,
+					action.payload.id,
+					action.payload.listId,
+					{ checklist: action.payload.checklist }
+				)
+			}
 		default:
 			return state
 	}
