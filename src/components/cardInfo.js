@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import styled, { css } from 'styled-components'
-import { RiCheckboxLine } from 'react-icons/ri'
+import {
+	RiCheckboxLine,
+	RiBug2Line,
+	RiStarLine,
+	RiCloseLine,
+	RiToolsLine
+} from 'react-icons/ri'
+import { MdBugReport, MdStar } from 'react-icons/md'
+import { IconContext } from 'react-icons'
 
 const ChecklistArea = styled.div`
 	display: inline-block;
@@ -11,7 +19,7 @@ const ChecklistArea = styled.div`
 	/* ${(props) => props.allChecksDone && css`
 		border: 2px #3cbc3c solid;
 		`
-} */
+	} */
 `
 const ChecklistText = styled.span`
 	position: relative;
@@ -25,6 +33,25 @@ const CardInfo = ({ card }) => {
 	const [allChecksDone, setAllChecksDone] = useState(false)
 	const [checksCount, setChecksCount] = useState(0)
 	const [doneChecksCount, setDoneChecksCount] = useState(0)
+
+	let riIcon
+	let fillColor
+	switch (card.label) {
+		case 'bug':
+			riIcon = MdBugReport
+			fillColor = 'crimson'
+			break
+		case 'feature':
+			riIcon = MdStar
+			fillColor = '#fab000'
+			break
+		case 'chore':
+			riIcon = RiToolsLine
+			fillColor = 'black'
+			break
+		default:
+			break
+	}
 
 	useEffect(() => {
 		if (card.checklist) {
@@ -48,8 +75,20 @@ const CardInfo = ({ card }) => {
 		return (null)
 	}
 
+	const Label = () => {
+		console.log('label', card.label)
+		return (
+			<>
+				{React.createElement(riIcon, { size: 20, title: `This task is a ${card.label}`, fill: fillColor, style: { marginBottom: '5px', marginRight: '3px' } })}
+			</>
+		)
+	}
+
 	return (
 		<div style={{ marginBottom: '-5px', marginTop: '2px' }}>
+			{card.label
+				? <Label />
+				: null}
 			<Checklist />
 		</div>
 	)

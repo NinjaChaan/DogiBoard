@@ -1,5 +1,6 @@
 import React, { useEffect, Suspense } from 'react'
 import { connect } from 'react-redux'
+import { setSelectedCard } from '../../redux/actions/index'
 import Button from 'react-bootstrap/Button'
 import styled from 'styled-components'
 import CardTitle from './cardTitle'
@@ -109,9 +110,12 @@ const mapStateToProps = (state) => {
 	return { selectedCard: state.selectedCard }
 }
 
-const CardWindowContainer = ({ selectedCard }) => {
+const CardWindowContainer = ({ selectedCard, dispatch }) => {
 	const closeCardWindow = () => {
 		document.getElementById('window-overlay').style.display = 'none'
+		const selectedCard = {
+		}
+		dispatch(setSelectedCard(selectedCard))
 	}
 
 	function downHandler({ key }) {

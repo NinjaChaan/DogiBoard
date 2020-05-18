@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import {
 	RiBug2Line,
 	RiStarLine,
@@ -42,10 +42,14 @@ const SidebarModule = styled.div`
 `
 
 const LabelDropdownButton = styled(Button)`
-	padding-top: 4px;
+	padding-top: 3px;
 	border: 3px solid transparent;
 
+	background-color: ${(props) => props.backgroundColor || Button.backgroundColor};
+
 	&:hover{
+		background-color: ${(props) => props.backgroundColor || Button.backgroundColor};
+		${(props) => props.backgroundColor && css`filter: brightness(90%);`}
 		border: 3px solid transparent;
 	}
 
@@ -109,19 +113,19 @@ const CardSidebarModule = ({ selectedCard, closeCardWindow, dispatch }) => {
 								No label
 							</ButtonContainer>
 						</LabelDropdownButton>
-						<LabelDropdownButton className={selectedCard.label === 'feature' && 'selected'} light onClick={() => updateCardLabelPressed('feature')}>
+						<LabelDropdownButton className={selectedCard.label === 'feature' && 'selected'} light backgroundColor="#ffd840" onClick={() => updateCardLabelPressed('feature')}>
 							<ButtonContainer>
-								{React.createElement(MdStar, { fill: '#fab000' })}
+								{React.createElement(MdStar, { /* fill: '#fab000' */ })}
 								Feature
 							</ButtonContainer>
 						</LabelDropdownButton>
-						<LabelDropdownButton className={selectedCard.label === 'bug' && 'selected'} light onClick={() => updateCardLabelPressed('bug')}>
+						<LabelDropdownButton className={selectedCard.label === 'bug' && 'selected'} light backgroundColor="#f43b3b" onClick={() => updateCardLabelPressed('bug')}>
 							<ButtonContainer>
-								{React.createElement(MdBugReport, { size: 22, fill: 'crimson', style: { marginTop: '2px', marginLeft: '3px', marginRight: '3px' } })}
+								{React.createElement(MdBugReport, { size: 22, /* fill: 'crimson', */ style: { marginTop: '2px', marginLeft: '3px', marginRight: '3px' } })}
 								Bug
 							</ButtonContainer>
 						</LabelDropdownButton>
-						<LabelDropdownButton className={selectedCard.label === 'chore' && 'selected'} light onClick={() => updateCardLabelPressed('chore')}>
+						<LabelDropdownButton className={selectedCard.label === 'chore' && 'selected'} light backgroundColor="#5991f2" style={{ marginBottom: '0px' }} onClick={() => updateCardLabelPressed('chore')}>
 							<ButtonContainer>
 								{React.createElement(RiToolsLine, {})}
 								Chore
