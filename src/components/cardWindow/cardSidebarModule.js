@@ -47,7 +47,7 @@ const LabelDropdownButton = styled(Button)`
 
 	background-color: ${(props) => props.backgroundColor || Button.backgroundColor};
 
-	&:hover{
+	&:hover, &:focus, &:active{
 		background-color: ${(props) => props.backgroundColor || Button.backgroundColor};
 		${(props) => props.backgroundColor && css`filter: brightness(90%);`}
 		border: 3px solid transparent;
@@ -109,7 +109,7 @@ const CardSidebarModule = ({ selectedCard, closeCardWindow, dispatch }) => {
 					<IconContext.Provider value={{ size: 18, style: { marginTop: '3px', marginLeft: '5px', marginRight: '5px' } }}>
 						<LabelDropdownButton className={selectedCard.label || 'selected'} light onClick={() => updateCardLabelPressed(null)}>
 							<ButtonContainer>
-								{React.createElement(RiCloseLine, {})}
+								{React.createElement(RiCloseLine, { size: 20, style: { marginLeft: '3px' } })}
 								No label
 							</ButtonContainer>
 						</LabelDropdownButton>

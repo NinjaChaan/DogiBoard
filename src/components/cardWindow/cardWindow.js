@@ -2,6 +2,7 @@ import React, { useEffect, Suspense } from 'react'
 import { connect } from 'react-redux'
 import { setSelectedCard } from '../../redux/actions/index'
 import Button from 'react-bootstrap/Button'
+import CardLabel from './cardLabel'
 import styled from 'styled-components'
 import CardTitle from './cardTitle'
 import CardDescription from './cardDescription'
@@ -100,7 +101,7 @@ const MainContainerLeft = styled.div`
 
 const CardHeader = styled.div`
 	min-height: 24px;
-    padding: 0 8px 20px 0px;
+    padding: 0 8px 0px 0px;
     position: relative;
     width: 100%;
 `
@@ -138,6 +139,9 @@ const CardWindowContainer = ({ selectedCard, dispatch }) => {
 	return (
 		<WindowOverlay id="window-overlay" className="window-overlay" onClick={closeCardWindow}>
 			<CardWindow id="card-window" className="window row" tabIndex="0" onClick={handleChildClick}>
+				{selectedCard.label
+					? <CardLabel label={selectedCard.label} />
+					: null}
 				<CardHeader className="col-10">
 					<CardTitle
 						listTitle={selectedCard.name}
@@ -163,7 +167,7 @@ const CardWindowContainer = ({ selectedCard, dispatch }) => {
 							<CardSidebarModule selectedCard={selectedCard} closeCardWindow={closeCardWindow} />
 						</SideBar>
 					</CardWindowMain>
-					<div style={{ height: '75px' }} />
+					<div style={{ height: '200px' }} />
 				</div>
 			</CardWindow>
 		</WindowOverlay>

@@ -374,7 +374,7 @@ code {
 
 .btn-close-card-window {
     position: absolute;
-    top: 0;
+    top: -10px;
     right: 0;
     margin-right: 15px;
     margin-top: 10px;
@@ -383,7 +383,8 @@ code {
     font-weight: 900;
     background: transparent;
     border: none;
-    color: rgba(61, 61, 61, 0.6);
+    /* color: rgba(61, 61, 61, 0.6); */
+    color: black;
 }
 
 .btn-close-card-window:hover {
