@@ -5,6 +5,7 @@ const spdy = require('spdy')
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const _ = require('underscore')
 const shrinkRay = require('shrink-ray-current')
 const fs = require('fs')
 const config = require('./webpack.config')
@@ -41,6 +42,106 @@ app.use(require('webpack-hot-middleware')(compiler))
 // 		}
 // 	},
 // }))
+
+// app.get('/stream/:id', (request, response, next) => {
+// 	// response.set('Cache-Control', 'no-cache')
+// 	// response.set('Content-Type', 'text/event-stream')
+// 	// response.set('Access-Control-Allow-Origin', '*')
+// 	// response.flushHeaders() // flush the headers to establish SSE with client
+// 	response.writeHead(200, {
+// 		Connection: 'keep-alive',
+// 		'Content-Type': 'text/event-stream',
+// 		'Cache-Control': 'no-cache',
+
+// 		// enabling CORS
+// 		'Access-Control-Allow-Origin': '*',
+// 		'Access-Control-Allow-Headers':
+// 			'Origin, X-Requested-With, Content-Type, Accept',
+// 	})
+// 	console.log('trying to stream width id ', request.params.id)
+
+// 	const interValID = setInterval(() => {
+// 		Board.findById(request.params.id)
+// 			.then((board) => {
+// 				if (board) {
+// 					// console.log('stream board success', board.toJSON())
+// 					// response.json(board.toJSON())
+// 					// response.write(`data: ${board.toJSON()}`)
+// 					// `${JSON.stringify(board)}\n\n`
+// 					const data = {
+// 						message: 'hello'
+// 					}
+// 					console.log('data', board.toJSON())
+// 					response.write(`data: ${JSON.stringify(board)}`)
+// 					response.write('\n\n')
+// 					// response.write('data: {"flight": "I768", "state": "landing"}')
+// 				} else {
+// 					console.log('stream error')
+// 					response.writeHead(404)
+// 					response.end()
+// 				}
+// 			})
+// 			.catch((error) => next(error))
+// 		// res.send(`data: ${JSON.stringify({ num: counter })}\n\n`) // res.write() instead of res.send()
+// 	}, 1000)
+
+// 	// If client closes connection, stop sending events
+// 	response.on('close', () => {
+// 		console.log('client dropped me')
+// 		clearInterval(interValID)
+// 		response.end()
+// 	})
+// })
+
+
+app.get('/stream/:id', (request, response, next) => {
+	response.set({
+		// needed for SSE!
+		'Content-Type': 'text/event-stream',
+		'Cache-Control': 'no-cache',
+		Connection: 'keep-alive',
+
+		// enabling CORS
+		'Access-Control-Allow-Origin': '*',
+		'Access-Control-Allow-Headers':
+			'Origin, X-Requested-With, Content-Type, Accept',
+	})
+	response.flush()
+
+	let previousBoard
+
+	const interValID = setInterval(() => {
+
+		Board.findById(request.params.id)
+			.then((board) => {
+				if (board) {
+					if (_.isEqual(board, previousBoard)) {
+						console.log('no need to update')
+					} else {
+						console.log('updating')
+						previousBoard = board
+						response.write(`data: ${JSON.stringify(board)}`)
+						response.write('\n\n')
+						response.flush()
+					}
+				} else {
+					console.log('stream error')
+					response.writeHead(404)
+					response.flush()
+					response.end()
+				}
+			})
+			.catch((error) => next(error))
+	}, 1000)
+
+	// If client closes connection, stop sending events
+	response.on('close', () => {
+		console.log('client dropped me')
+		clearInterval(interValID)
+		response.end()
+	})
+})
+
 
 // DEV
 app.get('/', (req, res) => {

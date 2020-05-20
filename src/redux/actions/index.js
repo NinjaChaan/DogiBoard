@@ -1,7 +1,7 @@
 import store from '../store/index'
 
-let nextTodoId = store.getState().listReducer.lists.reduce((prev, current) => Math.max(prev, current.cards.reduce((prevC, curC) => Math.max(prevC, curC.id), 0)), 0) + 1
-console.log(nextTodoId)
+let nextTodoId = () => store.getState().listReducer.lists.reduce((prev, current) => Math.max(prev, current.cards.reduce((prevC, curC) => Math.max(prevC, curC.id), 0)), 0) + 1
+
 
 // export const setSelectedCard = ({
 // 	name, id, listId, description, checklist, label
@@ -33,7 +33,7 @@ export const addCard = ({ name, listId }) => ({
 	type: 'ADD_CARD',
 	payload: {
 		name,
-		id: nextTodoId++,
+		id: nextTodoId(),
 		listId
 	}
 })
@@ -83,7 +83,7 @@ export const addList = ({ name }) => ({
 	payload: {
 		name,
 		cards: [],
-		id: nextTodoId++
+		id: nextTodoId()
 	}
 })
 

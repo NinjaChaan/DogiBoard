@@ -78,7 +78,12 @@ const CardTitle = ({
 
 	const blurTitle = () => {
 		setListTitleClass('textarea-card-title')
-		console.log('update card', dispatch(updateCard({ name: document.getElementById('cardTitle').value, id, listId })))
+		const name = document.getElementById('cardTitle').value
+		const newSelection = {
+			...selectedCard,
+			name
+		}
+		console.log('update card', dispatch(updateCard(newSelection)))
 	}
 	return (
 		<textarea

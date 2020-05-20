@@ -33,6 +33,23 @@ max-width: 200px;
 const Page = ({ children, dispatch }) => {
 	const lists = useSelector((state) => state.listReducer.lists)
 	const [firstStateGotten, setFirstStateGotten] = useState(false)
+	const [ignoreNextUpdate, setIgnoreNextUpdate] = useState(true)
+
+	// Listen to server events (someone else changed something on their client)
+	React.useEffect(() => {
+		console.log('Conncting to event stream:', '/stream/5ebae66d8e142057446007d7')
+		const eventSource = new EventSource('/stream/5ebae66d8e142057446007d7')
+		eventSource.onopen = (m) => {
+			console.log('Connected!', m)
+		}
+		eventSource.onerror = (e) => console.log(e)
+		eventSource.onmessage = (e) => {
+			const data = JSON.parse(e.data)
+			console.log(data)
+			setIgnoreNextUpdate(true)
+			dispatch(setLists(data.lists))
+		}
+	}, [])
 
 	// Get all data from mongodb at the start
 	const getAllHook = () => {
@@ -47,7 +64,8 @@ const Page = ({ children, dispatch }) => {
 
 	// If lists change in store, and first state has been loaded, send changes to mongodb
 	useEffect(() => {
-		if (firstStateGotten) {
+		if (firstStateGotten && !ignoreNextUpdate) {
+
 			console.log('sending lists', lists)
 
 			const updatedBoard = {
@@ -58,6 +76,8 @@ const Page = ({ children, dispatch }) => {
 			boardService.update('5ebae66d8e142057446007d7', updatedBoard).then((response) => {
 				console.log(response)
 			})
+		} else if (ignoreNextUpdate) {
+			setIgnoreNextUpdate(false)
 		}
 	}, [lists])
 
