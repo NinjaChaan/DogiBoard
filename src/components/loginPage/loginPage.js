@@ -17,7 +17,7 @@ const PageContainer = styled.div`
 
 const LoginContainer = styled.div`
 	margin: 10px auto auto auto;
-	width: 50%;
+	width: 60%;
 	text-align: center;
 `
 
@@ -64,7 +64,6 @@ const LoginPage = ({ dispatch }) => {
 	useEffect(() => {
 		const listener = (event) => {
 			if (event.code === 'Enter' || event.code === 'NumpadEnter') {
-				console.log('Enter key was pressed. Run your function.')
 				handleSubmit(event)
 			}
 		}

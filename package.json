@@ -21,6 +21,7 @@
         "command-line-args": "^5.1.1",
         "cors": "^2.8.5",
         "dotenv": "^8.2.0",
+        "email-validator": "^2.0.4",
         "event-source-polyfill": "^1.0.15",
         "eventsource": "^1.0.7",
         "express": "^4.17.1",
