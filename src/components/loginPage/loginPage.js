@@ -1,9 +1,13 @@
-import React, { useState } from 'react'
+/* eslint-disable indent */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable no-trailing-spaces */
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { login } from '../../redux/actions/index'
 import loginService from '../../services/login'
 import Button from '../Button'
+import StatusMessage from '../StatusMessage'
 
 const PageContainer = styled.div`
 	display: flex;
@@ -12,7 +16,7 @@ const PageContainer = styled.div`
 `
 
 const LoginContainer = styled.div`
-	margin: 50px auto auto auto;
+	margin: 10px auto auto auto;
 	width: 50%;
 	text-align: center;
 `
@@ -22,6 +26,7 @@ const LoginTextarea = styled.textarea`
 	resize: none;
 	width: 40%;
 	margin-bottom: 20px;
+	border-radius: 4px;
 `
 
 const LoginButton = styled(Button)`
@@ -34,6 +39,8 @@ const TextSpan = styled.span`
 `
 
 const LoginPage = ({ dispatch }) => {
+	const [statusMessage, setStatusMessage] = useState('')
+	const [statusType, setStatusType] = useState('')
 	const handleSubmit = (event) => {
 		event.preventDefault()
 		console.log('submit login')
@@ -41,14 +48,39 @@ const LoginPage = ({ dispatch }) => {
 		const pass = document.getElementById('passwordField').value
 		loginService.login({ username: user, password: pass }).then((response) => {
 			console.log('login response', response)
-			dispatch(login({ loggedIn: true, token: response.token }))
+			if (response.status === 200) {
+				setStatusType('success')
+				setStatusMessage('Logged in successfully')
+				setTimeout(() => {
+					dispatch(login({ loggedIn: true, token: response.data.token }))
+				}, 1000)
+			} else if (response.status === 401) {
+				setStatusType('error')
+				setStatusMessage(response.data.error)
+			}
 		})
 	}
+
+	useEffect(() => {
+		const listener = (event) => {
+			if (event.code === 'Enter' || event.code === 'NumpadEnter') {
+				console.log('Enter key was pressed. Run your function.')
+				handleSubmit(event)
+			}
+		}
+		document.addEventListener('keydown', listener)
+		return () => {
+			document.removeEventListener('keydown', listener)
+		}
+	}, [])
 
 	return (
 		<PageContainer>
 			<LoginContainer>
-				<form onSubmit={handleSubmit}>
+				<StatusMessage statusMessage={statusMessage} statusType={statusType} />
+				<form
+					onSubmit={handleSubmit}
+				>
 					<TextSpan>Username or email</TextSpan>
 					<br />
 					<LoginTextarea id="usernameField" />
@@ -59,7 +91,7 @@ const LoginPage = ({ dispatch }) => {
 					<LoginButton type="submit">Log in</LoginButton>
 				</form>
 			</LoginContainer>
-		</PageContainer >
+		</PageContainer>
 	)
 }
 

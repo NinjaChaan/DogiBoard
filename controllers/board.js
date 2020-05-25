@@ -168,7 +168,6 @@ boardRouter.put('/adduser/:id', async (request, response, next) => {
 							...foundBoard.toJSON(),
 							users: foundBoard.users.concat(body.userId)
 						})
-						console.log('board', board)
 						if (foundBoard.users.includes(user._id)) {
 							Board.updateOne({ _id: request.params.id }, board).then(() => {
 								response.json({ response: `${foundUser.username} added to ${foundBoard.name}` })
@@ -184,8 +183,6 @@ boardRouter.put('/adduser/:id', async (request, response, next) => {
 					next(error)
 				})
 			} else {
-				console.log('foundboard not found', foundBoard)
-				console.log('request.params', request.params)
 				response.status(404)
 			}
 		}).catch((error) => next(error))
