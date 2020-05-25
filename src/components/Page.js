@@ -2,8 +2,20 @@ import React, { useEffect, useState } from 'react'
 import { connect, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import boardService from '../services/boards'
+import LoginPage from './loginPage/loginPage'
 import { device } from '../devices'
 import { setLists } from '../redux/actions/index'
+import EventSourcePoly from 'eventsource'
+
+const mapStateToProps = (state) => {
+	console.log('state at page', state)
+	const user = state.user
+	return (
+		({
+			user
+		})
+	)
+}
 
 const PageStyle = styled.div`
 display: flex;
@@ -30,42 +42,58 @@ max-width: 200px;
 	max-width: 100%;
 }
 `
-const Page = ({ children, dispatch }) => {
+const Page = ({ children, dispatch, user }) => {
 	const lists = useSelector((state) => state.listReducer.lists)
 	const [firstStateGotten, setFirstStateGotten] = useState(false)
 	const [ignoreNextUpdate, setIgnoreNextUpdate] = useState(true)
+	const [loggedIn, setLoggedIn] = useState(false)
 
 	// Listen to server events (someone else changed something on their client)
 	React.useEffect(() => {
-		console.log('Conncting to event stream:', '/stream/5ebae66d8e142057446007d7')
-		const eventSource = new EventSource('/stream/5ebae66d8e142057446007d7')
-		eventSource.onopen = (m) => {
-			console.log('Connected!', m)
+		if (user.loggedIn) {
+			setLoggedIn(true)
 		}
-		eventSource.onerror = (e) => console.log(e)
-		eventSource.onmessage = (e) => {
-			const data = JSON.parse(e.data)
-			console.log(data)
-			setIgnoreNextUpdate(true)
-			dispatch(setLists(data.lists))
+		if (user.loggedIn) {
+			console.log('Conncting to event stream:', '/api/boards/stream/5eca9eb8ac8fb5275c45e1c5')
+			console.log('evt poly:', EventSourcePoly)
+			const eventSourceInitDict = {
+				headers: {
+					Authorization: `Bearer ${user.token}`
+				}
+			}
+			const eventSource = new EventSourcePoly('/api/boards/stream/5eca9eb8ac8fb5275c45e1c5', eventSourceInitDict)
+			console.log('events', eventSource)
+			eventSource.onopen = (m) => {
+				console.log('Connected!', m)
+			}
+			eventSource.onerror = (e) => console.log(e)
+			eventSource.onmessage = (e) => {
+				const data = JSON.parse(e.data)
+				setFirstStateGotten(true)
+				setIgnoreNextUpdate(true)
+				dispatch(setLists(data.lists))
+			}
 		}
-	}, [])
+	}, [user])
 
 	// Get all data from mongodb at the start
 	const getAllHook = () => {
-		boardService.getAll().then((response) => {
-			dispatch(setLists(response[0].lists))
-			// console.log(dispatch(setLists(response[0].lists)))
-			console.log('loaded lists', response[0].lists)
-			setFirstStateGotten(true)
-		})
+		if (loggedIn) {
+			boardService.getOne('5eca9eb8ac8fb5275c45e1c5').then((response) => {
+				console.log('response', response)
+				dispatch(setLists(response[0].lists))
+				// console.log(dispatch(setLists(response[0].lists)))
+				console.log('loaded lists', response[0].lists)
+				setFirstStateGotten(true)
+			})
+		}
 	}
 	useEffect(getAllHook, [])
 
 	// If lists change in store, and first state has been loaded, send changes to mongodb
 	useEffect(() => {
+		console.log('list change', lists)
 		if (firstStateGotten && !ignoreNextUpdate) {
-
 			console.log('sending lists', lists)
 
 			const updatedBoard = {
@@ -73,7 +101,7 @@ const Page = ({ children, dispatch }) => {
 				lists
 			}
 
-			boardService.update('5ebae66d8e142057446007d7', updatedBoard).then((response) => {
+			boardService.update('5eca9eb8ac8fb5275c45e1c5', updatedBoard).then((response) => {
 				console.log(response)
 			})
 		} else if (ignoreNextUpdate) {
@@ -81,11 +109,16 @@ const Page = ({ children, dispatch }) => {
 		}
 	}, [lists])
 
+	if (loggedIn) {
+		return (
+			<PageStyle>
+				{children}
+			</PageStyle>
+		)
+	}
 	return (
-		<PageStyle>
-			{children}
-		</PageStyle>
+		<LoginPage />
 	)
 }
 
-export default connect(null, null)(Page)
+export default connect(mapStateToProps, null)(Page)

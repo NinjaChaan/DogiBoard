@@ -3,9 +3,11 @@ import { combineReducers } from 'redux'
 import cardReducer from './cards'
 import selectedCard from './selectedCard'
 import listReducer from './lists'
+import user from './user'
 
 export default combineReducers({
 	cardReducer,
 	selectedCard,
-	listReducer
+	listReducer,
+	user
 })

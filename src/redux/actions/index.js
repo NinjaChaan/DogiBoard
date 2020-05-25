@@ -17,6 +17,14 @@ let nextTodoId = () => store.getState().listReducer.lists.reduce((prev, current)
 // 	}
 // })
 
+export const login = ({ loggedIn, token }) => ({
+	type: 'LOGIN',
+	payload: {
+		loggedIn,
+		token
+	}
+})
+
 export const setSelectedCard = (selectedCard) => ({
 	type: 'SET_SELECTED_CARD',
 	payload: {
