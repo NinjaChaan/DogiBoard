@@ -47,7 +47,6 @@ max-width: 200px;
 const Page = ({ children, dispatch, user }) => {
 	const lists = useSelector((state) => state.listReducer.lists)
 	const board = useSelector((state) => state.board.board)
-	const [firstStateGotten, setFirstStateGotten] = useState(false)
 	const [ignoreNextUpdate, setIgnoreNextUpdate] = useState(true)
 	const [loggedIn, setLoggedIn] = useState(false)
 
@@ -76,11 +75,9 @@ const Page = ({ children, dispatch, user }) => {
 			eventSource.onmessage = (e) => {
 				const data = JSON.parse(e.data)
 				console.log('stream data', data)
-				if (!firstStateGotten) {
-					dispatch(setLists(data.lists))
-					setFirstStateGotten(true)
-				}
+
 				if (!_.isEqual(data, board)) {
+					setIgnoreNextUpdate(true)
 					dispatch(setLists(data.lists))
 				}
 			}
@@ -105,7 +102,8 @@ const Page = ({ children, dispatch, user }) => {
 	useEffect(() => {
 		console.log('list change', lists)
 		console.log('ignor next?', ignoreNextUpdate)
-		if (firstStateGotten && lists) {
+
+		if (!ignoreNextUpdate && lists) {
 			console.log('sending lists', lists)
 
 			const updatedBoard = {
@@ -125,7 +123,7 @@ const Page = ({ children, dispatch, user }) => {
 		if (board.id) {
 			console.log('board change', board)
 			startStream()
-			dispatch(setLists(lists))
+			dispatch(setLists(board.lists))
 		}
 		// if (firstStateGotten && !ignoreNextUpdate) {
 		// 	console.log('sending lists', lists)
@@ -144,7 +142,7 @@ const Page = ({ children, dispatch, user }) => {
 	}, [board])
 
 	if (loggedIn) {
-		if (!board.id && !firstStateGotten) {
+		if (!board.id) {
 			return (
 				<BoardsPage />
 			)
