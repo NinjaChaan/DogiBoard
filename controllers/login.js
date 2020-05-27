@@ -18,7 +18,7 @@ loginRouter.post('/', async (request, response) => {
 		}
 	}
 
-	const user = await User.findOne(data)
+	const user = await User.findOne(data).populate('boards')
 	const passwordCorrect = user === null
 		? false
 		: await bcrypt.compare(body.password, user.passwordHash)

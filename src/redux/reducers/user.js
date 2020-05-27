@@ -12,7 +12,8 @@ const userReducer = (state = initialState, action) => {
 			return {
 				...state,
 				loggedIn: action.payload.loggedIn,
-				token: action.payload.token
+				token: action.payload.token,
+				user: action.payload.user
 			}
 		default:
 			return state

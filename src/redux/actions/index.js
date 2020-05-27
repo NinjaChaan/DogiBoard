@@ -1,7 +1,7 @@
 import store from '../store/index'
 
-let nextTodoId = () => store.getState().listReducer.lists.reduce((prev, current) => Math.max(prev, current.cards.reduce((prevC, curC) => Math.max(prevC, curC.id), 0)), 0) + 1
-
+const nextCardId = () => store.getState().listReducer.lists.reduce((prev, current) => Math.max(prev, current.cards.reduce((prevC, curC) => Math.max(prevC, curC.id), 0)), 0) + 1
+const nextListId = () => store.getState().listReducer.lists.reduce((prev, current) => Math.max(prev, current.id), 0) + 1
 
 // export const setSelectedCard = ({
 // 	name, id, listId, description, checklist, label
@@ -17,11 +17,19 @@ let nextTodoId = () => store.getState().listReducer.lists.reduce((prev, current)
 // 	}
 // })
 
-export const login = ({ loggedIn, token }) => ({
+export const login = ({ loggedIn, token, user }) => ({
 	type: 'LOGIN',
 	payload: {
 		loggedIn,
-		token
+		token,
+		user
+	}
+})
+
+export const setBoard = (board) => ({
+	type: 'SET_BOARD',
+	payload: {
+		...board
 	}
 })
 
@@ -41,7 +49,7 @@ export const addCard = ({ name, listId }) => ({
 	type: 'ADD_CARD',
 	payload: {
 		name,
-		id: nextTodoId(),
+		id: nextCardId(),
 		listId
 	}
 })
@@ -91,7 +99,7 @@ export const addList = ({ name }) => ({
 	payload: {
 		name,
 		cards: [],
-		id: nextTodoId()
+		id: nextListId()
 	}
 })
 

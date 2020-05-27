@@ -1,40 +1,15 @@
 require('dotenv').config()
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
 const _ = require('underscore')
 const boardRouter = require('express').Router()
 const User = require('../models/user')
 const Board = require('../models/board')
+const getUserUtil = require('../src/utils/getUser')
 
-const getTokenFrom = (request) => {
-	const authorization = request.get('authorization')
-	if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-		return authorization.substring(7)
-	}
-	return null
-}
-
-const getDecodedToken = (request, response) => {
-	const token = getTokenFrom(request)
-	const decodedToken = jwt.verify(token, process.env.SECRET)
-	if (!token || !decodedToken || !decodedToken.id) {
-		return response.status(401).json({ error: 'token missing or invalid' })
-	}
-	return decodedToken
-}
-
-async function getUser(request, response) {
-	const decodedToken = getDecodedToken(request, response)
-
-	const user = await User.findById(decodedToken.id)
-
-	return user
-}
 
 boardRouter.get('/stream/:id', async (request, response, next) => {
 	console.log('stream request')
 
-	const user = await getUser(request, response)
+	const user = await getUserUtil.getUser(request, response)
 
 	response.set({
 		// needed for SSE!
@@ -110,7 +85,7 @@ boardRouter.get('/', (request, response, next) => {
 })
 
 boardRouter.get('/:id', async (request, response, next) => {
-	const user = await getUser(request, response)
+	const user = await getUserUtil.getUser(request, response)
 
 	Board.findById(request.params.id)
 		.then((board) => {
@@ -119,7 +94,7 @@ boardRouter.get('/:id', async (request, response, next) => {
 					if (board.users && board.users.includes(user._id)) {
 						authorized = true
 					} else {
-						response.writeHead(401).json({ error: 'You are not authorized to look at this board' })
+						response.status(401).json({ error: 'You are not authorized to look at this board' })
 						response.flush()
 						response.end()
 					}
@@ -136,7 +111,7 @@ boardRouter.get('/:id', async (request, response, next) => {
 boardRouter.post('/', async (request, response, next) => {
 	const { body } = request
 
-	const user = await getUser(request, response)
+	const user = await getUserUtil.getUser(request, response)
 
 	const board = new Board({
 		name: body.name,
@@ -157,7 +132,7 @@ boardRouter.post('/', async (request, response, next) => {
 boardRouter.put('/adduser/:id', async (request, response, next) => {
 	const { body } = request
 
-	const user = await getUser(request, response)
+	const user = await getUserUtil.getUser(request, response)
 
 	Board.findById(request.params.id)
 		.then((foundBoard) => {
@@ -191,7 +166,7 @@ boardRouter.put('/adduser/:id', async (request, response, next) => {
 boardRouter.put('/:id', async (request, response, next) => {
 	const { body } = request
 
-	const user = await getUser(request, response)
+	const user = await getUserUtil.getUser(request, response)
 
 	Board.findById(request.params.id)
 		.then((foundBoard) => {
@@ -221,7 +196,7 @@ boardRouter.put('/:id', async (request, response, next) => {
 })
 
 boardRouter.delete('/:id', async (request, response, next) => {
-	const user = await getUser(request, response)
+	const user = await getUserUtil.getUser(request, response)
 
 	Board.findById(request.params.id)
 		.then((foundBoard) => {
