@@ -96,7 +96,6 @@ const Page = ({ children, dispatch, user }) => {
 
 	// Listen to server events (someone else changed something on their client)
 	const startStream = () => {
-		setBoardChecked(true)
 		console.log('trying to start stream', user)
 		if (user.loggedIn && board.id) {
 			console.log('Conncting to event stream:', `/api/boards/stream/${board.id}`)
@@ -188,13 +187,20 @@ const Page = ({ children, dispatch, user }) => {
 	// 	)
 	// }
 
+	const TopBar = styled.div`
+		height: 40px;
+		background-color: dodgerblue;
+	`
+
 	console.log('loggedIn', loggedIn)
 	console.log('tokenChecked', tokenChecked)
-	if (tokenChecked) {
-		if (boardChecked) {
-			return (
-				<Router>
-					<div>
+	return (
+		<div>
+			<TopBar />
+			{/* if token checked, show routed stuff */}
+			{tokenChecked
+				&& (
+					<Router>
 						<Switch>
 							<Route exact path="/">
 								{!loggedIn
@@ -207,13 +213,20 @@ const Page = ({ children, dispatch, user }) => {
 									: <LoginPage />}
 							</Route>
 							<Route path="/board">
-								{board.id
-									? (
+								{/* if board checked from url and board is valid, show the board */}
+								{boardChecked && board.id
+									&& (
 										<PageStyle>
 											{children}
 										</PageStyle>
-									)
-									: <Redirect to="/boards" />}
+									)}
+
+								{/* if board checked from url and board is invalid, show the boards page */}
+								{boardChecked && !board.id
+									&& <Redirect to="/boards" />}
+
+								{/* if board not checked from url, show nothing */}
+								{!boardChecked && null}
 							</Route>
 							<Route path="/boards">
 								{board.id
@@ -221,46 +234,44 @@ const Page = ({ children, dispatch, user }) => {
 									: <BoardsPage />}
 							</Route>
 						</Switch>
-					</div>
-				</Router>
-			)
-		}
-		return (
-			<Router>
-				<div>
-					<Switch>
-						<Route exact path="/">
-							{!loggedIn
-								? <Redirect to="/login" />
-								: <Redirect to="/boards" />}
-						</Route>
-						<Route path="/login">
-							{(loggedIn && tokenChecked)
-								? <Redirect to="/boards" />
-								: <LoginPage />}
-						</Route>
-						<Route path="/board">
-							{board.id
-								? (
-									<PageStyle>
-										{children}
-									</PageStyle>
-								)
-								: null}
-						</Route>
-						<Route path="/boards">
-							{board.id
-								? <Redirect to={`/board/${board.id}`} />
-								: <BoardsPage />}
-						</Route>
-					</Switch>
-				</div>
-			</Router>
-		)
-	}
-	return (
-		<div>Loading...</div>
+					</Router>
+				)}
+			{!tokenChecked && <div>Loading...</div>}
+		</div>
 	)
+	// return (
+	// 	<Router>
+	// 		<div>
+	// 			<Switch>
+	// 				<Route exact path="/">
+	// 					{!loggedIn
+	// 						? <Redirect to="/login" />
+	// 						: <Redirect to="/boards" />}
+	// 				</Route>
+	// 				<Route path="/login">
+	// 					{(loggedIn && tokenChecked)
+	// 						? <Redirect to="/boards" />
+	// 						: <LoginPage />}
+	// 				</Route>
+	// 				<Route path="/board">
+	// 					{board.id
+	// 						? (
+	// 							<PageStyle>
+	// 								{children}
+	// 							</PageStyle>
+	// 						)
+	// 						: null}
+	// 				</Route>
+	// 				<Route path="/boards">
+	// 					{board.id
+	// 						? <Redirect to={`/board/${board.id}`} />
+	// 						: <BoardsPage />}
+	// 				</Route>
+	// 			</Switch>
+	// 		</div>
+	// 	</Router>
+	// )
+	// }
 
 	// if (loggedIn) {
 	// 	if (!board.id) {
