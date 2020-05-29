@@ -12,21 +12,17 @@ const getOne = (id) => {
 			Authorization: `Bearer ${store.getState().user.token}`
 		}
 	})
-	return request.then((response) => response.data).catch((error) => {
-		console.log(error.message)
-	})
+	return request.then((response) => response).catch((error) => (error.response))
 }
 
 const getAll = () => {
 	const request = axios.get(baseUrl)
-	return request.then((response) => response.data).catch((error) => {
-		console.log(error.message)
-	})
+	return request.then((response) => response.data).catch((error) => (error.message))
 }
 
 const create = (newObject) => {
 	const request = axios.post(baseUrl, newObject)
-	return request.then((response) => response.data)
+	return request.then((response) => response.data).catch((error) => (error.message))
 }
 
 const update = (id, newObject) => {
@@ -35,14 +31,12 @@ const update = (id, newObject) => {
 			Authorization: `Bearer ${store.getState().user.token}`
 		}
 	})
-	return request.then((response) => response.data).catch((error) => {
-		console.log(error.message)
-	})
+	return request.then((response) => response.data).catch((error) => (error.message))
 }
 
 const remove = (id) => {
 	const request = axios.delete(`${baseUrl}/${id}`)
-	return request.then((response) => response.data)
+	return request.then((response) => response.data).catch((error) => (error.message))
 }
 
 export default {

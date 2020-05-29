@@ -1,3 +1,4 @@
+const boardRouter = require('express').Router()
 const logger = require('./logger')
 
 const requestLogger = (request, response, next) => {
@@ -9,7 +10,13 @@ const requestLogger = (request, response, next) => {
 }
 
 const unknownEndpoint = (request, response) => {
-	response.status(404).send({ error: 'unknown endpoint' })
+	// response.status(404).send({ error: 'unknown endpoint' })
+	if (request.path.includes('/board/')) {
+		const boardId = request.path.split('/board/')[1]
+		response.redirect(`/api/boards/${boardId}`)
+	} else {
+		response.redirect('/')
+	}
 }
 
 const errorHandler = (error, request, response, next) => {
@@ -26,7 +33,7 @@ const errorHandler = (error, request, response, next) => {
 	}
 	if (error.name === 'CastError') {
 		if (error.message.includes('ObjectId')) {
-			return response.status(401).json({ error: 'invalid id' })
+			return response.status(400).json({ error: 'invalid id' })
 		}
 		return response.status(401).json({ error: 'invalid parameter' })
 	}

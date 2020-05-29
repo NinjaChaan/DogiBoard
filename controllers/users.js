@@ -31,10 +31,20 @@ usersRouter.get('/', async (request, response) => {
 	response.json(users.map((user) => user.toJSON()))
 })
 
+usersRouter.get('/token', async (request, response) => {
+	const user = await getUserUtil.getUser(request, response)
+
+	User.findById(user.id).populate('boards')
+		.then((u) => {
+			response.json(u.toJSON())
+		})
+})
+
 usersRouter.get('/:id', async (request, response) => {
+	const user = await getUserUtil.getUser(request, response)
 	User.findById(request.params.id)
-		.then((user) => {
-			response.json(user.toJSON())
+		.then((u) => {
+			response.json(u.toJSON())
 		})
 })
 

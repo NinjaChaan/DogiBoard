@@ -3,11 +3,19 @@ import { connect, useSelector } from 'react-redux'
 import _ from 'underscore'
 import styled from 'styled-components'
 import EventSourcePoly from 'eventsource'
+import Cookies from 'js-cookie'
+import {
+	BrowserRouter as Router,
+	Switch,
+	Route,
+	Redirect
+} from 'react-router-dom'
 import boardService from '../services/boards'
-import LoginPage from './loginPage/loginPage'
+import userService from '../services/users'
 import BoardsPage from './boardsPage'
+import LoginPage from './loginPage/loginPage'
 import { device } from '../devices'
-import { setLists } from '../redux/actions/index'
+import { setLists, login, setBoard } from '../redux/actions/index'
 
 const mapStateToProps = (state) => {
 	console.log('state at page', state)
@@ -49,6 +57,36 @@ const Page = ({ children, dispatch, user }) => {
 	const board = useSelector((state) => state.board.board)
 	const [ignoreNextUpdate, setIgnoreNextUpdate] = useState(true)
 	const [loggedIn, setLoggedIn] = useState(false)
+	const [tokenChecked, setTokenChecked] = useState(false)
+	const [boardChecked, setBoardChecked] = useState(false)
+
+	useEffect(() => {
+		const token = Cookies.get('token')
+		console.log('token?', token)
+		console.log('cookies', Cookies.get())
+		if (token) {
+			userService.getWithToken(token)
+				.then((response) => {
+					console.log('user', response)
+					dispatch(login({ loggedIn: true, token, user: response }))
+					if (window.location.href.includes('/board/')) {
+						console.log('try to load board', window.location.href)
+						const boardId = window.location.href.split('/board/')[1]
+
+						boardService.getOne(boardId).then((response) => {
+							console.log('response', response.data)
+							if (response.data.error) {
+								console.log(response.data.error)
+							} else {
+								dispatch(setBoard({ board: response.data }))
+							}
+							setBoardChecked(true)
+						})
+					}
+					setTokenChecked(true)
+				})
+		}
+	}, [])
 
 	useEffect(() => {
 		if (user.loggedIn) {
@@ -58,6 +96,7 @@ const Page = ({ children, dispatch, user }) => {
 
 	// Listen to server events (someone else changed something on their client)
 	const startStream = () => {
+		setBoardChecked(true)
 		console.log('trying to start stream', user)
 		if (user.loggedIn && board.id) {
 			console.log('Conncting to event stream:', `/api/boards/stream/${board.id}`)
@@ -141,21 +180,103 @@ const Page = ({ children, dispatch, user }) => {
 		// }
 	}, [board])
 
-	if (loggedIn) {
-		if (!board.id) {
+	// if (!loggedIn) {
+	// 	return (
+	// 		<Router>
+	// 			<Redirect to="/login" />
+	// 		</Router>
+	// 	)
+	// }
+
+	console.log('loggedIn', loggedIn)
+	console.log('tokenChecked', tokenChecked)
+	if (tokenChecked) {
+		if (boardChecked) {
 			return (
-				<BoardsPage />
+				<Router>
+					<div>
+						<Switch>
+							<Route exact path="/">
+								{!loggedIn
+									? <Redirect to="/login" />
+									: <Redirect to="/boards" />}
+							</Route>
+							<Route path="/login">
+								{(loggedIn && tokenChecked)
+									? <Redirect to="/boards" />
+									: <LoginPage />}
+							</Route>
+							<Route path="/board">
+								{board.id
+									? (
+										<PageStyle>
+											{children}
+										</PageStyle>
+									)
+									: <Redirect to="/boards" />}
+							</Route>
+							<Route path="/boards">
+								{board.id
+									? <Redirect to={`/board/${board.id}`} />
+									: <BoardsPage />}
+							</Route>
+						</Switch>
+					</div>
+				</Router>
 			)
 		}
 		return (
-			<PageStyle>
-				{children}
-			</PageStyle>
+			<Router>
+				<div>
+					<Switch>
+						<Route exact path="/">
+							{!loggedIn
+								? <Redirect to="/login" />
+								: <Redirect to="/boards" />}
+						</Route>
+						<Route path="/login">
+							{(loggedIn && tokenChecked)
+								? <Redirect to="/boards" />
+								: <LoginPage />}
+						</Route>
+						<Route path="/board">
+							{board.id
+								? (
+									<PageStyle>
+										{children}
+									</PageStyle>
+								)
+								: null}
+						</Route>
+						<Route path="/boards">
+							{board.id
+								? <Redirect to={`/board/${board.id}`} />
+								: <BoardsPage />}
+						</Route>
+					</Switch>
+				</div>
+			</Router>
 		)
 	}
 	return (
-		<LoginPage />
+		<div>Loading...</div>
 	)
+
+	// if (loggedIn) {
+	// 	if (!board.id) {
+	// 		return (
+	// 			<BoardsPage />
+	// 		)
+	// 	}
+	// 	return (
+	// 		<PageStyle>
+	// 			{children}
+	// 		</PageStyle>
+	// 	)
+	// }
+	// return (
+	// 	<LoginPage />
+	// )
 }
 
 export default connect(mapStateToProps, null)(Page)

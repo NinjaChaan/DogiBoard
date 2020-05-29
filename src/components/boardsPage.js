@@ -11,6 +11,7 @@ const BoardButton = styled(Button)`
 
 const mapStateToProps = (state) => {
 	const user = state.user
+	console.log('board user', user)
 	return (
 		({
 			user

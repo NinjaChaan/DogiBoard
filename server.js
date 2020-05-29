@@ -53,6 +53,13 @@ app.use(require('webpack-hot-middleware')(compiler))
 app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname, 'index.html'))
 })
+app.get('/login', (req, res) => {
+	res.sendFile(path.join(__dirname, 'index.html'))
+})
+
+app.get('/board/*', (req, res) => {
+	res.sendFile(path.join(__dirname, 'index.html'))
+})
 
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)

@@ -90,16 +90,12 @@ boardRouter.get('/:id', async (request, response, next) => {
 	Board.findById(request.params.id)
 		.then((board) => {
 			if (board) {
-				if (!authorized) {
-					if (board.users && board.users.includes(user._id)) {
-						authorized = true
-					} else {
-						response.status(401).json({ error: 'You are not authorized to look at this board' })
-						response.flush()
-						response.end()
-					}
-				} else {
+				if (board.users && board.users.includes(user._id)) {
 					response.json(board.toJSON())
+				} else {
+					response.status(401).json({ error: 'You are not authorized to look at this board' })
+					response.flush()
+					response.end()
 				}
 			} else {
 				response.status(404).end()

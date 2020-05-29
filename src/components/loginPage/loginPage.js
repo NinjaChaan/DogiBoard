@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
+import Cookies from 'js-cookie'
 import { login } from '../../redux/actions/index'
 import loginService from '../../services/login'
 import Button from '../Button'
@@ -41,6 +42,7 @@ const TextSpan = styled.span`
 const LoginPage = ({ dispatch }) => {
 	const [statusMessage, setStatusMessage] = useState('')
 	const [statusType, setStatusType] = useState('')
+
 	const handleSubmit = (event) => {
 		event.preventDefault()
 		console.log('submit login')
@@ -52,6 +54,7 @@ const LoginPage = ({ dispatch }) => {
 				setStatusType('success')
 				setStatusMessage('Logged in successfully')
 				setTimeout(() => {
+					Cookies.set('token', response.data.token)
 					dispatch(login({ loggedIn: true, token: response.data.token, user: response.data.user }))
 				}, 1000)
 			} else if (response.status === 401) {
