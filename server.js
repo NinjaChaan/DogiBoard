@@ -16,6 +16,8 @@ const loginRouter = require('./controllers/login')
 const boardRouter = require('./controllers/board')
 const middleware = require('./src/utils/middleware')
 
+const router = express.Router()
+
 const app = express()
 app.use(cors())
 app.use(shrinkRay())
@@ -56,6 +58,13 @@ app.get('/', (req, res) => {
 app.get('/login', (req, res) => {
 	res.sendFile(path.join(__dirname, 'index.html'))
 })
+app.get('/boards', (req, res) => {
+	console.log('trying to boards')
+	res.sendFile(path.join(__dirname, 'index.html'))
+})
+app.get('/about', (req, res) => {
+	res.sendFile(path.join(__dirname, 'index.html'))
+})
 
 app.get('/board/*', (req, res) => {
 	res.sendFile(path.join(__dirname, 'index.html'))
@@ -64,7 +73,6 @@ app.get('/board/*', (req, res) => {
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/boards', boardRouter)
-
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 

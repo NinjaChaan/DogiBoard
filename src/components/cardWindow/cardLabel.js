@@ -23,7 +23,7 @@ const LabelContainer = styled.div`
 	background-color: ${(props) => (props.label === 'bug' && '#f43b3b')
 		|| (props.label === 'feature' && '#ffd840')
 		|| (props.label === 'chore' && '#5991f2')
-	};
+};
 `
 
 const CardLabel = ({ label }) => {
@@ -51,7 +51,7 @@ const CardLabel = ({ label }) => {
 	return (
 		<LabelContainer label={label}>
 			{React.createElement(riIcon, {
-				size: 20, title: `This task is a ${label}`, /*fill: fillColor,*/ style: { marginBottom: '5px', marginRight: '3px' }
+				size: 20, title: `This task is a ${label}`, /* fill: fillColor, */ style: { marginBottom: '5px', marginRight: '3px' }
 			})}
 			{LabelToUpper()}
 		</LabelContainer>

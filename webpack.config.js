@@ -6,9 +6,9 @@ const BrotliPlugin = require('brotli-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
-const EventSource = NativeEventSource || EventSourcePolyfill;
+const EventSource = NativeEventSource || EventSourcePolyfill
 // OR: may also need to set as global property
-global.EventSource = NativeEventSource || EventSourcePolyfill;
+global.EventSource = NativeEventSource || EventSourcePolyfill
 
 
 module.exports = {

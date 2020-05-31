@@ -19,7 +19,7 @@ const ChecklistArea = styled.div`
 	/* ${(props) => props.allChecksDone && css`
 		border: 2px #3cbc3c solid;
 		`
-	} */
+} */
 `
 const ChecklistText = styled.span`
 	position: relative;
@@ -79,7 +79,9 @@ const CardInfo = ({ card }) => {
 		console.log('label', card.label)
 		return (
 			<>
-				{React.createElement(riIcon, { size: 20, title: `This task is a ${card.label}`, fill: fillColor, style: { marginBottom: '5px', marginRight: '3px' } })}
+				{React.createElement(riIcon, {
+					size: 20, title: `This task is a ${card.label}`, fill: fillColor, style: { marginBottom: '5px', marginRight: '3px' }
+				})}
 			</>
 		)
 	}

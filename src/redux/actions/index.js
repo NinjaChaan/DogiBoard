@@ -1,7 +1,7 @@
 import store from '../store/index'
 
-const nextCardId = () => store.getState().listReducer.lists.reduce((prev, current) => Math.max(prev, current.cards.reduce((prevC, curC) => Math.max(prevC, curC.id), 0)), 0) + 1
-const nextListId = () => store.getState().listReducer.lists.reduce((prev, current) => Math.max(prev, current.id), 0) + 1
+const nextCardId = () => store.getState().board.board.lists.reduce((prev, current) => Math.max(prev, current.cards.reduce((prevC, curC) => Math.max(prevC, curC.id), 0)), 0) + 1
+const nextListId = () => store.getState().board.board.lists.reduce((prev, current) => Math.max(prev, current.id), 0) + 1
 
 // export const setSelectedCard = ({
 // 	name, id, listId, description, checklist, label
@@ -30,6 +30,13 @@ export const setBoard = (board) => ({
 	type: 'SET_BOARD',
 	payload: {
 		...board
+	}
+})
+
+export const setRoute = (route) => ({
+	type: 'SET_ROUTE',
+	payload: {
+		...route
 	}
 })
 

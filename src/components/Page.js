@@ -13,9 +13,13 @@ import {
 import boardService from '../services/boards'
 import userService from '../services/users'
 import BoardsPage from './boardsPage'
+import TopBar from './TopBar'
 import LoginPage from './loginPage/loginPage'
 import { device } from '../devices'
-import { setLists, login, setBoard } from '../redux/actions/index'
+import BoardPage from './boardPage'
+import {
+	setLists, login, setBoard, setRoute
+} from '../redux/actions/index'
 
 const mapStateToProps = (state) => {
 	console.log('state at page', state)
@@ -53,7 +57,7 @@ max-width: 200px;
 }
 `
 const Page = ({ children, dispatch, user }) => {
-	const lists = useSelector((state) => state.listReducer.lists)
+	//const lists = useSelector((state) => state.listReducer.lists)
 	const board = useSelector((state) => state.board.board)
 	const [ignoreNextUpdate, setIgnoreNextUpdate] = useState(true)
 	const [loggedIn, setLoggedIn] = useState(false)
@@ -69,22 +73,24 @@ const Page = ({ children, dispatch, user }) => {
 				.then((response) => {
 					console.log('user', response)
 					dispatch(login({ loggedIn: true, token, user: response }))
-					if (window.location.href.includes('/board/')) {
-						console.log('try to load board', window.location.href)
-						const boardId = window.location.href.split('/board/')[1]
+					// if (window.location.href.includes('/board/')) {
+					// 	console.log('try to load board', window.location.href)
+					// 	const boardId = window.location.href.split('/board/')[1]
 
-						boardService.getOne(boardId).then((response) => {
-							console.log('response', response.data)
-							if (response.data.error) {
-								console.log(response.data.error)
-							} else {
-								dispatch(setBoard({ board: response.data }))
-							}
-							setBoardChecked(true)
-						})
-					}
+					// 	boardService.getOne(boardId).then((response) => {
+					// 		console.log('response', response.data)
+					// 		if (response.data.error) {
+					// 			console.log(response.data.error)
+					// 		} else {
+					// 			dispatch(setBoard({ board: response.data }))
+					// 		}
+					// 		setBoardChecked(true)
+					// 	})
+					// }
 					setTokenChecked(true)
 				})
+		} else {
+			setTokenChecked(true)
 		}
 	}, [])
 
@@ -95,32 +101,32 @@ const Page = ({ children, dispatch, user }) => {
 	}, [user])
 
 	// Listen to server events (someone else changed something on their client)
-	const startStream = () => {
-		console.log('trying to start stream', user)
-		if (user.loggedIn && board.id) {
-			console.log('Conncting to event stream:', `/api/boards/stream/${board.id}`)
-			const eventSourceInitDict = {
-				headers: {
-					Authorization: `Bearer ${user.token}`
-				}
-			}
-			const eventSource = new EventSourcePoly(`/api/boards/stream/${board.id}`, eventSourceInitDict)
-			console.log('events', eventSource)
-			eventSource.onopen = (m) => {
-				console.log('Connected!', m)
-			}
-			eventSource.onerror = (e) => console.log(e)
-			eventSource.onmessage = (e) => {
-				const data = JSON.parse(e.data)
-				console.log('stream data', data)
+	// const startStream = () => {
+	// 	console.log('trying to start stream', user)
+	// 	if (user.loggedIn && board.id) {
+	// 		console.log('Conncting to event stream:', `/api/boards/stream/${board.id}`)
+	// 		const eventSourceInitDict = {
+	// 			headers: {
+	// 				Authorization: `Bearer ${user.token}`
+	// 			}
+	// 		}
+	// 		const eventSource = new EventSourcePoly(`/api/boards/stream/${board.id}`, eventSourceInitDict)
+	// 		console.log('events', eventSource)
+	// 		eventSource.onopen = (m) => {
+	// 			console.log('Connected!', m)
+	// 		}
+	// 		eventSource.onerror = (e) => console.log(e)
+	// 		eventSource.onmessage = (e) => {
+	// 			const data = JSON.parse(e.data)
+	// 			console.log('stream data', data)
 
-				if (!_.isEqual(data, board)) {
-					setIgnoreNextUpdate(true)
-					dispatch(setLists(data.lists))
-				}
-			}
-		}
-	}
+	// 			if (!_.isEqual(data, board)) {
+	// 				setIgnoreNextUpdate(true)
+	// 				dispatch(setLists(data.lists))
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 	// // Get all data from mongodb at the start
 	// const getAllHook = () => {
@@ -137,47 +143,51 @@ const Page = ({ children, dispatch, user }) => {
 	// useEffect(getAllHook, [])
 
 	// If lists change in store, and first state has been loaded, send changes to mongodb
-	useEffect(() => {
-		console.log('list change', lists)
-		console.log('ignor next?', ignoreNextUpdate)
+	// useEffect(() => {
+	// 	console.log('list change', lists)
+	// 	console.log('ignor next?', ignoreNextUpdate)
 
-		if (!ignoreNextUpdate && lists) {
-			console.log('sending lists', lists)
+	// 	if (!ignoreNextUpdate && lists) {
+	// 		console.log('sending lists', lists)
 
-			const updatedBoard = {
-				name: board.name,
-				lists
-			}
+	// 		const updatedBoard = {
+	// 			name: board.name,
+	// 			lists
+	// 		}
 
-			boardService.update(board.id, updatedBoard).then((response) => {
-				console.log(response)
-			})
-		} else if (ignoreNextUpdate) {
-			setIgnoreNextUpdate(false)
-		}
-	}, [lists])
+	// 		boardService.update(board.id, updatedBoard).then((response) => {
+	// 			console.log(response)
+	// 		})
+	// 	} else if (ignoreNextUpdate) {
+	// 		setIgnoreNextUpdate(false)
+	// 	}
+	// }, [lists])
 	// If board changes in store, load that board
-	useEffect(() => {
-		if (board.id) {
-			console.log('board change', board)
-			startStream()
-			dispatch(setLists(board.lists))
-		}
-		// if (firstStateGotten && !ignoreNextUpdate) {
-		// 	console.log('sending lists', lists)
 
-		// 	const updatedBoard = {
-		// 		name: 'TestBoard',
-		// 		lists
-		// 	}
+	// useEffect(() => {
+	// 	if (board && board.id) {
+	// 		console.log('board change', board)
+	// 		startStream()
+	// 		dispatch(setRoute({ route: 'board' }))
+	// 		dispatch(setLists(board.lists))
+	// 		setBoardChecked(true)
+	// 	}
+	// 	// if (firstStateGotten && !ignoreNextUpdate) {
+	// 	// 	console.log('sending lists', lists)
 
-		// 	boardService.update('5eca9eb8ac8fb5275c45e1c5', updatedBoard).then((response) => {
-		// 		console.log(response)
-		// 	})
-		// } else if (ignoreNextUpdate) {
-		// 	setIgnoreNextUpdate(false)
-		// }
-	}, [board])
+	// 	// 	const updatedBoard = {
+	// 	// 		name: 'TestBoard',
+	// 	// 		lists
+	// 	// 	}
+
+	// 	// 	boardService.update('5eca9eb8ac8fb5275c45e1c5', updatedBoard).then((response) => {
+	// 	// 		console.log(response)
+	// 	// 	})
+	// 	// } else if (ignoreNextUpdate) {
+	// 	// 	setIgnoreNextUpdate(false)
+	// 	// }
+	// }, [board])
+
 
 	// if (!loggedIn) {
 	// 	return (
@@ -187,56 +197,43 @@ const Page = ({ children, dispatch, user }) => {
 	// 	)
 	// }
 
-	const TopBar = styled.div`
-		height: 40px;
-		background-color: dodgerblue;
-	`
-
 	console.log('loggedIn', loggedIn)
 	console.log('tokenChecked', tokenChecked)
 	return (
 		<div>
-			<TopBar />
-			{/* if token checked, show routed stuff */}
-			{tokenChecked
-				&& (
-					<Router>
-						<Switch>
-							<Route exact path="/">
-								{!loggedIn
-									? <Redirect to="/login" />
-									: <Redirect to="/boards" />}
-							</Route>
-							<Route path="/login">
-								{(loggedIn && tokenChecked)
-									? <Redirect to="/boards" />
-									: <LoginPage />}
-							</Route>
-							<Route path="/board">
-								{/* if board checked from url and board is valid, show the board */}
-								{boardChecked && board.id
-									&& (
-										<PageStyle>
-											{children}
-										</PageStyle>
-									)}
+			<Router>
+				<TopBar />
+				{/* if token checked, show routed stuff */}
+				{tokenChecked
+					&& (
+						<>
+							{!loggedIn && <Redirect to="/login" />}
+							<Switch>
+								<Route exact path="/">
+									{!loggedIn
+										? <Redirect to="/login" />
+										: <Redirect to="/boards" />}
+								</Route>
+								<Route path="/login">
+									{(loggedIn && tokenChecked)
+										? <Redirect to="/boards" />
+										: <LoginPage />}
+								</Route>
+								<Route path="/about">
+									<div>About</div>
+								</Route>
 
-								{/* if board checked from url and board is invalid, show the boards page */}
-								{boardChecked && !board.id
-									&& <Redirect to="/boards" />}
-
-								{/* if board not checked from url, show nothing */}
-								{!boardChecked && null}
-							</Route>
-							<Route path="/boards">
-								{board.id
-									? <Redirect to={`/board/${board.id}`} />
-									: <BoardsPage />}
-							</Route>
-						</Switch>
-					</Router>
-				)}
-			{!tokenChecked && <div>Loading...</div>}
+								{loggedIn && <Route path="/board/:id" component={BoardPage} />}
+								{loggedIn && (
+									<Route path="/boards">
+										<BoardsPage />
+									</Route>
+								)}
+							</Switch>
+						</>
+					)}
+				{!tokenChecked && <div>Loading...</div>}
+			</Router>
 		</div>
 	)
 	// return (

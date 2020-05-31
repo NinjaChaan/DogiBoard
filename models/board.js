@@ -7,7 +7,7 @@ mongoose.set('useFindAndModify', false)
 mongoose.set('useCreateIndex', true)
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 	.then(() => {
-		console.log('connected to MongoDB')
+		console.log('connected to MongoDB from board model')
 	})
 	.catch((error) => {
 		console.log('error connecting to MongoDB: ', error.message)

@@ -11,12 +11,13 @@ const requestLogger = (request, response, next) => {
 
 const unknownEndpoint = (request, response) => {
 	// response.status(404).send({ error: 'unknown endpoint' })
-	if (request.path.includes('/board/')) {
-		const boardId = request.path.split('/board/')[1]
-		response.redirect(`/api/boards/${boardId}`)
-	} else {
-		response.redirect('/')
-	}
+	// if (request.path.includes('/board/')) {
+	// 	const boardId = request.path.split('/board/')[1]
+	// 	response.redirect(`/api/boards/${boardId}`)
+	// } else {
+	console.log('redirect to root')
+	response.redirect('/')
+	// }
 }
 
 const errorHandler = (error, request, response, next) => {

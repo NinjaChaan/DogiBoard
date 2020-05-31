@@ -9,7 +9,7 @@ const AddList = React.lazy(() => import('./addList'))
 
 const mapStateToProps = (state) => {
 	// console.log('state', state.listReducer)
-	return { lists: state.listReducer.lists }
+	return { lists: state.board.board? state.board.board.lists : [] }
 }
 
 const ListTable = ({ lists, dispatch }) => {

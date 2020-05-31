@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import Button from './Button'
-import { setBoard } from '../redux/actions/index'
+import { setBoard, setRoute } from '../redux/actions/index'
+
 
 const BoardButton = styled(Button)`
 	padding: auto;
@@ -22,19 +24,17 @@ const mapStateToProps = (state) => {
 const BoardsPage = ({ user, dispatch }) => {
 	const OpenBoard = (board) => {
 		dispatch(setBoard({ board }))
+		// dispatch(setRoute({ route: 'board' }))
 	}
-	// const [boardIds, setBoardIds] = useState([])
-	// useEffect(() => {
-	// 	user.user.boards.map((board) => (
-	// 		console.log('board', board)
-	// 	))
-	// }, [])
+	console.log('we in boards', user)
 	return (
 		<div>
 			<h1>Boards</h1>
 			{
 				user.user.boards.map((board) => (
-					<BoardButton key={board.id} onClick={() => { OpenBoard(board) }}>{board.name}</BoardButton>
+					<Link key={board.id} to={`/board/${board.id}`}>
+						<BoardButton onClick={() => { OpenBoard(board) }}>{board.name}</BoardButton>
+					</Link>
 				))
 			}
 		</div>
