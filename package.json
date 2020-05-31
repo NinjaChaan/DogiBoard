@@ -53,6 +53,7 @@
         "styled-theming": "^2.2.0",
         "typescript": "^3.8.3",
         "underscore": "^1.10.2",
+        "validator": "^13.0.0",
         "webpack": "^4.42.0",
         "webpack-dev-middleware": "^3.7.2",
         "webpack-hot-middleware": "^2.25.0"

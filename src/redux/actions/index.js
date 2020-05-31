@@ -26,6 +26,10 @@ export const login = ({ loggedIn, token, user }) => ({
 	}
 })
 
+export const logout = () => ({
+	type: 'LOGOUT'
+})
+
 export const setBoard = (board) => ({
 	type: 'SET_BOARD',
 	payload: {

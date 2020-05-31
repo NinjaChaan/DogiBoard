@@ -1,18 +1,41 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Link, BrowserRouter as Router, Switch } from 'react-router-dom'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
+import Cookies from 'js-cookie'
 import Button from './Button'
-import { setBoard, setRoute } from '../redux/actions/index'
+import { setBoard, logout } from '../redux/actions/index'
 
 const TopBarContainer = styled.div`
 	height: 45px;
 	background-color: #1d6cba;
 	padding: 5px;
+	display:flex;
+	flex-wrap: wrap;
 `
 
-const BoardsButton = styled(Button)`
-	width: 10%;
+const TopButton = styled(Button)`
+`
+
+const BoardsButton = styled(TopButton)`
+`
+const LogoutButton = styled(TopButton)`
+	/* position: absolute;
+	top: 0;
+	right: 0;  */
+	float: right;
+`
+
+const LinkStyle = styled(Link)`
+	flex: 0 0 10%;
+	max-width: 10%;
+	padding-left: 10px;
+`
+
+const LogoutStyle = styled(LinkStyle)`
+	position: absolute;
+	/* top: 0; */
+	right: 10px;
 `
 
 const TopBar = ({ dispatch }) => {
@@ -20,13 +43,19 @@ const TopBar = ({ dispatch }) => {
 		dispatch(setBoard({ board: null }))
 	}
 
+	const LogoutButtonPressed = () => {
+		dispatch(logout())
+		Cookies.remove('token')
+	}
+
 	return (
-		<TopBarContainer>
-			<nav>
-				<Link to="/boards">
-					<BoardsButton onClick={BoardsButtonPressed}>Boards</BoardsButton>
-				</Link>
-			</nav>
+		<TopBarContainer className="row">
+			<LinkStyle to="/boards">
+				<BoardsButton type="button" onClick={BoardsButtonPressed}>Boards</BoardsButton>
+			</LinkStyle>
+			<LogoutStyle to="/login">
+				<LogoutButton onClick={LogoutButtonPressed}>Logout</LogoutButton>
+			</LogoutStyle>
 		</TopBarContainer>
 	)
 }

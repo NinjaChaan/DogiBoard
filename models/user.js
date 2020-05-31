@@ -1,3 +1,4 @@
+const isEmail = require('validator/lib/isEmail')
 const mongoose = require('mongoose')
 const uniqueValidator = require('mongoose-unique-validator')
 
@@ -16,17 +17,24 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 const userSchema = new mongoose.Schema({
 	username: {
 		type: String,
-		unique: true,
-		required: true
+		unique: 'That username already exists. Choose another.',
+		trim: true,
+		required: 'Username is required',
+		minlength: 4
 	},
 	email: {
-		type: mongoose.Schema.Types,
-		unique: true,
-		required: true
+		type: String,
+		unique: 'That email already exists. Choose another.',
+		trim: true,
+		lowercase: true,
+		required: 'Email address is required',
+		validate: [isEmail, 'Please fill a valid email address'],
 	},
 	passwordHash: {
 		type: String,
-		required: true
+		trim: true,
+		required: 'Password is required',
+		minlength: 7
 	},
 	boards: [
 		{

@@ -8,6 +8,10 @@ const getUserUtil = require('../src/utils/getUser')
 usersRouter.post('/', async (request, response, next) => {
 	const { body } = request
 
+	if (body.password.length < 7) {
+		response.status(400).json({ error: 'Password is too short' })
+	}
+
 	const saltRounds = 10
 	const passwordHash = await bcrypt.hash(body.password, saltRounds)
 

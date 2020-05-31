@@ -3,7 +3,7 @@
 /* eslint-disable no-trailing-spaces */
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { connect } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import Cookies from 'js-cookie'
 import { login } from '../../redux/actions/index'
 import loginService from '../../services/login'
@@ -40,15 +40,16 @@ const TextSpan = styled.span`
 `
 
 const LoginPage = ({ dispatch }) => {
+	const user = useSelector((state) => state.user)
 	const [statusMessage, setStatusMessage] = useState('')
 	const [statusType, setStatusType] = useState('')
 
 	const handleSubmit = (event) => {
 		event.preventDefault()
 		console.log('submit login')
-		const user = document.getElementById('usernameField').value
+		const username = document.getElementById('usernameField').value
 		const pass = document.getElementById('passwordField').value
-		loginService.login({ username: user, password: pass }).then((response) => {
+		loginService.login({ username, password: pass }).then((response) => {
 			console.log('login response', response)
 			if (response.status === 200) {
 				setStatusType('success')
@@ -63,6 +64,13 @@ const LoginPage = ({ dispatch }) => {
 			}
 		})
 	}
+
+	useEffect(() => {
+		if (user.loggedOut) {
+			setStatusType('success')
+			setStatusMessage('Logged out')
+		}
+	}, [user])
 
 	useEffect(() => {
 		const listener = (event) => {

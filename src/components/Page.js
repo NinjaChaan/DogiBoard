@@ -95,9 +95,7 @@ const Page = ({ children, dispatch, user }) => {
 	}, [])
 
 	useEffect(() => {
-		if (user.loggedIn) {
-			setLoggedIn(true)
-		}
+		setLoggedIn(user.loggedIn)
 	}, [user])
 
 	// Listen to server events (someone else changed something on their client)
