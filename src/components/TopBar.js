@@ -33,9 +33,11 @@ const LinkStyle = styled(Link)`
 `
 
 const LogoutStyle = styled(LinkStyle)`
-	position: absolute;
+	/* position: absolute; */
 	/* top: 0; */
-	right: 10px;
+	/* right: 10px; */
+	margin-left: auto !important;
+	margin-right: 1.5rem !important;
 `
 
 const TopBar = ({ dispatch }) => {
@@ -53,7 +55,7 @@ const TopBar = ({ dispatch }) => {
 			<LinkStyle to="/boards">
 				<BoardsButton type="button" onClick={BoardsButtonPressed}>Boards</BoardsButton>
 			</LinkStyle>
-			<LogoutStyle to="/login">
+			<LogoutStyle className="float-right" to="/login">
 				<LogoutButton onClick={LogoutButtonPressed}>Logout</LogoutButton>
 			</LogoutStyle>
 		</TopBarContainer>
