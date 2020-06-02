@@ -3,6 +3,7 @@ import Card from 'react-bootstrap/Card'
 import { Draggable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
 import { setSelectedCard } from '../redux/actions/index'
+import LoadingAnimation from './loadingAnimation'
 const CardInfo = React.lazy(() => import('./cardInfo'))
 
 const CardDraggable = ({ i, card, dispatch }) => {
@@ -37,7 +38,7 @@ const CardDraggable = ({ i, card, dispatch }) => {
 							<Card.Text style={{ marginBottom: '0px' }}>
 								{card.name}
 							</Card.Text>
-							<Suspense fallback={<div>Loading...</div>}>
+							<Suspense fallback={<></>}>
 								<CardInfo card={card} />
 							</Suspense>
 						</Card>

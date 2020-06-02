@@ -19,6 +19,7 @@ import { device } from '../devices'
 import {
 	setLists, login, setBoard, setRoute
 } from '../redux/actions/index'
+import LoadingAnimation from './loadingAnimation'
 
 
 const ListTable = React.lazy(() => import('./listTable'))
@@ -129,7 +130,7 @@ const BoardPage = ({ match, user, dispatch }) => {
 
 	if (board && board.id) {
 		return (
-			<Suspense fallback={<div>Loading...</div>}>
+			<Suspense fallback={<LoadingAnimation />}>
 				<PageStyle>
 					<div style={{ width: '100vw', overflow: 'auto', height: '100vh' }}>
 						<ListTable />
@@ -140,7 +141,7 @@ const BoardPage = ({ match, user, dispatch }) => {
 		)
 	} else {
 		return (
-			<div>Loading...</div>
+			<LoadingAnimation />
 		)
 	}
 

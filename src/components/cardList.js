@@ -6,6 +6,7 @@ import Button from './Button'
 import AddCard from './addCard'
 import ListTitle from './listTitle'
 import './cardList.css'
+import LoadingAnimation from './loadingAnimation'
 const CardDraggable = React.lazy(() => import('./cardDraggable'))
 
 const LinkButton = styled(Button)`
@@ -19,11 +20,12 @@ const CardList = ({
 	cards, innerRef, placeholder, showingAddAnother, changeShowAddAnother, id
 }) => (
 		<tbody ref={innerRef}>
-			{cards.map((card, i) => (
-				<Suspense key={i} fallback={<tr><td><div>Loading...</div></td></tr>}>
+
+			<Suspense fallback={<tr><td><LoadingAnimation /></td></tr>}>
+				{cards.map((card, i) => (
 					<CardDraggable key={card.id} i={i} card={card} />
-				</Suspense>
-			))}
+				))}
+			</Suspense>
 
 			{placeholder}
 			<tr>

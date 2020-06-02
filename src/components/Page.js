@@ -20,6 +20,7 @@ import BoardPage from './boardPage'
 import {
 	setLists, login, setBoard, setRoute
 } from '../redux/actions/index'
+import LoadingAnimation from './loadingAnimation'
 
 const mapStateToProps = (state) => {
 	console.log('state at page', state)
@@ -230,7 +231,7 @@ const Page = ({ children, dispatch, user }) => {
 							</Switch>
 						</>
 					)}
-				{!tokenChecked && <div>Loading...</div>}
+				{!tokenChecked && <LoadingAnimation />}
 			</Router>
 		</div>
 	)

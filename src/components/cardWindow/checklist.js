@@ -6,6 +6,7 @@ import Button from '../Button'
 import ChecklistTitle from './checkListTitle'
 import ProgressBar from './progressBar'
 import { setSelectedCard, updateChecklist } from '../../redux/actions/index'
+import LoadingAnimation from '../loadingAnimation'
 const CheckListDraggable = React.lazy(() => import('./checkListDraggable'))
 const AddChecklistItem = React.lazy(() => import('./addChecklistItem'))
 
@@ -42,13 +43,14 @@ const Checklist = ({
 					// maxHeight: '300px',
 				}}
 			>
-				{
-					checkItems.map((item, i) => (
-						<Suspense key={i} fallback={<tr><td><div>Loading...</div></td></tr>}>
+				<Suspense fallback={<tr><td><></></td></tr>}>
+					{
+						checkItems.map((item, i) => (
 							<CheckListDraggable key={item.id} i={i} checkItem={item} calculateProgress={calculateProgress} />
-						</Suspense>
-					))
-				}
+
+						))
+					}
+				</Suspense>
 				{placeholder}
 				<tr style={{ display: 'block', width: '100%' }}>
 					<td style={{ display: 'block', width: '100%' }}>
@@ -61,7 +63,7 @@ const Checklist = ({
 									</LinkButton>
 								)
 								: (
-									<Suspense fallback={<div>Loading...</div>}>
+									<Suspense fallback={<></>}>
 										<AddChecklistItem
 											listId={id}
 											changeShowAddAnother={changeShowAddAnother}

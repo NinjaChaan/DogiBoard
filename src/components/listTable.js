@@ -4,12 +4,13 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { connect } from 'react-redux'
 import CardListContainer from './cardList'
 import { updateListOrder } from '../redux/actions/index'
+import LoadingAnimation from './loadingAnimation'
 const AddList = React.lazy(() => import('./addList'))
 
 
 const mapStateToProps = (state) => {
 	// console.log('state', state.listReducer)
-	return { lists: state.board.board? state.board.board.lists : [] }
+	return { lists: state.board.board ? state.board.board.lists : [] }
 }
 
 const ListTable = ({ lists, dispatch }) => {
@@ -159,7 +160,7 @@ const ListTable = ({ lists, dispatch }) => {
 											</Button>
 										)
 										: (
-											<Suspense fallback={<div>Loading...</div>}>
+											<Suspense fallback={<></>}>
 												<AddList
 													changeShowAddAnother={changeShowAddAnother}
 												/>

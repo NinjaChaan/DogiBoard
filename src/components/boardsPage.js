@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
+import React from 'react'
+import styled, { keyframes } from 'styled-components'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Button from './Button'
-import { setBoard, setRoute } from '../redux/actions/index'
-
+import { setBoard } from '../redux/actions/index'
 
 const BoardButton = styled(Button)`
 	padding: auto;
 	width: 200px;
 `
+
 
 const mapStateToProps = (state) => {
 	const user = state.user

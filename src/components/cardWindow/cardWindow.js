@@ -8,6 +8,7 @@ import CardTitle from './cardTitle'
 import CardDescription from './cardDescription'
 import CardSidebarModule from './cardSidebarModule'
 import { device } from '../../devices'
+import LoadingAnimation from '../loadingAnimation'
 const Checklist = React.lazy(() => import('./checklist'))
 
 const CardWindowMain = styled.div`
@@ -158,7 +159,7 @@ const CardWindowContainer = ({ selectedCard, dispatch }) => {
 							</div>
 							<CardDescription />
 							{selectedCard.checklist
-								? <Suspense fallback={<div>Loading...</div>}>
+								? <Suspense fallback={<></>}>
 									<Checklist selectedCard={selectedCard} />
 								</Suspense>
 								: null}
