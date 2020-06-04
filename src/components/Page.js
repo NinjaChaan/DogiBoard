@@ -223,11 +223,11 @@ const Page = ({ children, dispatch, user }) => {
 								</Route>
 
 								{loggedIn && <Route path="/board/:id" component={BoardPage} />}
-								{loggedIn && (
-									<Route path="/boards">
-										<BoardsPage />
-									</Route>
-								)}
+								<Route path="/boards">
+									{(loggedIn && tokenChecked)
+										? <BoardsPage />
+										: <Redirect to="/login" />}
+								</Route>
 							</Switch>
 						</>
 					)}
