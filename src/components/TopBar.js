@@ -5,6 +5,7 @@ import { connect, useSelector } from 'react-redux'
 import Cookies from 'js-cookie'
 import Button from './Button'
 import { setBoard, logout } from '../redux/actions/index'
+import { device } from '../devices'
 
 const TopBarContainer = styled.div`
 	height: 45px;
@@ -27,9 +28,17 @@ const LogoutButton = styled(TopButton)`
 `
 
 const LinkStyle = styled(Link)`
-	flex: 0 0 10%;
-	max-width: 10%;
-	padding-left: 10px;
+	flex: 0 0 20%;
+	max-width: 20%;
+	@media ${(props) => props.theme.device.mobileL} {	
+		flex: 0 0 15%;
+		max-width: 15%;
+	}
+	@media ${(props) => props.theme.device.laptop} { 
+		flex: 0 0 10%;
+		max-width: 10%;
+	}
+	margin-left: 5px;
 `
 
 const LogoutStyle = styled(LinkStyle)`
@@ -37,7 +46,7 @@ const LogoutStyle = styled(LinkStyle)`
 	/* top: 0; */
 	/* right: 10px; */
 	margin-left: auto !important;
-	margin-right: 1.5rem !important;
+	margin-right: 5px;
 `
 
 const TopBar = ({ dispatch }) => {
@@ -54,7 +63,7 @@ const TopBar = ({ dispatch }) => {
 	}
 
 	return (
-		<TopBarContainer className="row">
+		<TopBarContainer className="flex-row">
 			<LinkStyle to="/boards">
 				<BoardsButton type="button" onClick={BoardsButtonPressed}>Boards</BoardsButton>
 			</LinkStyle>

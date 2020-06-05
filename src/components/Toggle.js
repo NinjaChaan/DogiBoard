@@ -64,6 +64,7 @@ const ToggleContainer = styled.div`
 const TextSpan = styled.span`
 	vertical-align: middle;
 	font-weight: 500;
+	margin-left: 10px;
 `
 
 const Toggle = ({
