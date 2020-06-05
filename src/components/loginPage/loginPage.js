@@ -104,6 +104,10 @@ const LoginPage = ({ dispatch }) => {
 		}
 	}, [])
 
+	const keepLoggedInChanged = (value) => {
+		Cookies.set('stayLogged', value)
+	}
+
 	return (
 		<PageContainer>
 			<LoginContainer>
@@ -119,8 +123,7 @@ const LoginPage = ({ dispatch }) => {
 					<br />
 					<LoginTextarea id="passwordField" />
 					<br />
-					<Toggle scale={0.75} text="Keep logged in" />
-					<br />
+					<Toggle scale={0.75} text="Keep me logged in" checked={Cookies.get('stayLogged') === 'true'} onChange={keepLoggedInChanged} />
 					<LoginButton type="submit">Log in</LoginButton>
 				</LoginForm>
 			</LoginContainer>

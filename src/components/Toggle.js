@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 const Input = styled.input`
@@ -34,6 +34,7 @@ const Slider = styled.span`
 `
 
 const Switch = styled.label`
+	margin-left: -5px;
 	position: relative;
 	display: inline-block;
 	width: 60px;
@@ -60,14 +61,31 @@ const ToggleContainer = styled.div`
 	text-align: left;
 `
 
-const Toggle = ({ scale, text }) => (
-	<ToggleContainer>
-		<Switch scale={scale}>
-			<Input type="checkbox" />
-			<Slider />
-		</Switch>
-		<span>{text}</span>
-	</ToggleContainer>
-)
+const TextSpan = styled.span`
+	vertical-align: middle;
+	font-weight: 500;
+`
+
+const Toggle = ({
+	scale, text, onChange, checked
+}) => {
+	const [checkedIn, setCheckedIn] = useState(checked)
+	const handleInputChange = (event) => {
+		const target = event.target
+		const value = target.checked
+		setCheckedIn(value)
+		onChange(value)
+	}
+
+	return (
+		<ToggleContainer>
+			<Switch scale={scale}>
+				<Input type="checkbox" checked={checkedIn} onChange={handleInputChange} />
+				<Slider />
+			</Switch>
+			<TextSpan>{text}</TextSpan>
+		</ToggleContainer>
+	)
+}
 
 export default Toggle

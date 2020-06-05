@@ -67,32 +67,38 @@ const Page = ({ children, dispatch, user }) => {
 
 	useEffect(() => {
 		const token = Cookies.get('token')
+		const stayLogged = Cookies.get('stayLogged')
 		console.log('token?', token)
 		console.log('cookies', Cookies.get())
-		if (token) {
-			userService.getWithToken(token)
-				.then((response) => {
-					console.log('user', response)
-					dispatch(login({ loggedIn: true, token, user: response }))
-					// if (window.location.href.includes('/board/')) {
-					// 	console.log('try to load board', window.location.href)
-					// 	const boardId = window.location.href.split('/board/')[1]
+		if (stayLogged === 'true') {
+			if (token) {
+				userService.getWithToken(token)
+					.then((response) => {
+						console.log('user', response)
+						dispatch(login({ loggedIn: true, token, user: response }))
+						// if (window.location.href.includes('/board/')) {
+						// 	console.log('try to load board', window.location.href)
+						// 	const boardId = window.location.href.split('/board/')[1]
 
-					// 	boardService.getOne(boardId).then((response) => {
-					// 		console.log('response', response.data)
-					// 		if (response.data.error) {
-					// 			console.log(response.data.error)
-					// 		} else {
-					// 			dispatch(setBoard({ board: response.data }))
-					// 		}
-					// 		setBoardChecked(true)
-					// 	})
-					// }
-					setTokenChecked(true)
-				})
-		} else {
-			setTokenChecked(true)
+						// 	boardService.getOne(boardId).then((response) => {
+						// 		console.log('response', response.data)
+						// 		if (response.data.error) {
+						// 			console.log(response.data.error)
+						// 		} else {
+						// 			dispatch(setBoard({ board: response.data }))
+						// 		}
+						// 		setBoardChecked(true)
+						// 	})
+						// }
+						setTokenChecked(true)
+					})
+			} else {
+				setTokenChecked(true)
+			}
 		}
+		setTimeout(() => {
+			setTokenChecked(true)
+		}, 1000)
 	}, [])
 
 	useEffect(() => {
