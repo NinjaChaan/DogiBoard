@@ -75,7 +75,9 @@ const LoginPage = ({ dispatch }) => {
 				setStatusType('success')
 				setStatusMessage('Logged in successfully')
 				setTimeout(() => {
-					Cookies.set('token', response.data.token)
+					if (Cookies.get('stayLogged') === 'true') {
+						Cookies.set('token', response.data.token)
+					}
 					dispatch(login({ loggedIn: true, token: response.data.token, user: response.data.user }))
 				}, 1000)
 			} else if (response.status === 401) {

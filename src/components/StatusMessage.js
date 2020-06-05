@@ -6,7 +6,7 @@ import { RiCloseCircleLine, RiCheckboxCircleLine } from 'react-icons/ri'
 import { IconContext } from 'react-icons'
 
 const StatusMessageContainer = styled.div`
-	width: 40%;
+	width: 50%;
 	display: flex;
 	margin: auto;
 	background-color: ${(props) =>

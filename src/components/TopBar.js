@@ -1,7 +1,7 @@
 import React from 'react'
-import { Link, BrowserRouter as Router, Switch } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import { connect } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import Cookies from 'js-cookie'
 import Button from './Button'
 import { setBoard, logout } from '../redux/actions/index'
@@ -41,13 +41,16 @@ const LogoutStyle = styled(LinkStyle)`
 `
 
 const TopBar = ({ dispatch }) => {
+	const user = useSelector((state) => state.user)
 	const BoardsButtonPressed = () => {
 		dispatch(setBoard({ board: null }))
 	}
 
 	const LogoutButtonPressed = () => {
-		dispatch(logout())
-		Cookies.remove('token')
+		if (user.loggedIn) {
+			dispatch(logout())
+			Cookies.remove('token')
+		}
 	}
 
 	return (
