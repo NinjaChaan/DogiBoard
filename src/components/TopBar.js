@@ -1,11 +1,11 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import md5 from 'md5'
+import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import { connect, useSelector } from 'react-redux'
 import Cookies from 'js-cookie'
 import Button from './Button'
 import { setBoard, logout } from '../redux/actions/index'
-import { device } from '../devices'
 
 const TopBarContainer = styled.div`
 	height: 45px;
@@ -21,10 +21,14 @@ const TopButton = styled(Button)`
 const BoardsButton = styled(TopButton)`
 `
 const LogoutButton = styled(TopButton)`
-	/* position: absolute;
-	top: 0;
-	right: 0;  */
+	padding-top: 0px;
+	background-color: transparent;
+	width: 40px;
+	height: 40px;
 	float: right;
+	&:hover{
+		background-color: transparent;
+	}
 `
 
 const LinkStyle = styled(Link)`
@@ -42,15 +46,28 @@ const LinkStyle = styled(Link)`
 `
 
 const LogoutStyle = styled(LinkStyle)`
-	/* position: absolute; */
-	/* top: 0; */
-	/* right: 10px; */
+	flex: 0 0 10%;
+	max-width: 10%;
+	@media ${(props) => props.theme.device.mobileL} {	
+		flex: 0 0 5%;
+		max-width: 5%;
+	}
+	@media ${(props) => props.theme.device.laptop} { 
+		flex: 0 0 3%;
+		max-width: 3%;
+	}
 	margin-left: auto !important;
 	margin-right: 5px;
 `
 
+const Avatar = styled.img`
+	border-radius: 50%;
+	border: 2px solid white;
+`
+
 const TopBar = ({ dispatch }) => {
 	const user = useSelector((state) => state.user)
+	const [emailHash, setEmailHash] = useState('')
 	const BoardsButtonPressed = () => {
 		dispatch(setBoard({ board: null }))
 	}
@@ -62,14 +79,23 @@ const TopBar = ({ dispatch }) => {
 		}
 	}
 
+	useEffect(() => {
+		if (user.user.email) {
+			setEmailHash(md5(user.user.email))
+		}
+	}, [user])
+
 	return (
 		<TopBarContainer className="flex-row">
 			<LinkStyle to="/boards">
 				<BoardsButton type="button" onClick={BoardsButtonPressed}>Boards</BoardsButton>
 			</LinkStyle>
-			<LogoutStyle className="float-right" to="/login">
-				<LogoutButton onClick={LogoutButtonPressed}>Logout</LogoutButton>
-			</LogoutStyle>
+			{useLocation().pathname !== '/login' && emailHash
+				&& (
+					<LogoutStyle className="float-right" to="/login">
+						<LogoutButton onClick={LogoutButtonPressed}><Avatar src={`https://www.gravatar.com/avatar/${emailHash}?s=100`} /></LogoutButton>
+					</LogoutStyle>
+				)}
 		</TopBarContainer>
 	)
 }
