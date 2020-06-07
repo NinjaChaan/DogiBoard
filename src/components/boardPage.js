@@ -3,22 +3,9 @@ import { connect, useSelector } from 'react-redux'
 import _ from 'underscore'
 import styled from 'styled-components'
 import EventSourcePoly from 'eventsource'
-import Cookies from 'js-cookie'
-import {
-	BrowserRouter as Router,
-	Switch,
-	Route,
-	Redirect
-} from 'react-router-dom'
 import boardService from '../services/boards'
-import userService from '../services/users'
-import BoardsPage from './boardsPage'
-import TopBar from './TopBar'
-import LoginPage from './loginPage/loginPage'
 import { device } from '../devices'
-import {
-	setLists, login, setBoard, setRoute
-} from '../redux/actions/index'
+import { setBoard } from '../redux/actions/index'
 import LoadingAnimation from './loadingAnimation'
 
 

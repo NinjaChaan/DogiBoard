@@ -7,8 +7,6 @@ const getUserUtil = require('../src/utils/getUser')
 
 
 boardRouter.get('/stream/:id', async (request, response, next) => {
-	console.log('stream request')
-
 	const user = await getUserUtil.getUser(request, response)
 
 	response.set({

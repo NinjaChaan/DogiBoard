@@ -10,16 +10,13 @@ import {
 	Route,
 	Redirect
 } from 'react-router-dom'
-import boardService from '../services/boards'
 import userService from '../services/users'
 import BoardsPage from './boardsPage'
 import TopBar from './TopBar'
 import LoginPage from './loginPage/loginPage'
 import { device } from '../devices'
 import BoardPage from './boardPage'
-import {
-	setLists, login, setBoard, setRoute
-} from '../redux/actions/index'
+import { login } from '../redux/actions/index'
 import LoadingAnimation from './loadingAnimation'
 
 const mapStateToProps = (state) => {
@@ -57,13 +54,9 @@ max-width: 200px;
 	max-width: 100%;
 }
 `
-const Page = ({ children, dispatch, user }) => {
-	//const lists = useSelector((state) => state.listReducer.lists)
-	const board = useSelector((state) => state.board.board)
-	const [ignoreNextUpdate, setIgnoreNextUpdate] = useState(true)
+const Page = ({ dispatch, user }) => {
 	const [loggedIn, setLoggedIn] = useState(false)
 	const [tokenChecked, setTokenChecked] = useState(false)
-	const [boardChecked, setBoardChecked] = useState(false)
 
 	useEffect(() => {
 		const token = Cookies.get('token')

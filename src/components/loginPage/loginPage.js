@@ -76,7 +76,7 @@ const LoginPage = ({ dispatch }) => {
 				setStatusMessage('Logged in successfully')
 				setTimeout(() => {
 					if (Cookies.get('stayLogged') === 'true') {
-						Cookies.set('token', response.data.token)
+						Cookies.set('token', response.data.token, { expires: 365, secure: true })
 					}
 					dispatch(login({ loggedIn: true, token: response.data.token, user: response.data.user }))
 				}, 1000)
@@ -107,7 +107,7 @@ const LoginPage = ({ dispatch }) => {
 	}, [])
 
 	const keepLoggedInChanged = (value) => {
-		Cookies.set('stayLogged', value)
+		Cookies.set('stayLogged', value, { expires: 365 })
 	}
 
 	return (
