@@ -6,6 +6,7 @@ import { connect, useSelector } from 'react-redux'
 import Cookies from 'js-cookie'
 import Button from './Button'
 import { setBoard, logout } from '../redux/actions/index'
+import Dropdown from './Dropdown'
 
 const TopBarContainer = styled.div`
 	height: 45px;
@@ -20,7 +21,7 @@ const TopButton = styled(Button)`
 
 const BoardsButton = styled(TopButton)`
 `
-const LogoutButton = styled(TopButton)`
+const UserMenuButton = styled(TopButton)`
 	padding-top: 0px;
 	background-color: transparent;
 	width: 40px;
@@ -45,7 +46,22 @@ const LinkStyle = styled(Link)`
 	margin-left: 5px;
 `
 
-const LogoutStyle = styled(LinkStyle)`
+const UserMenuContainer = styled.div`
+	flex: 0 0 10%;
+	max-width: 10%;
+	@media ${(props) => props.theme.device.mobileL} {	
+		flex: 0 0 5%;
+		max-width: 5%;
+	}
+	@media ${(props) => props.theme.device.laptop} { 
+		flex: 0 0 3%;
+		max-width: 3%;
+	}
+	margin-left: auto !important;
+	margin-right: 5px;
+`
+
+const LogoutStyle = styled(Link)`
 	flex: 0 0 10%;
 	max-width: 10%;
 	@media ${(props) => props.theme.device.mobileL} {	
@@ -64,15 +80,39 @@ const Avatar = styled.img`
 	border-radius: 50%;
 	border: 2px solid white;
 `
+const ButtonContainer = styled.div`
+width: 100%;
+display: flex;
+justify-content: left;
+`
+
+const LabelDropdownButton = styled(Button)`
+	padding-top: 3px;
+	border: 3px solid transparent;
+
+	background-color: ${(props) => props.backgroundColor || Button.backgroundColor};
+
+	&:hover, &:focus, &:active{
+		background-color: ${(props) => props.backgroundColor || Button.backgroundColor};
+		${(props) => props.backgroundColor && css`filter: brightness(90%);`}
+		border: 3px solid transparent;
+	}
+
+	&.selected{
+		border: 3px solid #fff;
+	}
+`
 
 const TopBar = ({ dispatch }) => {
 	const user = useSelector((state) => state.user)
 	const [emailHash, setEmailHash] = useState('')
+	const [showUserMenu, setShowUserMenu] = useState(false)
 	const BoardsButtonPressed = () => {
 		dispatch(setBoard({ board: null }))
 	}
 
 	const LogoutButtonPressed = () => {
+		setShowUserMenu(false)
 		if (user.loggedIn) {
 			dispatch(logout())
 			Cookies.remove('token')
@@ -80,7 +120,7 @@ const TopBar = ({ dispatch }) => {
 	}
 
 	useEffect(() => {
-		if (user.user.email) {
+		if (user.user && user.user.email) {
 			setEmailHash(md5(user.user.email))
 		}
 	}, [user])
@@ -92,9 +132,20 @@ const TopBar = ({ dispatch }) => {
 			</LinkStyle>
 			{useLocation().pathname !== '/login' && emailHash
 				&& (
-					<LogoutStyle className="float-right" to="/login">
-						<LogoutButton onClick={LogoutButtonPressed}><Avatar src={`https://www.gravatar.com/avatar/${emailHash}?s=100`} /></LogoutButton>
-					</LogoutStyle>
+					<>
+						<UserMenuContainer className="float-right">
+							<UserMenuButton id="userMenuButton" onClick={() => { setShowUserMenu(!showUserMenu) }}><Avatar src={`https://www.gravatar.com/avatar/${emailHash}?s=100`} /></UserMenuButton>
+						</UserMenuContainer>
+						<Dropdown show={showUserMenu || false} setShowMenu={setShowUserMenu} parentId="userMenuButton" width={200} position={{ top: '45px', right: '0px' }}>
+							<Link to="/login">
+								<LabelDropdownButton light onClick={LogoutButtonPressed}>
+									<ButtonContainer>
+										Log out
+									</ButtonContainer>
+								</LabelDropdownButton>
+							</Link>
+						</Dropdown>
+					</>
 				)}
 		</TopBarContainer>
 	)

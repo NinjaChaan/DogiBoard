@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 const DropdownMenu = styled.div`
 	display: inline-table;
@@ -8,6 +8,13 @@ const DropdownMenu = styled.div`
 	background-color: rgb(175, 175, 175);
 	padding: 10px;
 	border-radius: 4px;
+
+	${(props) => props.position && css`
+		top: ${props.position.top || null};
+		right: ${props.position.right || null};
+		left: ${props.position.left || null};
+		bottom: ${props.position.bottom || null};`
+	}
 
 	transform-origin: top center;
   
@@ -55,14 +62,19 @@ const DropdownMenu = styled.div`
 `
 
 const Dropdown = ({
-	children, show, setShowMenu, parentId
+	children, show, setShowMenu, parentId, width, position
 }) => {
 	const menu = useRef()
-	const [width, setWidth] = useState(0)
+	const [menuWidth, setWidth] = useState(0)
 
 	const handleClick = (e) => {
 		const parent = document.getElementById(parentId)
-		setWidth(parent.scrollWidth)
+
+		if (width === undefined) {
+			setWidth(parent.scrollWidth)
+		} else {
+			setWidth(width)
+		}
 		if (menu.current.contains(e.target) || parent.contains(e.target)) {
 			// inside click
 			return
@@ -78,7 +90,7 @@ const Dropdown = ({
 		}
 	}, [])
 	return (
-		<DropdownMenu width={width} className={show && 'show'} ref={menu}>
+		<DropdownMenu width={menuWidth} position={position} className={show && 'show'} ref={menu}>
 			{children}
 		</DropdownMenu>
 	)
