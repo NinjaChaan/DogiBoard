@@ -21,6 +21,21 @@ const mapStateToProps = (state) => {
 	)
 }
 
+const BoardsContainer = styled.div`
+	margin: auto;
+	width: 80%;
+`
+
+const Title = styled.h1`
+	margin: auto;
+	width: 80%;
+	padding: 15px;
+`
+
+const BoardLink = styled(Link)`
+	margin: 15px;
+`
+
 const BoardsPage = ({ user, dispatch }) => {
 	const OpenBoard = (board) => {
 		dispatch(setBoard({ board }))
@@ -28,15 +43,17 @@ const BoardsPage = ({ user, dispatch }) => {
 	}
 	console.log('we in boards', user)
 	return (
-		<div>
-			<h1>Boards</h1>
-			{
-				user.user.boards.map((board) => (
-					<Link key={board.id} to={`/board/${board.id}`}>
-						<BoardButton onClick={() => { OpenBoard(board) }}>{board.name}</BoardButton>
-					</Link>
-				))
-			}
+		<div className="container">
+			<Title>Boards</Title>
+			<BoardsContainer className="row">
+				{
+					user.user.boards.map((board) => (
+						<BoardLink key={board.id} to={`/board/${board.id}`}>
+							<BoardButton onClick={() => { OpenBoard(board) }}>{board.name}</BoardButton>
+						</BoardLink>
+					))
+				}
+			</BoardsContainer>
 		</div>
 	)
 }
