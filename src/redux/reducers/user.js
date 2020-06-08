@@ -25,6 +25,12 @@ const userReducer = (state = initialState, action) => {
 				user: null,
 				loggedOut: true
 			}
+		case 'UPDATE_USER':
+			console.log('user update reduce', action.payload)
+			return {
+				...state,
+				user: action.payload
+			}
 		default:
 			return state
 	}

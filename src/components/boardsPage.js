@@ -23,12 +23,12 @@ const mapStateToProps = (state) => {
 
 const BoardsContainer = styled.div`
 	margin: auto;
-	width: 80%;
+	width: 90%;
 `
 
 const Title = styled.h1`
 	margin: auto;
-	width: 80%;
+	width: 90%;
 	padding: 15px;
 `
 

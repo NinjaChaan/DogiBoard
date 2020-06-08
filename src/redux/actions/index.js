@@ -26,6 +26,13 @@ export const login = ({ loggedIn, token, user }) => ({
 	}
 })
 
+export const updateUser = (user) => ({
+	type: 'UPDATE_USER',
+	payload: {
+		...user
+	}
+})
+
 export const logout = () => ({
 	type: 'LOGOUT'
 })

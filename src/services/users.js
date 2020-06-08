@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from '../redux/store/index'
 
 const baseUrl = '/api/users'
 
@@ -26,9 +27,13 @@ const create = (newObject) => {
 }
 
 const update = (id, newObject) => {
-	const request = axios.put(`${baseUrl}/${id}`, newObject)
-	return request.then((response) => response.data).catch((error) => {
-		console.log(error.message)
+	const request = axios.put(`${baseUrl}/${id}`, newObject, {
+		headers: {
+			Authorization: `Bearer ${store.getState().user.token}`
+		}
+	})
+	return request.then((response) => response).catch((error) => {
+		return error.response
 	})
 }
 

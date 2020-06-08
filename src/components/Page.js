@@ -16,6 +16,7 @@ import TopBar from './TopBar'
 import LoginPage from './loginPage/loginPage'
 import { device } from '../devices'
 import BoardPage from './boardPage'
+import ProfilePage from './ProfilePage'
 import { login } from '../redux/actions/index'
 import LoadingAnimation from './loadingAnimation'
 
@@ -30,32 +31,31 @@ const mapStateToProps = (state) => {
 }
 
 const PageStyle = styled.div`
-display: flex;
-position: relative;
+	display: flex;
+	position: relative;
 
-height: 100%;
-max-width: 200px;
+	height: 100%;
+	max-width: 200px;
 
-@media ${device.mobileS}{
-	max-width: 100%;
-}
-@media ${device.mobileM}{
-	max-width: 100%;
-}
-@media ${device.mobileL}{
-	max-width: 100%;
-}
+	@media ${device.mobileS}{
+		max-width: 100%;
+	}
+	@media ${device.mobileM}{
+		max-width: 100%;
+	}
+	@media ${device.mobileL}{
+		max-width: 100%;
+	}
 
-@media ${device.laptop} { 
-	max-width: 100%;
-}
+	@media ${device.laptop} { 
+		max-width: 100%;
+	}
 
-@media ${device.desktop} {
-	max-width: 100%;
-}
+	@media ${device.desktop} {
+		max-width: 100%;
+	}
 `
 const Page = ({ dispatch, user }) => {
-	const [loggedIn, setLoggedIn] = useState(false)
 	const [tokenChecked, setTokenChecked] = useState(false)
 
 	useEffect(() => {
@@ -69,20 +69,6 @@ const Page = ({ dispatch, user }) => {
 					.then((response) => {
 						console.log('user', response)
 						dispatch(login({ loggedIn: true, token, user: response }))
-						// if (window.location.href.includes('/board/')) {
-						// 	console.log('try to load board', window.location.href)
-						// 	const boardId = window.location.href.split('/board/')[1]
-
-						// 	boardService.getOne(boardId).then((response) => {
-						// 		console.log('response', response.data)
-						// 		if (response.data.error) {
-						// 			console.log(response.data.error)
-						// 		} else {
-						// 			dispatch(setBoard({ board: response.data }))
-						// 		}
-						// 		setBoardChecked(true)
-						// 	})
-						// }
 						setTokenChecked(true)
 					})
 			} else {
@@ -94,108 +80,7 @@ const Page = ({ dispatch, user }) => {
 		}, 1000)
 	}, [])
 
-	useEffect(() => {
-		setLoggedIn(user.loggedIn)
-	}, [user])
-
-	// Listen to server events (someone else changed something on their client)
-	// const startStream = () => {
-	// 	console.log('trying to start stream', user)
-	// 	if (user.loggedIn && board.id) {
-	// 		console.log('Conncting to event stream:', `/api/boards/stream/${board.id}`)
-	// 		const eventSourceInitDict = {
-	// 			headers: {
-	// 				Authorization: `Bearer ${user.token}`
-	// 			}
-	// 		}
-	// 		const eventSource = new EventSourcePoly(`/api/boards/stream/${board.id}`, eventSourceInitDict)
-	// 		console.log('events', eventSource)
-	// 		eventSource.onopen = (m) => {
-	// 			console.log('Connected!', m)
-	// 		}
-	// 		eventSource.onerror = (e) => console.log(e)
-	// 		eventSource.onmessage = (e) => {
-	// 			const data = JSON.parse(e.data)
-	// 			console.log('stream data', data)
-
-	// 			if (!_.isEqual(data, board)) {
-	// 				setIgnoreNextUpdate(true)
-	// 				dispatch(setLists(data.lists))
-	// 			}
-	// 		}
-	// 	}
-	// }
-
-	// // Get all data from mongodb at the start
-	// const getAllHook = () => {
-	// 	if (loggedIn) {
-	// 		boardService.getOne('5eca9eb8ac8fb5275c45e1c5').then((response) => {
-	// 			console.log('response', response)
-	// 			dispatch(setLists(response[0].lists))
-	// 			// console.log(dispatch(setLists(response[0].lists)))
-	// 			console.log('loaded lists', response[0].lists)
-	// 			setFirstStateGotten(true)
-	// 		})
-	// 	}
-	// }
-	// useEffect(getAllHook, [])
-
-	// If lists change in store, and first state has been loaded, send changes to mongodb
-	// useEffect(() => {
-	// 	console.log('list change', lists)
-	// 	console.log('ignor next?', ignoreNextUpdate)
-
-	// 	if (!ignoreNextUpdate && lists) {
-	// 		console.log('sending lists', lists)
-
-	// 		const updatedBoard = {
-	// 			name: board.name,
-	// 			lists
-	// 		}
-
-	// 		boardService.update(board.id, updatedBoard).then((response) => {
-	// 			console.log(response)
-	// 		})
-	// 	} else if (ignoreNextUpdate) {
-	// 		setIgnoreNextUpdate(false)
-	// 	}
-	// }, [lists])
-	// If board changes in store, load that board
-
-	// useEffect(() => {
-	// 	if (board && board.id) {
-	// 		console.log('board change', board)
-	// 		startStream()
-	// 		dispatch(setRoute({ route: 'board' }))
-	// 		dispatch(setLists(board.lists))
-	// 		setBoardChecked(true)
-	// 	}
-	// 	// if (firstStateGotten && !ignoreNextUpdate) {
-	// 	// 	console.log('sending lists', lists)
-
-	// 	// 	const updatedBoard = {
-	// 	// 		name: 'TestBoard',
-	// 	// 		lists
-	// 	// 	}
-
-	// 	// 	boardService.update('5eca9eb8ac8fb5275c45e1c5', updatedBoard).then((response) => {
-	// 	// 		console.log(response)
-	// 	// 	})
-	// 	// } else if (ignoreNextUpdate) {
-	// 	// 	setIgnoreNextUpdate(false)
-	// 	// }
-	// }, [board])
-
-
-	// if (!loggedIn) {
-	// 	return (
-	// 		<Router>
-	// 			<Redirect to="/login" />
-	// 		</Router>
-	// 	)
-	// }
-
-	console.log('loggedIn', loggedIn)
+	console.log('loggedIn', user.loggedIn)
 	console.log('tokenChecked', tokenChecked)
 	return (
 		<div>
@@ -205,25 +90,24 @@ const Page = ({ dispatch, user }) => {
 				{tokenChecked
 					&& (
 						<>
-							{!loggedIn && <Redirect to="/login" />}
+							{!user.loggedIn && <Redirect to="/login" />}
 							<Switch>
 								<Route exact path="/">
-									{!loggedIn
+									{!user.loggedIn
 										? <Redirect to="/login" />
 										: <Redirect to="/boards" />}
 								</Route>
 								<Route path="/login">
-									{(loggedIn && tokenChecked)
+									{(user.loggedIn && tokenChecked)
 										? <Redirect to="/boards" />
 										: <LoginPage />}
 								</Route>
-								<Route path="/about">
-									<div>About</div>
-								</Route>
 
-								{loggedIn && <Route path="/board/:id" component={BoardPage} />}
+								{user.loggedIn && <Route path="/profile/:id" component={ProfilePage} />}
+
+								{user.loggedIn && <Route path="/board/:id" component={BoardPage} />}
 								<Route path="/boards">
-									{(loggedIn && tokenChecked)
+									{(user.loggedIn && tokenChecked)
 										? <BoardsPage />
 										: <Redirect to="/login" />}
 								</Route>
@@ -234,55 +118,6 @@ const Page = ({ dispatch, user }) => {
 			</Router>
 		</div>
 	)
-	// return (
-	// 	<Router>
-	// 		<div>
-	// 			<Switch>
-	// 				<Route exact path="/">
-	// 					{!loggedIn
-	// 						? <Redirect to="/login" />
-	// 						: <Redirect to="/boards" />}
-	// 				</Route>
-	// 				<Route path="/login">
-	// 					{(loggedIn && tokenChecked)
-	// 						? <Redirect to="/boards" />
-	// 						: <LoginPage />}
-	// 				</Route>
-	// 				<Route path="/board">
-	// 					{board.id
-	// 						? (
-	// 							<PageStyle>
-	// 								{children}
-	// 							</PageStyle>
-	// 						)
-	// 						: null}
-	// 				</Route>
-	// 				<Route path="/boards">
-	// 					{board.id
-	// 						? <Redirect to={`/board/${board.id}`} />
-	// 						: <BoardsPage />}
-	// 				</Route>
-	// 			</Switch>
-	// 		</div>
-	// 	</Router>
-	// )
-	// }
-
-	// if (loggedIn) {
-	// 	if (!board.id) {
-	// 		return (
-	// 			<BoardsPage />
-	// 		)
-	// 	}
-	// 	return (
-	// 		<PageStyle>
-	// 			{children}
-	// 		</PageStyle>
-	// 	)
-	// }
-	// return (
-	// 	<LoginPage />
-	// )
 }
 
 export default connect(mapStateToProps, null)(Page)
