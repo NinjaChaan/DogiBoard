@@ -113,10 +113,8 @@ const LoginPage = ({ dispatch }) => {
 	return (
 		<PageContainer>
 			<LoginContainer>
-				<StatusMessage statusMessage={statusMessage} statusType={statusType} />
-				<LoginForm
-					onSubmit={handleSubmit}
-				>
+				<LoginForm onSubmit={handleSubmit}>
+					<StatusMessage statusMessage={statusMessage} statusType={statusType} />
 					<TextSpan>Username or email</TextSpan>
 					<br />
 					<LoginTextarea id="usernameField" />

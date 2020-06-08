@@ -6,13 +6,13 @@ import { RiCloseCircleLine, RiCheckboxCircleLine } from 'react-icons/ri'
 import { IconContext } from 'react-icons'
 
 const StatusMessageContainer = styled.div`
-	width: 80%;
-	@media ${(props) => props.theme.device.mobileL} {	
+	width: 100%;
+	/* @media ${(props) => props.theme.device.mobileL} {	
 		width: 70%;
 	}
 	@media ${(props) => props.theme.device.laptop} { 
 		width: 50%;
-	}
+	} */
 	
 	display: flex;
 	margin: auto;

@@ -121,7 +121,11 @@ const TopBar = ({ dispatch }) => {
 
 	useEffect(() => {
 		if (user.user && user.user.email) {
-			setEmailHash(md5(user.user.email))
+			if (user.user.gravatarEmail) {
+				setEmailHash(md5(user.user.gravatarEmail))
+			} else {
+				setEmailHash(md5(user.user.email))
+			}
 		}
 	}, [user])
 

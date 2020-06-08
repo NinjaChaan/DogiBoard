@@ -30,6 +30,13 @@ const userSchema = new mongoose.Schema({
 		required: 'Email address is required',
 		validate: [isEmail, 'Please fill a valid email address'],
 	},
+	gravatarEmail: {
+		type: String,
+		unique: 'That gravatar email already exists. Choose another.',
+		trim: true,
+		lowercase: true,
+		validate: [isEmail, 'Please fill a valid email address'],
+	},
 	passwordHash: {
 		type: String,
 		trim: true,

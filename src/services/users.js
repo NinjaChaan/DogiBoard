@@ -37,6 +37,18 @@ const update = (id, newObject) => {
 	})
 }
 
+const updateGravatar = (id, gravatarEmail) => {
+	console.log('gravatar update', gravatarEmail)
+	const request = axios.put(`${baseUrl}/${id}/gravatar`, gravatarEmail, {
+		headers: {
+			Authorization: `Bearer ${store.getState().user.token}`
+		}
+	})
+	return request.then((response) => response).catch((error) => {
+		return error.response
+	})
+}
+
 const remove = (id) => {
 	const request = axios.delete(`${baseUrl}/${id}`)
 	return request.then((response) => response.data)
@@ -47,5 +59,6 @@ export default {
 	create,
 	update,
 	remove,
-	getWithToken
+	getWithToken,
+	updateGravatar
 }

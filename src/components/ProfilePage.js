@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import md5 from 'md5'
 import styled, { keyframes } from 'styled-components'
 import { connect, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -8,7 +9,8 @@ import userService from '../services/users'
 import StatusMessage from './StatusMessage'
 
 const ProfileContainer = styled.div`
-	margin: 10px auto auto auto;
+	margin: 10px auto auto 100px;
+	display: flex;
 	width: 100%;
 	text-align: center;
 	@media ${(props) => props.theme.device.mobileL} {	
@@ -38,8 +40,9 @@ const TextSpan = styled.span`
 	font-weight: 600;
 `
 const AccountDetailsForm = styled.form`
-	margin: auto;
-	width: 80%;
+	margin: auto auto auto 100px;
+	flex: 0 0 70%;
+	max-width: 70%;
 	@media ${(props) => props.theme.device.mobileL} {	
 		width: 70%;
 	}
@@ -47,15 +50,30 @@ const AccountDetailsForm = styled.form`
 		width: 50%;
 	}
 `
+const AvatarContainer = styled.div`
+	margin: 10px auto auto 100px;
+	flex: 0 0 30%;
+	max-width: 30%;
+	text-align: center;
+	@media ${(props) => props.theme.device.mobileL} {	
+		width: 60%;
+	}
+`
+
+const AvatarImage = styled.img`
+	border-radius: 50%;
+`
 
 const ProfilePage = ({ dispatch }) => {
 	const user = useSelector((state) => state.user.user)
 	const [username, setUsername] = useState('')
 	const [email, setEmail] = useState('')
+	const [gravatarEmail, setGravatarEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const [currentPassword, setCurrentPassword] = useState('')
 	const [statusMessage, setStatusMessage] = useState('')
 	const [statusType, setStatusType] = useState('')
+	const [emailHash, setEmailHash] = useState('')
 
 	const handleSubmit = (event) => {
 		event.preventDefault()
@@ -102,6 +120,31 @@ const ProfilePage = ({ dispatch }) => {
 		})
 	}
 
+	const handleGravatarSubmit = () => {
+		userService.updateGravatar(user.id, { gravatarEmail }).then((response) => {
+			console.log('gravatar change response', response)
+			if (response.status === 200) {
+				setStatusType('success')
+				setStatusMessage('Gravatar email saved successfully')
+				const updatedUser = {
+					...user,
+					gravatarEmail
+				}
+				dispatch(updateUser(updatedUser))
+			} else if (response.status === 400 || response.status === 401 || response.status === 404) {
+				setStatusType('error')
+				setStatusMessage(response.data.error)
+			} else {
+				setStatusType('error')
+				if (response.data) {
+					setStatusMessage(response.data)
+				} else {
+					setStatusMessage('Unknown error. Send bug report?')
+				}
+			}
+		})
+	}
+
 	useEffect(() => {
 		if (user) {
 			if (user.username) {
@@ -109,14 +152,21 @@ const ProfilePage = ({ dispatch }) => {
 			}
 			if (user.email) {
 				setEmail(user.email)
+				if (user.gravatarEmail) {
+					setGravatarEmail(user.gravatarEmail)
+					setEmailHash(md5(user.gravatarEmail))
+				} else {
+					setGravatarEmail(user.email)
+					setEmailHash(md5(user.email))
+				}
 			}
 		}
 	}, [user])
 
 	return (
 		<ProfileContainer>
-			<StatusMessage statusMessage={statusMessage} statusType={statusType} />
 			<AccountDetailsForm onSubmit={handleSubmit}>
+				<StatusMessage statusMessage={statusMessage} statusType={statusType} />
 				<TextSpan>Username</TextSpan>
 				<ProfileTextarea id="usernameField" value={username} onChange={(e) => setUsername(e.target.value)} />
 				<br />
@@ -131,6 +181,13 @@ const ProfilePage = ({ dispatch }) => {
 				<br />
 				<SaveButton type="submit">Save changes</SaveButton>
 			</AccountDetailsForm>
+			<AvatarContainer>
+				<h1>Avatar</h1>
+				<AvatarImage src={`https://www.gravatar.com/avatar/${emailHash}?s=200`} alt="User avatar" />
+				<TextSpan>Gravatar email</TextSpan>
+				<ProfileTextarea id="gravatarField" value={gravatarEmail} onChange={(e) => setGravatarEmail(e.target.value)} />
+				<SaveButton onClick={handleGravatarSubmit}>Save changes</SaveButton>
+			</AvatarContainer>
 		</ProfileContainer>
 	)
 }

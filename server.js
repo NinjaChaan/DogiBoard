@@ -62,7 +62,7 @@ app.get('/boards', (req, res) => {
 	console.log('trying to boards')
 	res.sendFile(path.join(__dirname, 'index.html'))
 })
-app.get('/about', (req, res) => {
+app.get('/profile/*', (req, res) => {
 	res.sendFile(path.join(__dirname, 'index.html'))
 })
 
