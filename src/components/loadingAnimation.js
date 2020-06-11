@@ -61,6 +61,7 @@ const LoadItem = styled.div`
 `
 const LoadBackground = styled.div`
 	margin: 0 auto;
+	margin-top: 100px;
 	width: 100px;
 	height: 125px;
 	background-color: white;

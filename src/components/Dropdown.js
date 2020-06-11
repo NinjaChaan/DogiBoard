@@ -5,7 +5,8 @@ const DropdownMenu = styled.div`
 	display: inline-table;
 	position: absolute;
 	z-index: 2000;
-	background-color: rgb(175, 175, 175);
+	background-color: ${(props) => props.bgColor || 'rgb(175, 175, 175)'};
+
 	padding: 10px;
 	border-radius: 4px;
 
@@ -15,6 +16,9 @@ const DropdownMenu = styled.div`
 		left: ${props.position.left || null};
 		bottom: ${props.position.bottom || null};`
 	}
+
+	position: ${(props) => props.relativePos && 'relative'};
+
 
 	transform-origin: top center;
   
@@ -62,7 +66,7 @@ const DropdownMenu = styled.div`
 `
 
 const Dropdown = ({
-	children, show, setShowMenu, parentId, width, position
+	children, show, setShowMenu, parentId, width, position, relativePos, bgColor
 }) => {
 	const menu = useRef()
 	const [menuWidth, setWidth] = useState(0)
@@ -90,7 +94,7 @@ const Dropdown = ({
 		}
 	}, [])
 	return (
-		<DropdownMenu width={menuWidth} position={position} className={show && 'show'} ref={menu}>
+		<DropdownMenu bgColor={bgColor} width={menuWidth} position={position} relativePos={relativePos} className={show && 'show'} ref={menu}>
 			{children}
 		</DropdownMenu>
 	)

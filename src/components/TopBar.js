@@ -7,6 +7,7 @@ import Cookies from 'js-cookie'
 import Button from './Button'
 import { setBoard, logout } from '../redux/actions/index'
 import Dropdown from './Dropdown'
+import UsersDropdown from './UsersDropdown'
 
 const TopBarContainer = styled.div`
 	height: 45px;
@@ -21,11 +22,12 @@ const TopButton = styled(Button)`
 
 const BoardsButton = styled(TopButton)`
 `
+
 const UserMenuButton = styled(TopButton)`
 	padding-top: 0px;
 	background-color: transparent;
-	width: 40px;
-	height: 40px;
+	width: 45px;
+	height: 45px;
 	float: right;
 	&:hover{
 		background-color: transparent;
@@ -106,13 +108,13 @@ const LabelDropdownButton = styled(Button)`
 const TopBar = ({ dispatch }) => {
 	const user = useSelector((state) => state.user)
 	const [emailHash, setEmailHash] = useState('')
-	const [showUserMenu, setShowUserMenu] = useState(false)
+	const [showProfileMenu, setShowProfileMenu] = useState(false)
 	const BoardsButtonPressed = () => {
 		dispatch(setBoard({ board: null }))
 	}
 
 	const LogoutButtonPressed = () => {
-		setShowUserMenu(false)
+		setShowProfileMenu(false)
 		if (user.loggedIn) {
 			dispatch(logout())
 			Cookies.remove('token')
@@ -134,15 +136,19 @@ const TopBar = ({ dispatch }) => {
 			<LinkStyle to="/boards">
 				<BoardsButton type="button" onClick={BoardsButtonPressed}>Boards</BoardsButton>
 			</LinkStyle>
+			{useLocation().pathname.includes('/board/')
+				&& (
+					<UsersDropdown />
+				)}
 			{useLocation().pathname !== '/login' && emailHash
 				&& (
 					<>
 						<UserMenuContainer className="float-right">
-							<UserMenuButton id="userMenuButton" onClick={() => { setShowUserMenu(!showUserMenu) }}><Avatar src={`https://www.gravatar.com/avatar/${emailHash}?s=100`} /></UserMenuButton>
+							<UserMenuButton id="profileMenuButton" onClick={() => { setShowProfileMenu(!showProfileMenu) }}><Avatar src={`https://www.gravatar.com/avatar/${emailHash}?s=100`} /></UserMenuButton>
 						</UserMenuContainer>
-						<Dropdown show={showUserMenu || false} setShowMenu={setShowUserMenu} parentId="userMenuButton" width={200} position={{ top: '45px', right: '0px' }}>
+						<Dropdown show={showProfileMenu || false} setShowMenu={setShowProfileMenu} parentId="profileMenuButton" width={200} position={{ top: '45px', right: '0px' }}>
 							<Link to={`/profile/${user.user.id}`}>
-								<LabelDropdownButton light onClick={() => setShowUserMenu(false)}>
+								<LabelDropdownButton light onClick={() => setShowProfileMenu(false)}>
 									<ButtonContainer>
 										Profile
 									</ButtonContainer>

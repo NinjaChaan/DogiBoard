@@ -21,6 +21,15 @@ const getWithToken = (token) => {
 	})
 }
 
+const getOne = (id) => {
+	const request = axios.get(`${baseUrl}/${id}`, {
+		headers: {
+			Authorization: `Bearer ${store.getState().user.token}`
+		}
+	})
+	return request.then((response) => response).catch((error) => (error.response))
+}
+
 const create = (newObject) => {
 	const request = axios.post(baseUrl, newObject)
 	return request.then((response) => response.data)
@@ -35,6 +44,20 @@ const update = (id, newObject) => {
 	return request.then((response) => response).catch((error) => {
 		return error.response
 	})
+}
+
+const getGravatar = (id) => {
+	const request = axios.get(`${baseUrl}/${id}`, {
+		headers: {
+			Authorization: `Bearer ${store.getState().user.token}`
+		}
+	})
+	request.then((response) => {
+		if (response.data.gravatarEmail) {
+			return response.data.gravatarEmail
+		}
+		return response.data.email
+	}).catch((error) => (error.response))
 }
 
 const updateGravatar = (id, gravatarEmail) => {
@@ -60,5 +83,7 @@ export default {
 	update,
 	remove,
 	getWithToken,
-	updateGravatar
+	getOne,
+	updateGravatar,
+	getGravatar
 }
