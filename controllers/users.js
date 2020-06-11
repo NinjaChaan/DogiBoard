@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 const _ = require('underscore')
 const usersRouter = require('express').Router()
+const stringSimilarity = require('string-similarity')
 const User = require('../models/user')
 const Board = require('../models/board')
 const getUserUtil = require('../src/utils/getUser')
@@ -38,6 +39,36 @@ usersRouter.get('/', async (request, response) => {
 	const users = await User
 		.find({}).populate('boards')
 	response.json(users.map((user) => user.toJSON()))
+})
+
+usersRouter.get('/search/:query', async (request, response) => {
+	const user = await getUserUtil.getUser(request, response)
+	const users = await User.find({})
+	const dict = new Object()
+	console.log('query?', request.params.query)
+
+	users.map((u) => {
+		dict[stringSimilarity.compareTwoStrings(request.params.query, u.username)] = u
+	})
+	keys = Object.keys(dict)
+
+	console.log('dict users?', dict)
+
+	keys.sort((a, b) => b - a)
+
+	const sorted = []
+
+	for (i = 0; i < keys.length; i++) {
+		k = keys[i]
+		console.log(`${k}:${dict[k]}`)
+		if (sorted.length < 10) {
+			if (k > 0) {
+				sorted.push(dict[k])
+			}
+		}
+	}
+
+	response.json(sorted)
 })
 
 usersRouter.get('/token', async (request, response) => {

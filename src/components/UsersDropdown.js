@@ -56,12 +56,25 @@ const InviteButton = styled(Button)`
 	margin-bottom: 0px;
 `
 
+const MatchedUsersContainer = styled.div`
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+`
+
+const UserName = styled.span`
+	margin: 10px auto auto 10px;
+	font-weight: 600;
+`
+
 const UsersDropdown = () => {
 	const currentUser = useSelector((state) => state.user.user)
 	const board = useSelector((state) => state.board.board)
 	const [showUsersMenu, setShowUsersMenu] = useState(false)
 	const [users, setUsers] = useState([])
 	const [inviteInput, setInviteInput] = useState('')
+	const [matchedUsers, setMatchedUsers] = useState([])
 
 	const GetUserEmailHash = (user) => {
 		if (user.gravatarEmail) {
@@ -94,6 +107,14 @@ const UsersDropdown = () => {
 			event.preventDefault()
 		}
 		setInviteInput(event.target.value)
+		userService.getClosestMatches(event.target.value)
+			.then((response) => {
+				if (response.data.length > 0) {
+					setMatchedUsers(response.data)
+				} else {
+					setMatchedUsers([])
+				}
+			})
 	}
 
 	return (
@@ -110,6 +131,14 @@ const UsersDropdown = () => {
 							</UsersContainer>
 							<h6>Invite to board</h6>
 							<UserTextarea placeholder="Enter email or username" value={inviteInput} onChange={handleIviteTextChange} />
+							<div>
+								{matchedUsers.map((user) => (
+									<MatchedUsersContainer>
+										<UsersUserButton key={user.id} onClick={() => { setShowProfileMenu(!showProfileMenu) }}><Avatar src={`https://www.gravatar.com/avatar/${GetUserEmailHash(user)}?s=100`} /></UsersUserButton>
+										<UserName>{user.username}</UserName>
+									</MatchedUsersContainer>
+								))}
+							</div>
 							<InviteButton>Invite</InviteButton>
 						</>
 					)}

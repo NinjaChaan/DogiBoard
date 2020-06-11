@@ -60,6 +60,15 @@ const getGravatar = (id) => {
 	}).catch((error) => (error.response))
 }
 
+const getClosestMatches = (query) => {
+	const request = axios.get(`${baseUrl}/search/${query}`, {
+		headers: {
+			Authorization: `Bearer ${store.getState().user.token}`
+		}
+	})
+	return request.then((response) => response).catch((error) => (error.response))
+}
+
 const updateGravatar = (id, gravatarEmail) => {
 	console.log('gravatar update', gravatarEmail)
 	const request = axios.put(`${baseUrl}/${id}/gravatar`, gravatarEmail, {
@@ -85,5 +94,6 @@ export default {
 	getWithToken,
 	getOne,
 	updateGravatar,
-	getGravatar
+	getGravatar,
+	getClosestMatches
 }
