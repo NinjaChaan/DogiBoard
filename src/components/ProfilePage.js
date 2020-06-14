@@ -7,6 +7,7 @@ import Button from './Button'
 import { updateUser } from '../redux/actions/index'
 import userService from '../services/users'
 import StatusMessage from './StatusMessage'
+import UserAvatar from './UserAvatar'
 
 const ProfileContainer = styled.div`
 	margin: 10px auto auto 100px;
@@ -18,12 +19,13 @@ const ProfileContainer = styled.div`
 	}
 `
 
-const ProfileTextarea = styled.textarea`
+const ProfileTextarea = styled.input`
 	height: 2rem;
 	resize: none;
 	width: 100%;
 	margin-bottom: 20px;
 	border-radius: 4px;
+	padding-left: 5px;
 `
 
 const SaveButton = styled(Button)`
@@ -183,8 +185,11 @@ const ProfilePage = ({ dispatch }) => {
 			</AccountDetailsForm>
 			<AvatarContainer>
 				<h1>Avatar</h1>
-				<AvatarImage src={`https://www.gravatar.com/avatar/${emailHash}?s=200`} alt="User avatar" />
-				<TextSpan>Gravatar email</TextSpan>
+				<UserAvatar user={user} size="200" noBorder />
+				<TextSpan>
+					Gravatar email
+					<a href="https://en.gravatar.com/" target="_blank" rel="noopener noreferrer" style={{ fontSize: 'small', float: 'right', paddingTop: '3px' }}>What is Gravatar?</a>
+				</TextSpan>
 				<ProfileTextarea id="gravatarField" value={gravatarEmail} onChange={(e) => setGravatarEmail(e.target.value)} />
 				<SaveButton onClick={handleGravatarSubmit}>Save changes</SaveButton>
 			</AvatarContainer>

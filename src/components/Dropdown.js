@@ -16,6 +16,12 @@ const DropdownMenu = styled.div`
 		left: ${props.position.left || null};
 		bottom: ${props.position.bottom || null};`
 	}
+	${(props) => props.noTopBorder && css`
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;`
+	}
+
+
 
 	position: ${(props) => props.relativePos && 'relative'};
 
@@ -66,7 +72,7 @@ const DropdownMenu = styled.div`
 `
 
 const Dropdown = ({
-	children, show, setShowMenu, parentId, width, position, relativePos, bgColor
+	children, show, setShowMenu, parentId, width, position, relativePos, bgColor, noTopBorder
 }) => {
 	const menu = useRef()
 	const [menuWidth, setWidth] = useState(0)
@@ -94,7 +100,7 @@ const Dropdown = ({
 		}
 	}, [])
 	return (
-		<DropdownMenu bgColor={bgColor} width={menuWidth} position={position} relativePos={relativePos} className={show && 'show'} ref={menu}>
+		<DropdownMenu noTopBorder={noTopBorder} bgColor={bgColor} width={menuWidth} position={position} relativePos={relativePos} className={show && 'show'} ref={menu}>
 			{children}
 		</DropdownMenu>
 	)

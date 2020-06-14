@@ -8,11 +8,12 @@ import Button from './Button'
 import { setBoard, logout } from '../redux/actions/index'
 import Dropdown from './Dropdown'
 import UsersDropdown from './UsersDropdown'
+import UserAvatar from './UserAvatar'
 
 const TopBarContainer = styled.div`
-	height: 45px;
+	height: 50px;
 	background-color: #1d6cba;
-	padding: 5px;
+	padding: 7.5px;
 	display:flex;
 	flex-wrap: wrap;
 `
@@ -24,7 +25,7 @@ const BoardsButton = styled(TopButton)`
 `
 
 const UserMenuButton = styled(TopButton)`
-	padding-top: 0px;
+	padding: 0px;
 	background-color: transparent;
 	width: 45px;
 	height: 45px;
@@ -61,6 +62,7 @@ const UserMenuContainer = styled.div`
 	}
 	margin-left: auto !important;
 	margin-right: 5px;
+	margin-top: -5px;
 `
 
 const LogoutStyle = styled(Link)`
@@ -77,15 +79,10 @@ const LogoutStyle = styled(Link)`
 	margin-left: auto !important;
 	margin-right: 5px;
 `
-
-const Avatar = styled.img`
-	border-radius: 50%;
-	border: 2px solid white;
-`
 const ButtonContainer = styled.div`
-width: 100%;
-display: flex;
-justify-content: left;
+	width: 100%;
+	display: flex;
+	justify-content: left;
 `
 
 const LabelDropdownButton = styled(Button)`
@@ -106,7 +103,7 @@ const LabelDropdownButton = styled(Button)`
 `
 
 const TopBar = ({ dispatch }) => {
-	const user = useSelector((state) => state.user)
+	const user = useSelector((state) => state.user.user)
 	const [emailHash, setEmailHash] = useState('')
 	const [showProfileMenu, setShowProfileMenu] = useState(false)
 	const BoardsButtonPressed = () => {
@@ -122,11 +119,11 @@ const TopBar = ({ dispatch }) => {
 	}
 
 	useEffect(() => {
-		if (user.user && user.user.email) {
-			if (user.user.gravatarEmail) {
-				setEmailHash(md5(user.user.gravatarEmail))
+		if (user && user.email) {
+			if (user.gravatarEmail) {
+				setEmailHash(md5(user.gravatarEmail))
 			} else {
-				setEmailHash(md5(user.user.email))
+				setEmailHash(md5(user.email))
 			}
 		}
 	}, [user])
@@ -144,10 +141,10 @@ const TopBar = ({ dispatch }) => {
 				&& (
 					<>
 						<UserMenuContainer className="float-right">
-							<UserMenuButton id="profileMenuButton" onClick={() => { setShowProfileMenu(!showProfileMenu) }}><Avatar src={`https://www.gravatar.com/avatar/${emailHash}?s=100`} /></UserMenuButton>
+							<UserMenuButton id="profileMenuButton" onClick={() => { setShowProfileMenu(!showProfileMenu) }}><UserAvatar user={user} noBorder /></UserMenuButton>
 						</UserMenuContainer>
 						<Dropdown show={showProfileMenu || false} setShowMenu={setShowProfileMenu} parentId="profileMenuButton" width={200} position={{ top: '45px', right: '0px' }}>
-							<Link to={`/profile/${user.user.id}`}>
+							<Link to={`/profile/${user.id}`}>
 								<LabelDropdownButton light onClick={() => setShowProfileMenu(false)}>
 									<ButtonContainer>
 										Profile
