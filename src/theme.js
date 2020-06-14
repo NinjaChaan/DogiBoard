@@ -88,6 +88,18 @@ const theme = {
 				color: 'rgb(255, 255, 255)',
 			}
 		},
+		disabled: {
+			backgroundColor: 'rgba(200, 200, 200, 1)',
+			color: 'rgb(100, 100, 100)',
+			hover: {
+				backgroundColor: 'rgba(200, 200, 200, 1)',
+				color: 'rgb(100, 100, 100)',
+			},
+			focus: {
+				backgroundColor: 'rgba(200, 200, 200, 1)',
+				color: 'rgb(100, 100, 100)',
+			},
+		},
 	},
 	fonts: ['sans-serif', 'Roboto'],
 	fontSizes: {

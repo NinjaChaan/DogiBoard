@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect, useSelector } from 'react-redux'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import md5 from 'md5'
 import Cookies from 'js-cookie'
 import Dropdown from './Dropdown'
@@ -26,7 +26,7 @@ const UsersUserButton = styled(Button)`
 	background-color: transparent;
 	width: 45px;
 	height: 45px;
-	margin: 5.5px;
+	margin: 5.5px 5.5px 0px 5.5px;
 
 	&:hover{
 		background-color: transparent;
@@ -50,6 +50,7 @@ const UserTextarea = styled.textarea`
 	width: 100%;
 	margin-bottom: 20px;
 	border-radius: 4px;
+	outline: 0px none transparent;
 `
 
 const InviteButton = styled(Button)`
@@ -61,11 +62,46 @@ const MatchedUsersContainer = styled.div`
 	display: flex;
 	-ms-flex-wrap: wrap;
 	flex-wrap: wrap;
+	margin-bottom: 5px;
+	cursor: default;
+	border: 2px solid transparent;
+
+	${(props) => props.selected && css`
+		border: 2px solid #557dff;
+		border-radius: 4px;`
+	}	
+
+	&:hover{
+		${(props) => !props.onBoard && css`
+			cursor: pointer;
+			background-color: rgba(0, 0, 0, 0.07);`
+	}		
+	}
 `
 
 const UserName = styled.span`
-	margin: 10px auto auto 10px;
+	/* margin: auto auto auto 10px; */
 	font-weight: 600;
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+	
+	${(props) => (props.onBoard) && css`
+		margin-bottom: -5px;
+		margin-top: 5px;`
+	}
+`
+
+const UserInfo = styled.span`
+	font-size: smaller;
+`
+
+const UserInfoContainer = styled.div`
+	${(props) => !props.onBoard && css`
+		display: flex;
+		align-items: center;`
+	}
 `
 
 const UsersDropdown = () => {
@@ -75,6 +111,7 @@ const UsersDropdown = () => {
 	const [users, setUsers] = useState([])
 	const [inviteInput, setInviteInput] = useState('')
 	const [matchedUsers, setMatchedUsers] = useState([])
+	const [selectedUsers, setSelectedUsers] = useState([])
 
 	const GetUserEmailHash = (user) => {
 		if (user.gravatarEmail) {
@@ -107,18 +144,34 @@ const UsersDropdown = () => {
 			event.preventDefault()
 		}
 		setInviteInput(event.target.value)
-		userService.getClosestMatches(event.target.value)
-			.then((response) => {
-				if (response.data.length > 0) {
-					setMatchedUsers(response.data)
-				} else {
-					setMatchedUsers([])
-				}
-			})
+		if (!event.target.value.includes('/')) {
+			userService.getClosestMatches(event.target.value)
+				.then((response) => {
+					if (response.data.length > 0) {
+						const selected = []
+						selected.push(...selectedUsers)
+						console.log('selected', selected)
+						console.log(response.data.filter((u) => selected.every((us) => us.id !== u.id)))
+						setMatchedUsers([...selectedUsers, ...response.data.filter((u) => selected.every((us) => us.id !== u.id))])
+					} else {
+						setMatchedUsers([...selectedUsers])
+					}
+				})
+		}
+	}
+
+	const selectUser = (user, onBoard) => {
+		if (!onBoard) {
+			if (selectedUsers.indexOf(user) > -1) {
+				setSelectedUsers(selectedUsers.filter((u) => (u !== user)))
+			} else {
+				setSelectedUsers(selectedUsers.concat(user))
+			}
+		}
 	}
 
 	return (
-		<div className="col">
+		<div style={{ userSelect: 'none' }} className="col">
 			<UsersButton id="usersMenuButton" onClick={() => { setShowUsersMenu(!showUsersMenu) }}>Users</UsersButton>
 			<Dropdown bgColor="rgb(228, 225, 225)" show={showUsersMenu || false} setShowMenu={setShowUsersMenu} parentId="usersMenuButton" width={300} position={{ top: '-5px', left: '5px' }} relativePos={true}>
 				{board && board.users
@@ -131,15 +184,25 @@ const UsersDropdown = () => {
 							</UsersContainer>
 							<h6>Invite to board</h6>
 							<UserTextarea placeholder="Enter email or username" value={inviteInput} onChange={handleIviteTextChange} />
-							<div>
-								{matchedUsers.map((user) => (
-									<MatchedUsersContainer>
-										<UsersUserButton key={user.id} onClick={() => { setShowProfileMenu(!showProfileMenu) }}><Avatar src={`https://www.gravatar.com/avatar/${GetUserEmailHash(user)}?s=100`} /></UsersUserButton>
-										<UserName>{user.username}</UserName>
-									</MatchedUsersContainer>
-								))}
-							</div>
-							<InviteButton>Invite</InviteButton>
+							{matchedUsers.length > 0
+								&& (
+
+									<div>
+										{matchedUsers.map((user) => {
+											const onBoard = board.users.includes(user.id)
+											return (
+												<MatchedUsersContainer selected={selectedUsers.indexOf(user) > -1} onBoard={onBoard} key={user.id}>
+													<UsersUserButton onClick={() => { setShowProfileMenu(!showProfileMenu) }}><Avatar src={`https://www.gravatar.com/avatar/${GetUserEmailHash(user)}?s=100`} /></UsersUserButton>
+													<UserInfoContainer onBoard={onBoard} className="col" onMouseDown={() => selectUser(user, onBoard)}>
+														<UserName onBoard={onBoard}>{user.username}</UserName>
+														{onBoard && <UserInfo>(Already on board)</UserInfo>}
+													</UserInfoContainer>
+												</MatchedUsersContainer>
+											)
+										})}
+									</div>
+								)}
+							<InviteButton disabled={selectedUsers.length < 1}>Invite</InviteButton>
 						</>
 					)}
 			</Dropdown>

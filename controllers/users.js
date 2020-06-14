@@ -43,27 +43,24 @@ usersRouter.get('/', async (request, response) => {
 
 usersRouter.get('/search/:query', async (request, response) => {
 	const user = await getUserUtil.getUser(request, response)
+
 	const users = await User.find({})
-	const dict = new Object()
 	console.log('query?', request.params.query)
 
-	users.map((u) => {
-		dict[stringSimilarity.compareTwoStrings(request.params.query, u.username)] = u
+	const dict = users.map((u) => {
+		return { key: stringSimilarity.compareTwoStrings(request.params.query.toLowerCase(), u.username.toLowerCase()), value: u }
 	})
 	keys = Object.keys(dict)
 
-	console.log('dict users?', dict)
-
-	keys.sort((a, b) => b - a)
+	dict.sort((a, b) => b.key - a.key)
 
 	const sorted = []
 
-	for (i = 0; i < keys.length; i++) {
-		k = keys[i]
-		console.log(`${k}:${dict[k]}`)
+	for (let index = 0; index < dict.length; index++) {
+		const element = dict[index]
 		if (sorted.length < 10) {
-			if (k > 0) {
-				sorted.push(dict[k])
+			if (element.key > 0) {
+				sorted.push(element.value)
 			}
 		}
 	}
@@ -80,11 +77,17 @@ usersRouter.get('/token', async (request, response) => {
 		})
 })
 
-usersRouter.get('/:id', async (request, response) => {
+usersRouter.get('/:id', async (request, response, next) => {
 	const user = await getUserUtil.getUser(request, response)
 	User.findById(request.params.id)
 		.then((u) => {
+			if (u === null) {
+				return response.status(404)
+			}
 			response.json(u.toJSON())
+		})
+		.catch((error) => {
+			next(error)
 		})
 })
 

@@ -17,7 +17,10 @@ const Button = styled.button`
 	border-radius: 4px;
 	outline:none;
 	font-weight: 600;
-	
+
+	cursor: ${(props) => (props.disabled && 'not-allowed')
+		|| 'pointer'
+	};	
 
 	background-color: ${(props) =>
 		(props.nobr && 'rgba(0,0,0,0) !important')
@@ -29,6 +32,7 @@ const Button = styled.button`
 		|| (props.light && props.theme.colors.light.backgroundColor)
 		|| (props.link && props.theme.colors.link.backgroundColor)
 		|| (props.link_transparent && props.theme.colors.link_transparent.backgroundColor)
+		|| (props.disabled && props.theme.colors.disabled.backgroundColor)
 		|| props.theme.colors.primary.backgroundColor
 	};
 	
@@ -41,6 +45,7 @@ const Button = styled.button`
 		|| (props.light && props.theme.colors.light.color)
 		|| (props.link && props.theme.colors.link.color)
 		|| (props.link_transparent && props.theme.colors.link_transparent.color)
+		|| (props.disabled && props.theme.colors.disabled.color)
 		|| props.theme.colors.primary.color
 	};
 	
@@ -54,6 +59,7 @@ const Button = styled.button`
 		|| (props.light && props.theme.colors.light.hover.backgroundColor)
 		|| (props.link && props.theme.colors.link.hover.backgroundColor)
 		|| (props.link_transparent && props.theme.colors.link_transparent.hover.backgroundColor)
+		|| (props.disabled && props.theme.colors.disabled.hover.backgroundColor)
 		|| (props.theme.colors.primary.hover.backgroundColor)
 	};
 
@@ -66,6 +72,7 @@ const Button = styled.button`
 		|| (props.light && props.theme.colors.light.hover.color)
 		|| (props.link && props.theme.colors.link.hover.color)
 		|| (props.link_transparent && props.theme.colors.link_transparent.hover.color)
+		|| (props.disabled && props.theme.colors.disabled.hover.color)
 		|| (props.theme.colors.primary.hover.color)
 	};
 		outline: none;
@@ -86,6 +93,7 @@ const Button = styled.button`
 		|| (props.light && props.theme.colors.light.focus.backgroundColor)
 		|| (props.link && props.theme.colors.link.focus.backgroundColor)
 		|| (props.link_transparent && props.theme.colors.link_transparent.focus.backgroundColor)
+		|| (props.disabled && props.theme.colors.disabled.focus.backgroundColor)
 		|| (props.theme.colors.primary.focus.backgroundColor)
 	};
 
@@ -98,6 +106,7 @@ const Button = styled.button`
 		|| (props.light && props.theme.colors.light.focus.color)
 		|| (props.link && props.theme.colors.link.focus.color)
 		|| (props.link_transparent && props.theme.colors.link_transparent.focus.color)
+		|| (props.disabled && props.theme.colors.disabled.focus.color)
 		|| (props.theme.colors.primary.focus.color)
 	};
 }
