@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import {
 	RiCheckboxLine,
-	RiBug2Line,
-	RiStarLine,
-	RiCloseLine,
+	// RiBug2Line,
+	// RiStarLine,
+	// RiCloseLine,
 	RiToolsLine
 } from 'react-icons/ri'
 import { MdBugReport, MdStar } from 'react-icons/md'
-import { IconContext } from 'react-icons'
 
 const ChecklistArea = styled.div`
 	display: inline-block;
@@ -76,7 +75,6 @@ const CardInfo = ({ card }) => {
 	}
 
 	const Label = () => {
-		console.log('label', card.label)
 		return (
 			<>
 				{React.createElement(riIcon, {

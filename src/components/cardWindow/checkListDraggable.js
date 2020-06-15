@@ -89,10 +89,10 @@ const CheckListDraggable = ({
 
 		calculateProgress()
 
-		console.log('new lists', newChecklist)
-		console.log('new card', newCard)
-		console.log('sendind select', dispatch(setSelectedCard(newCard)))
-		console.log('sendind list with done', dispatch(updateChecklist(newChecklist)))
+		// console.log('new lists', newChecklist)
+		// console.log('new card', newCard)
+		dispatch(setSelectedCard(newCard))
+		dispatch(updateChecklist(newChecklist))
 	}
 
 	const deleteCheckItem = () => {

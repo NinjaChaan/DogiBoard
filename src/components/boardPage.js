@@ -12,16 +12,6 @@ import LoadingAnimation from './loadingAnimation'
 const ListTable = React.lazy(() => import('./listTable'))
 const CardWindow = React.lazy(() => import('./cardWindow/cardWindow'))
 
-const mapStateToProps = (state) => {
-	console.log('state at page', state)
-	const user = state.user
-	return (
-		({
-			user
-		})
-	)
-}
-
 const PageStyle = styled.div`
 display: flex;
 position: relative;
@@ -47,10 +37,11 @@ max-width: 200px;
 	max-width: 100%;
 }
 `
-const BoardPage = ({ match, user, dispatch }) => {
+const BoardPage = ({ match, dispatch }) => {
 	const boardId = match.params.id
 
 	// const lists = useSelector((state) => state.listReducer.lists)
+	const user = useSelector((state) => state.user)
 	const board = useSelector((state) => state.board.board)
 	const [ignoreNextUpdate, setIgnoreNextUpdate] = useState(true)
 	const [boardChecked, setBoardChecked] = useState(false)
@@ -59,14 +50,13 @@ const BoardPage = ({ match, user, dispatch }) => {
 	// Listen to server events (someone else changed something on their client)
 	const startStream = () => {
 		if (boardId) {
-			console.log('Conncting to event stream:', `/api/boards/stream/${boardId}`)
+			console.log('Connecting to event stream:', `/api/boards/stream/${boardId}`)
 			const eventSourceInitDict = {
 				headers: {
 					Authorization: `Bearer ${user.token}`
 				}
 			}
 			const eventSource = new EventSourcePoly(`/api/boards/stream/${boardId}`, eventSourceInitDict)
-			console.log('events', eventSource)
 			eventSource.onopen = (m) => {
 				console.log('Connected!', m)
 			}
@@ -77,7 +67,7 @@ const BoardPage = ({ match, user, dispatch }) => {
 
 				if (!_.isEqual(data, board)) {
 					setIgnoreNextUpdate(true)
-					console.log('dispatch', dispatch(setBoard({ board: data })))
+					dispatch(setBoard({ board: data }))
 					// console.log('dispatch', dispatch(setLists(data.lists))) // TODO: can this be just setBoard?
 				}
 			}
@@ -96,19 +86,13 @@ const BoardPage = ({ match, user, dispatch }) => {
 
 	// If lists change in store, and first state has been loaded, send changes to mongodb
 	useEffect(() => {
-		console.log('list change', board)
-		console.log('ignor next?', ignoreNextUpdate)
-
 		if (!ignoreNextUpdate && board && board.id) {
-			console.log('sending board', board)
-
 			const updatedBoard = {
 				name: board.name,
 				lists: board.lists
 			}
 
 			boardService.update(board.id, updatedBoard).then((response) => {
-				console.log(response)
 			})
 		} else if (ignoreNextUpdate) {
 			setIgnoreNextUpdate(false)
@@ -134,4 +118,4 @@ const BoardPage = ({ match, user, dispatch }) => {
 
 }
 
-export default connect(mapStateToProps, null)(BoardPage)
+export default connect(null, null)(BoardPage)

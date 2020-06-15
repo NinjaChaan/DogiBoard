@@ -125,7 +125,6 @@ const UsersDropdown = () => {
 	const [selectedUsers, setSelectedUsers] = useState([])
 
 	useEffect(() => {
-		console.log('boardopops', board)
 		if (board && board.users) {
 			const userArray = []
 			userArray.push(currentUser)
@@ -136,10 +135,11 @@ const UsersDropdown = () => {
 			}).filter((x) => x !== undefined)
 			Promise.all(promises).then((responses) => {
 				responses.map((response) => {
-					userArray.push(response.data)
+					if (response.data) {
+						userArray.push(response.data)
+					}
 				})
 				setUsers(userArray)
-				console.log('users', userArray)
 			})
 		}
 	}, [board])

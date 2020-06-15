@@ -14,7 +14,6 @@ const updateCardInsideLists = (board, cardId, listId, updated) => {
 				}
 				return card
 			})
-			console.log('updated cards', updatedCards)
 			return { ...list, cards: updatedCards }
 		}
 		return list
@@ -32,7 +31,6 @@ const replaceCardInsideLists = (board, cardId, listId, replaceCard) => {
 				}
 				return card
 			})
-			console.log('updated cards', updatedCards)
 			return { ...list, cards: updatedCards }
 		}
 		return list
@@ -59,7 +57,6 @@ const boardReducer = (state = initialState, action) => {
 			board = { ...board, lists: board.lists.concat(action.payload) }
 			break
 		case 'UPDATE_CARD':
-			console.log('update card', action.payload)
 			board = {
 				...board,
 				lists: replaceCardInsideLists(
@@ -71,7 +68,6 @@ const boardReducer = (state = initialState, action) => {
 			}
 			break
 		case 'UPDATE_LIST_TITLE':
-			console.log('update list title', action.payload)
 			const titleUpdatedLists = board.lists.map((list) => {
 				if (list.id === action.payload.listId) {
 					return { ...list, name: action.payload.name }
@@ -98,18 +94,15 @@ const boardReducer = (state = initialState, action) => {
 			break
 		case 'DELETE_CARD':
 			const cardss = listToUpdate.cards.filter((c) => c.id !== action.payload.id)
-			console.log('ccc', cardss)
 			const newLists = board.lists.map((list) => {
 				if (list.id === action.payload.listId) {
 					return { ...list, cards: cardss }
 				}
 				return list
 			})
-			console.log('dcards', newLists)
 			board = { ...board, lists: newLists }
 			break
 		case 'UPDATE_CHECKLIST':
-			console.log('update checklist', action.payload)
 			board = {
 				...board,
 				lists: updateCardInsideLists(

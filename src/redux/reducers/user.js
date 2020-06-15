@@ -10,7 +10,6 @@ const initialState = {
 const userReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case 'LOGIN':
-			console.log('login reduce', action.payload)
 			return {
 				loggedIn: action.payload.loggedIn,
 				token: action.payload.token,
@@ -18,7 +17,6 @@ const userReducer = (state = initialState, action) => {
 				loggedOut: false
 			}
 		case 'LOGOUT':
-			console.log('logout reduce', action.payload)
 			return {
 				loggedIn: false,
 				token: null,
@@ -26,7 +24,6 @@ const userReducer = (state = initialState, action) => {
 				loggedOut: true
 			}
 		case 'UPDATE_USER':
-			console.log('user update reduce', action.payload)
 			return {
 				...state,
 				user: action.payload

@@ -20,16 +20,6 @@ import ProfilePage from './ProfilePage'
 import { login } from '../redux/actions/index'
 import LoadingAnimation from './loadingAnimation'
 
-const mapStateToProps = (state) => {
-	console.log('state at page', state)
-	const user = state.user
-	return (
-		({
-			user
-		})
-	)
-}
-
 const PageStyle = styled.div`
 	display: flex;
 	position: relative;
@@ -55,19 +45,17 @@ const PageStyle = styled.div`
 		max-width: 100%;
 	}
 `
-const Page = ({ dispatch, user }) => {
+const Page = ({ dispatch }) => {
+	const user = useSelector((state) => state.user)
 	const [tokenChecked, setTokenChecked] = useState(false)
 
 	useEffect(() => {
 		const token = Cookies.get('token')
 		const stayLogged = Cookies.get('stayLogged')
-		console.log('token?', token)
-		console.log('cookies', Cookies.get())
 		if (stayLogged === 'true') {
 			if (token) {
 				userService.getWithToken(token)
 					.then((response) => {
-						console.log('user', response)
 						dispatch(login({ loggedIn: true, token, user: response }))
 						setTokenChecked(true)
 					})
@@ -80,8 +68,6 @@ const Page = ({ dispatch, user }) => {
 		}, 1000)
 	}, [])
 
-	console.log('loggedIn', user.loggedIn)
-	console.log('tokenChecked', tokenChecked)
 	return (
 		<div>
 			<Router>
@@ -120,4 +106,4 @@ const Page = ({ dispatch, user }) => {
 	)
 }
 
-export default connect(mapStateToProps, null)(Page)
+export default connect(null, null)(Page)

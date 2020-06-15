@@ -108,7 +108,7 @@ const CardHeader = styled.div`
 `
 
 const mapStateToProps = (state) => {
-	console.log('state at cardwindiw', state.selectedCard)
+	// console.log('state at cardwindiw', state.selectedCard)
 	return { selectedCard: state.selectedCard }
 }
 
@@ -123,7 +123,6 @@ const CardWindowContainer = ({ selectedCard, dispatch }) => {
 	function downHandler({ key }) {
 		if (key === 'Escape') {
 			closeCardWindow()
-			console.log(key)
 		}
 	}
 

@@ -61,8 +61,6 @@ const LabelDropdownButton = styled(Button)`
 const CardSidebarModule = ({ selectedCard, closeCardWindow, dispatch }) => {
 	const [showLabelMenu, setShowLabelMenu] = useState(false)
 
-	console.log('selected label', selectedCard)
-
 	const deleteCardPressed = () => {
 		dispatch(deleteCard(selectedCard))
 		closeCardWindow()
@@ -90,8 +88,8 @@ const CardSidebarModule = ({ selectedCard, closeCardWindow, dispatch }) => {
 			listId: selectedCard.listId
 		}
 
-		console.log(dispatch(setSelectedCard(newCard)))
-		console.log(dispatch(updateChecklist(newChecklist)))
+		dispatch(setSelectedCard(newCard))
+		dispatch(updateChecklist(newChecklist))
 	}
 	return (
 		<>

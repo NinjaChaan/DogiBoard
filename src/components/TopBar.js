@@ -103,30 +103,42 @@ const LabelDropdownButton = styled(Button)`
 `
 
 const TopBar = ({ dispatch }) => {
-	const user = useSelector((state) => state.user.user)
+	const userState = useSelector((state) => state.user)
 	const [emailHash, setEmailHash] = useState('')
 	const [showProfileMenu, setShowProfileMenu] = useState(false)
+	const [user, setUser] = useState()
 	const BoardsButtonPressed = () => {
 		dispatch(setBoard({ board: null }))
 	}
 
 	const LogoutButtonPressed = () => {
 		setShowProfileMenu(false)
-		if (user.loggedIn) {
+		if (userState.loggedIn) {
+			console.log('logged out')
 			dispatch(logout())
 			Cookies.remove('token')
+		} else {
+			console.log('faled to log out')
 		}
 	}
 
 	useEffect(() => {
-		if (user && user.email) {
-			if (user.gravatarEmail) {
-				setEmailHash(md5(user.gravatarEmail))
-			} else {
-				setEmailHash(md5(user.email))
+		if (user) {
+			if (user.email) {
+				if (user.gravatarEmail) {
+					setEmailHash(md5(user.gravatarEmail))
+				} else {
+					setEmailHash(md5(user.email))
+				}
 			}
 		}
 	}, [user])
+
+	useEffect(() => {
+		if (userState) {
+			setUser(userState.user)
+		}
+	}, [userState])
 
 	return (
 		<TopBarContainer className="flex-row">
