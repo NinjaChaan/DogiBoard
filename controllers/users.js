@@ -79,7 +79,8 @@ usersRouter.get('/token', async (request, response) => {
 
 usersRouter.get('/:id', async (request, response, next) => {
 	const user = await getUserUtil.getUser(request, response)
-	User.findById(request.params.id)
+
+	User.findById(request.params.id).populate('boards').populate('invites')
 		.then((u) => {
 			if (u === null) {
 				return response.status(404)

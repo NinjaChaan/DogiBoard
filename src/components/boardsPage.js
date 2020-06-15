@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { connect, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import Button from './Button'
 import { setBoard, updateUser } from '../redux/actions/index'
 import boardService from '../services/boards'
+import userService from '../services/users'
 
-const BoardButton = styled.a`
+const BoardButton = styled(Button)`
 	padding: auto;
 	width: 200px;
 `
@@ -61,6 +62,8 @@ const BoardContainer = styled.div`
 
 const BoardsPage = ({ dispatch }) => {
 	const user = useSelector((state) => state.user.user)
+	const [boards, setBoards] = useState([])
+	const [invites, setInvites] = useState([])
 	const OpenBoard = (board) => {
 		dispatch(setBoard({ board }))
 	}
@@ -73,24 +76,33 @@ const BoardsPage = ({ dispatch }) => {
 		}
 
 		boardService.respondToInvitation(boardid, update)
-			.then((u) => {
-				dispatch(updateUser({ u }))
+			.then((response) => {
+				console.log(response)
+				userService.getOne(user.id).then((u) => {
+					console.log(u)
+					dispatch(updateUser(u.data))
+				})
 			})
 	}
 
 	useEffect(() => {
-		console.log('user updated')
+		if (user.boards) {
+			setBoards(user.boards)
+		}
+		if (user.invites) {
+			setInvites(user.invites)
+		}
 	}, [user])
 
 	return (
 		<div className="container">
-			{user.boards.length > 0
+			{boards.length > 0
 				&& (
 					<>
 						<Title>Boards</Title>
 						<BoardsContainer className="row">
 							{
-								user.boards.map((board) => (
+								boards.map((board) => (
 									<BoardLink key={board.id} to={`/board/${board.id}`}>
 										<BoardButton onClick={() => { OpenBoard(board) }}>{board.name}</BoardButton>
 									</BoardLink>
@@ -99,13 +111,13 @@ const BoardsPage = ({ dispatch }) => {
 						</BoardsContainer>
 					</>
 				)}
-			{user.invites.length > 0
+			{invites.length > 0
 				&& (
 					<>
 						<Title>Invites</Title>
 						<BoardsContainer className="row">
 							{
-								user.invites.map((board) => (
+								invites.map((board) => (
 									<BoardContainer key={board.id}>
 										<BoardTitle>
 											{board.name}
@@ -119,9 +131,8 @@ const BoardsPage = ({ dispatch }) => {
 							}
 						</BoardsContainer>
 					</>
-				)
-			}
-		</div >
+				)}
+		</div>
 	)
 }
 

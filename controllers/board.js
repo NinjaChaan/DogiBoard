@@ -138,15 +138,19 @@ boardRouter.put('/inviteUser/:id', async (request, response, next) => {
 							users: foundBoard.users.concat(body.userId)
 						})
 						if (foundBoard.users.includes(user._id)) {
-							Board.updateOne({ _id: request.params.id }, board).then(() => {
-								const updatedUser = ({
-									...foundUser.toJSON(),
-									invites: foundUser.invites.concat(foundBoard.id)
+							if (!foundBoard.users.includes(foundUser._id)) {
+								Board.updateOne({ _id: request.params.id }, board).then(() => {
+									const updatedUser = ({
+										...foundUser.toJSON(),
+										invites: foundUser.invites.concat(foundBoard.id)
+									})
+									User.updateOne({ _id: foundUser._id }, updatedUser).then(() => {
+										response.json({ response: `${foundUser.username} invited to ${foundBoard.name}`, data: updatedUser })
+									})
 								})
-								User.updateOne({ _id: foundUser._id }, updatedUser).then(() => {
-									response.json({ response: `${foundUser.username} invited to ${foundBoard.name}`, data: updatedUser })
-								})
-							})
+							} else {
+								response.status(400).json({ error: 'User already exists on this board' })
+							}
 						} else {
 							response.status(401).json({ error: 'You are not authorized to edit this board' })
 						}
@@ -167,8 +171,6 @@ boardRouter.put('/inviteUser/:id', async (request, response, next) => {
 boardRouter.put('/invitationResponse/:id', async (request, response, next) => {
 	const { body } = request
 
-	console.log('inv res', body)
-
 	const user = await getUserUtil.getUser(request, response)
 
 	Board.findById(request.params.id)
@@ -180,10 +182,6 @@ boardRouter.put('/invitationResponse/:id', async (request, response, next) => {
 							...foundBoard.toJSON(),
 							users: body.answer ? foundBoard.users : foundBoard.users.filter((u) => !_.isEqual(u, foundUser._id))
 						})
-						console.log('foundBoard.users[2]', typeof (foundBoard.users[2]))
-						console.log('foundUser._id', typeof (foundUser._id))
-						console.log('foundBoard.users[2]', foundBoard.users[2])
-						console.log('foundUser._id', foundUser._id)
 						if (foundBoard.users.includes(user._id)) {
 							Board.updateOne({ _id: request.params.id }, board).then(() => {
 								const updatedUser = ({
@@ -192,7 +190,7 @@ boardRouter.put('/invitationResponse/:id', async (request, response, next) => {
 									invites: foundUser.invites.filter((b) => !_.isEqual(b, foundBoard._id))
 								})
 								User.updateOne({ _id: foundUser._id }, updatedUser).then(() => {
-									response.json({ response: `${foundUser.username} response to ${foundBoard.name} successful` })
+									response.json({ message: `${foundUser.username} response to ${foundBoard.name} successful`, data: updatedUser })
 								})
 							})
 						} else {
