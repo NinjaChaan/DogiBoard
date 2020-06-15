@@ -34,6 +34,15 @@ const update = (id, newObject) => {
 	return request.then((response) => response.data).catch((error) => (error.message))
 }
 
+const inviteUser = (id, userId) => {
+	const request = axios.put(`${baseUrl}/inviteUser/${id}`, userId, {
+		headers: {
+			Authorization: `Bearer ${store.getState().user.token}`
+		}
+	})
+	return request.then((response) => response.data).catch((error) => (error.message))
+}
+
 const remove = (id) => {
 	const request = axios.delete(`${baseUrl}/${id}`)
 	return request.then((response) => response.data).catch((error) => (error.message))
@@ -44,5 +53,6 @@ export default {
 	getAll,
 	create,
 	update,
-	remove
+	remove,
+	inviteUser
 }

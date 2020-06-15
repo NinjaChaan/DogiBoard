@@ -49,6 +49,12 @@ const userSchema = new mongoose.Schema({
 			ref: 'Board'
 		}
 	],
+	invites: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Invite'
+		}
+	],
 })
 
 userSchema.plugin(uniqueValidator)

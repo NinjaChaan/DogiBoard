@@ -123,7 +123,7 @@ boardRouter.post('/', async (request, response, next) => {
 	response.json(savedBoard.toJSON())
 })
 
-boardRouter.put('/adduser/:id', async (request, response, next) => {
+boardRouter.put('/inviteUser/:id', async (request, response, next) => {
 	const { body } = request
 
 	const user = await getUserUtil.getUser(request, response)
@@ -139,7 +139,13 @@ boardRouter.put('/adduser/:id', async (request, response, next) => {
 						})
 						if (foundBoard.users.includes(user._id)) {
 							Board.updateOne({ _id: request.params.id }, board).then(() => {
-								response.json({ response: `${foundUser.username} added to ${foundBoard.name}` })
+								const updatedUser = ({
+									...foundUser.toJSON(),
+									invites: foundUser.invites.concat(foundBoard.id)
+								})
+								User.updateOne({ _id: foundUser._id }, updatedUser).then(() => {
+									response.json({ response: `${foundUser.username} invited to ${foundBoard.name}` })
+								})
 							})
 						} else {
 							response.status(401).json({ error: 'You are not authorized to edit this board' })

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { connect, useSelector } from 'react-redux'
 import styled, { css } from 'styled-components'
-import Cookies from 'js-cookie'
 import Dropdown from './Dropdown'
 import Button from './Button'
+import boardService from '../services/boards'
 import userService from '../services/users'
 import UserAvatar from './UserAvatar'
 
@@ -125,19 +125,22 @@ const UsersDropdown = () => {
 	const [selectedUsers, setSelectedUsers] = useState([])
 
 	useEffect(() => {
+		console.log('boardopops', board)
 		if (board && board.users) {
 			const userArray = []
 			userArray.push(currentUser)
-			board.users.map((user) => {
+			const promises = board.users.map((user) => {
 				if (user !== currentUser.id) {
-					userService.getOne(user)
-						.then((response) => {
-							console.log('user response', response)
-							userArray.push(response.data)
-						})
+					return userService.getOne(user)
 				}
+			}).filter((x) => x !== undefined)
+			Promise.all(promises).then((responses) => {
+				responses.map((response) => {
+					userArray.push(response.data)
+				})
+				setUsers(userArray)
+				console.log('users', userArray)
 			})
-			setUsers(userArray)
 		}
 	}, [board])
 
@@ -168,6 +171,17 @@ const UsersDropdown = () => {
 				setSelectedUsers(selectedUsers.concat(user))
 			}
 		}
+	}
+
+	const inviteButtonPressed = () => {
+		for (let i = 0; i < selectedUsers.length; i++) {
+			const userId = selectedUsers[i].id
+			boardService.inviteUser(board.id, { userId })
+				.then((response) => {
+					console.log('invite response', response)
+				})
+		}
+		setSelectedUsers([])
 	}
 
 	return (
@@ -202,7 +216,7 @@ const UsersDropdown = () => {
 										})}
 									</div>
 								)}
-							<InviteButton disabled={selectedUsers.length < 1}>Invite</InviteButton>
+							<InviteButton onClick={inviteButtonPressed} disabled={selectedUsers.length < 1}>Invite</InviteButton>
 						</>
 					)}
 			</Dropdown>
