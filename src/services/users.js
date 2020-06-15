@@ -70,7 +70,6 @@ const getClosestMatches = (query) => {
 }
 
 const updateGravatar = (id, gravatarEmail) => {
-	console.log('gravatar update', gravatarEmail)
 	const request = axios.put(`${baseUrl}/${id}/gravatar`, gravatarEmail, {
 		headers: {
 			Authorization: `Bearer ${store.getState().user.token}`

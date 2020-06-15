@@ -144,7 +144,55 @@ boardRouter.put('/inviteUser/:id', async (request, response, next) => {
 									invites: foundUser.invites.concat(foundBoard.id)
 								})
 								User.updateOne({ _id: foundUser._id }, updatedUser).then(() => {
-									response.json({ response: `${foundUser.username} invited to ${foundBoard.name}` })
+									response.json({ response: `${foundUser.username} invited to ${foundBoard.name}`, data: updatedUser })
+								})
+							})
+						} else {
+							response.status(401).json({ error: 'You are not authorized to edit this board' })
+						}
+					} else {
+						response.status(404).json({ error: 'Couldn\'t find such user' })
+					}
+				}).catch((error) => {
+					response.status(404)
+					next(error)
+				})
+			} else {
+				response.status(404)
+			}
+		}).catch((error) => next(error))
+})
+
+
+boardRouter.put('/invitationResponse/:id', async (request, response, next) => {
+	const { body } = request
+
+	console.log('inv res', body)
+
+	const user = await getUserUtil.getUser(request, response)
+
+	Board.findById(request.params.id)
+		.then((foundBoard) => {
+			if (foundBoard) {
+				User.findById(body.userId).then((foundUser) => {
+					if (foundUser) {
+						const board = ({
+							...foundBoard.toJSON(),
+							users: body.answer ? foundBoard.users : foundBoard.users.filter((u) => !_.isEqual(u, foundUser._id))
+						})
+						console.log('foundBoard.users[2]', typeof (foundBoard.users[2]))
+						console.log('foundUser._id', typeof (foundUser._id))
+						console.log('foundBoard.users[2]', foundBoard.users[2])
+						console.log('foundUser._id', foundUser._id)
+						if (foundBoard.users.includes(user._id)) {
+							Board.updateOne({ _id: request.params.id }, board).then(() => {
+								const updatedUser = ({
+									...foundUser.toJSON(),
+									boards: body.answer ? foundUser.boards.concat(foundBoard.id) : foundUser.boards,
+									invites: foundUser.invites.filter((b) => !_.isEqual(b, foundBoard._id))
+								})
+								User.updateOne({ _id: foundUser._id }, updatedUser).then(() => {
+									response.json({ response: `${foundUser.username} response to ${foundBoard.name} successful` })
 								})
 							})
 						} else {
