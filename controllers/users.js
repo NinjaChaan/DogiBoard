@@ -71,7 +71,7 @@ usersRouter.get('/search/:query', async (request, response) => {
 usersRouter.get('/token', async (request, response) => {
 	const user = await getUserUtil.getUser(request, response)
 
-	User.findById(user.id).populate('boards')
+	User.findById(user.id).populate('boards').populate('invites')
 		.then((u) => {
 			response.json(u.toJSON())
 		})

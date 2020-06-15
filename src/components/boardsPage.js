@@ -32,16 +32,36 @@ const BoardsPage = ({ dispatch }) => {
 	}
 	return (
 		<div className="container">
-			<Title>Boards</Title>
-			<BoardsContainer className="row">
-				{
-					user.boards.map((board) => (
-						<BoardLink key={board.id} to={`/board/${board.id}`}>
-							<BoardButton onClick={() => { OpenBoard(board) }}>{board.name}</BoardButton>
-						</BoardLink>
-					))
-				}
-			</BoardsContainer>
+			{user.boards.length > 0
+				&& (
+					<>
+						<Title>Boards</Title>
+						<BoardsContainer className="row">
+							{
+								user.boards.map((board) => (
+									<BoardLink key={board.id} to={`/board/${board.id}`}>
+										<BoardButton onClick={() => { OpenBoard(board) }}>{board.name}</BoardButton>
+									</BoardLink>
+								))
+							}
+						</BoardsContainer>
+					</>
+				)}
+			{user.invites.length > 0
+				&& (
+					<>
+						<Title>Invites</Title>
+						<BoardsContainer className="row">
+							{
+								user.invites.map((board) => (
+									<BoardLink key={board.id} to={`/board/${board.id}`}>
+										<BoardButton onClick={() => { OpenBoard(board) }}>{board.name}</BoardButton>
+									</BoardLink>
+								))
+							}
+						</BoardsContainer>
+					</>
+				)}
 		</div>
 	)
 }
