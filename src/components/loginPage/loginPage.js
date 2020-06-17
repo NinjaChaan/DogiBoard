@@ -27,12 +27,13 @@ const LoginContainer = styled.div`
 	}
 `
 
-const LoginTextarea = styled.textarea`
+const LoginTextarea = styled.input`
 	height: 2rem;
 	resize: none;
 	width: 100%;
 	margin-bottom: 20px;
 	border-radius: 4px;
+	padding-left: 5px;
 `
 
 const LoginButton = styled(Button)`
@@ -121,7 +122,7 @@ const LoginPage = ({ dispatch }) => {
 					<br />
 					<TextSpan>Password</TextSpan>
 					<br />
-					<LoginTextarea id="passwordField" />
+					<LoginTextarea type="password" id="passwordField" />
 					<br />
 					<Toggle scale={0.75} text="Keep me logged in" checked={Cookies.get('stayLogged') === 'true'} onChange={keepLoggedInChanged} />
 					<LoginButton type="submit">Log in</LoginButton>

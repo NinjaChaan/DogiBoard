@@ -191,13 +191,13 @@ const ProfilePage = ({ dispatch }) => {
 				<ProfileTextarea id="usernameField" value={username} onChange={(e) => setUsername(e.target.value)} />
 				<br />
 				<TextSpan>Email</TextSpan>
-				<ProfileTextarea id="emailField" value={email} onChange={(e) => setEmail(e.target.value)} />
+				<ProfileTextarea type="email" id="emailField" value={email} onChange={(e) => setEmail(e.target.value)} />
 				<br />
 				<TextSpan>New password</TextSpan>
-				<ProfileTextarea id="passwordField" value={password} onChange={(e) => setPassword(e.target.value)} />
+				<ProfileTextarea type="password" id="passwordField" value={password} onChange={(e) => setPassword(e.target.value)} />
 				<br />
 				<TextSpan>Current password</TextSpan>
-				<ProfileTextarea id="oldPasswordField" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
+				<ProfileTextarea type="password" id="oldPasswordField" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
 				<br />
 				<SaveButton type="submit">Save changes</SaveButton>
 			</AccountDetailsForm>
@@ -208,7 +208,7 @@ const ProfilePage = ({ dispatch }) => {
 					Gravatar email
 					<a href="https://en.gravatar.com/" target="_blank" rel="noopener noreferrer" style={{ fontSize: 'small', float: 'right', paddingTop: '3px' }}>What is Gravatar?</a>
 				</TextSpan>
-				<ProfileTextarea id="gravatarField" value={gravatarEmail} onChange={(e) => setGravatarEmail(e.target.value)} />
+				<ProfileTextarea type="email" id="gravatarField" value={gravatarEmail} onChange={(e) => setGravatarEmail(e.target.value)} />
 				<SaveButton onClick={handleGravatarSubmit}>Save changes</SaveButton>
 			</AvatarContainer>
 		</ProfileContainer>
