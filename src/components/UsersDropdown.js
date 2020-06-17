@@ -1,5 +1,7 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react'
 import { connect, useSelector } from 'react-redux'
+import { Link, useLocation } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 import Dropdown from './Dropdown'
 import Button from './Button'
@@ -115,10 +117,28 @@ const UserInfoContainer = styled.div`
 	}
 `
 
+const UserInfoCardContainer = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+`
+
+const UserInfoUsername = styled(UserName)`
+	/* margin: 0 0 0 20px; */
+	font-size: larger;
+`
+
+const EditProfileLink = styled.a`
+	color: rgb(100, 100, 100) !important;
+`
+
 const UsersDropdown = () => {
 	const currentUser = useSelector((state) => state.user.user)
 	const board = useSelector((state) => state.board.board)
 	const [showUsersMenu, setShowUsersMenu] = useState(false)
+	const [showUserInfoMenu, setShowUserInfoMenu] = useState(false)
+	const [clickedUser, setClickedUser] = useState()
+	const [userInfoId, setUserInfoId] = useState('')
+	const [userInfoPos, setUserInfoPos] = useState({})
 	const [users, setUsers] = useState([])
 	const [inviteInput, setInviteInput] = useState('')
 	const [matchedUsers, setMatchedUsers] = useState([])
@@ -184,6 +204,16 @@ const UsersDropdown = () => {
 		setSelectedUsers([])
 	}
 
+	const openUserInfoMenu = (user) => {
+		const index = users.indexOf(user)
+		setClickedUser(user)
+		setUserInfoId(`userButton-${user.id}`)
+		const rect = document.getElementById(`userButton-${user.id}`).getBoundingClientRect()
+		console.log(rect)
+		setUserInfoPos({ top: `${rect.top}px`, left: `${index * 50 + 20}px` })
+		setShowUserInfoMenu(true)
+	}
+
 	return (
 		<div style={{ userSelect: 'none' }} className="col">
 			<UsersButton id="usersMenuButton" onClick={() => { setShowUsersMenu(!showUsersMenu) }}>Users</UsersButton>
@@ -193,8 +223,26 @@ const UsersDropdown = () => {
 						<>
 							<UsersContainer>
 								{users.map((user) => (
-									<UsersUserButton key={user.id} onClick={() => { setShowProfileMenu(!showProfileMenu) }}><UserAvatar user={user} /></UsersUserButton>
+									<>
+										<UsersUserButton id={`userButton-${user.id}`} key={user.id} onClick={() => { openUserInfoMenu(user) }}><UserAvatar user={user} /></UsersUserButton>
+
+									</>
 								))}
+								{clickedUser && (
+									<Dropdown bgColor="rgb(255, 255, 255)" show={showUserInfoMenu || false} setShowMenu={setShowUserInfoMenu} parentId={userInfoId} width={300} position={userInfoPos}>
+										<UserInfoCardContainer>
+											<UserAvatar user={clickedUser} size="50" />
+											<div className="col">
+												<UserInfoUsername>{clickedUser.username}</UserInfoUsername>
+												{clickedUser.id === currentUser.id && (
+													<Link to={`/profile/${clickedUser.id}`}>
+														<EditProfileLink onClick={() => setShowUserInfoMenu(false)}> Edit profile </EditProfileLink>
+													</Link>
+												)}
+											</div>
+										</UserInfoCardContainer>
+									</Dropdown>
+								)}
 							</UsersContainer>
 							<h6>Invite to board</h6>
 							<UserTextarea spellCheck={false} placeholder="Enter email or username" value={inviteInput} onChange={handleIviteTextChange} />
@@ -206,7 +254,7 @@ const UsersDropdown = () => {
 											const onBoard = board.users.includes(user.id)
 											return (
 												<MatchedUsersContainer className="col" selected={selectedUsers.indexOf(user) > -1} onBoard={onBoard} key={user.id}>
-													<UsersUserButton onClick={() => { setShowProfileMenu(!showProfileMenu) }}><UserAvatar user={user} title={false} /></UsersUserButton>
+													<UsersUserButton><UserAvatar user={user} title={false} /></UsersUserButton>
 													<UserInfoContainer onBoard={onBoard} className="col" onMouseDown={() => selectUser(user, onBoard)}>
 														<UserName onBoard={onBoard}>{user.username}</UserName>
 														{onBoard && <UserInfo>(Already on board)</UserInfo>}

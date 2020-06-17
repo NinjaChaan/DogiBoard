@@ -5,7 +5,9 @@ const DropdownMenu = styled.div`
 	display: inline-table;
 	position: absolute;
 	z-index: 2000;
-	background-color: ${(props) => props.bgColor || 'rgb(175, 175, 175)'};
+	background-color: ${(props) => props.bgColor || 'rgb(252, 252, 252)'};
+
+	box-shadow: ${(props) => !props.noShadow && '0px 1px 5px 0px rgba(0,0,0,0.5)'};
 
 	padding: 10px;
 	border-radius: 4px;
@@ -72,13 +74,14 @@ const DropdownMenu = styled.div`
 `
 
 const Dropdown = ({
-	children, show, setShowMenu, parentId, width, position, relativePos, bgColor, noTopBorder
+	children, show, setShowMenu, parentId, width, position, relativePos, bgColor, noTopBorder, noShadow
 }) => {
 	const menu = useRef()
 	const [menuWidth, setWidth] = useState(0)
 
 	const handleClick = (e) => {
 		const parent = document.getElementById(parentId)
+		console.log(`dropwdown parent ${parentId}`, parent)
 
 		if (width === undefined) {
 			setWidth(parent.scrollWidth)
@@ -93,14 +96,16 @@ const Dropdown = ({
 	}
 
 	useEffect(() => {
-		// add when mounted
-		document.addEventListener('mousedown', handleClick) // return function to be called when unmounted
-		return () => {
-			document.removeEventListener('mousedown', handleClick)
+		if (parentId) {
+			// add when mounted
+			document.addEventListener('mousedown', handleClick) // return function to be called when unmounted
+			return () => {
+				document.removeEventListener('mousedown', handleClick)
+			}
 		}
-	}, [])
+	}, [parentId])
 	return (
-		<DropdownMenu noTopBorder={noTopBorder} bgColor={bgColor} width={menuWidth} position={position} relativePos={relativePos} className={show && 'show'} ref={menu}>
+		<DropdownMenu noShadow={noShadow} noTopBorder={noTopBorder} bgColor={bgColor} width={menuWidth} position={position} relativePos={relativePos} className={show && 'show'} ref={menu}>
 			{children}
 		</DropdownMenu>
 	)
