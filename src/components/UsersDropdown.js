@@ -27,6 +27,7 @@ const UsersButtonContainer = styled.div`
 `
 
 const UsersUserButton = styled(Button)`
+	display: contents;
 	padding-top: 0px;
 	background-color: transparent;
 	width: 45px;
@@ -154,6 +155,7 @@ const UsersDropdown = () => {
 	const [inviteInput, setInviteInput] = useState('')
 	const [matchedUsers, setMatchedUsers] = useState([])
 	const [selectedUsers, setSelectedUsers] = useState([])
+	const [bigAvatar, setBigAvatar] = useState(false)
 
 	useEffect(() => {
 		if (board && board.users) {
@@ -225,15 +227,15 @@ const UsersDropdown = () => {
 		setUserInfoId(`userButton-${user.id}`)
 		const rect = document.getElementById(`userButton-${user.id}`).getBoundingClientRect()
 		if (window.matchMedia('(min-width: 425px)').matches) {
-			setUserInfoPos({ top: `${rect.top}px`, left: `${index * 50 + 15}px` })
+			setUserInfoPos({ top: `${rect.top + 55}px`, left: `${index * 50 + 10}px` })
 		} else {
-			setUserInfoPos({ top: `${rect.top - 5}px`, left: '0' })
+			setUserInfoPos({ top: `${rect.top + 55}px`, left: '0' })
 		}
 		setShowUserInfoMenu(user !== clickedUser)
 	}
 
 	return (
-		<div style={{ userSelect: 'none', display: 'flex' }} className="col">
+		<div style={{ userSelect: 'none', display: 'flex', maxHeight: '45px' }} className="col">
 			<UsersButtonContainer>
 				<UsersButton id="usersMenuButton" onClick={() => { setShowUsersMenu(!showUsersMenu) }}>Users</UsersButton>
 			</UsersButtonContainer>
@@ -244,14 +246,14 @@ const UsersDropdown = () => {
 							<UsersContainer>
 								{users.map((user) => (
 									<div key={user.id}>
-										<UsersUserButton link_transparent id={`userButton-${user.id}`} key={user.id} onClick={() => { openUserInfoMenu(user) }}><UserAvatar user={user} /></UsersUserButton>
+										<UsersUserButton link_transparent id={`userButton-${user.id}`} key={user.id} onClick={() => { openUserInfoMenu(user) }}><UserAvatar user={user} size="40" /></UsersUserButton>
 
 									</div>
 								))}
 								<Dropdown bgColor="rgb(255, 255, 255)" show={showUserInfoMenu || false} setShowMenu={setShowUserInfoMenu} parentId={userInfoId} width={300} position={userInfoPos}>
 									{clickedUser && (
 										<UserInfoCardContainer>
-											<UserAvatar user={clickedUser} size="50" />
+											<UsersUserButton link_transparent onClick={() => setBigAvatar(!bigAvatar)}><UserAvatar noBorderRadius={bigAvatar} user={clickedUser} size={bigAvatar ? '150' : '50'} /></UsersUserButton>
 											<div className="col">
 												<UserInfoUsername>{(clickedUser && clickedUser.username) || 'Default username'}</UserInfoUsername>
 
@@ -287,11 +289,11 @@ const UsersDropdown = () => {
 									</div>
 								)
 							}
-							<InviteButton onClick={inviteButtonPressed} disabled={selectedUsers.length < 1} > Invite</InviteButton>
+							<InviteButton onClick={inviteButtonPressed} disabled={selectedUsers.length < 1}> Invite</InviteButton>
 						</>
 					)}
 			</UsersDropdownStyle>
-		</div >
+		</div>
 	)
 }
 

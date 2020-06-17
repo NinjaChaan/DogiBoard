@@ -11,11 +11,14 @@ import UsersDropdown from './UsersDropdown'
 import UserAvatar from './UserAvatar'
 
 const TopBarContainer = styled.div`
+	position: fixed;
 	height: 50px;
 	background-color: #1d6cba;
 	padding: 7.5px;
 	display:flex;
 	flex-wrap: wrap;
+	width: 100%;
+	z-index: 1;
 `
 
 const TopButton = styled(Button)`
@@ -36,6 +39,7 @@ const UserMenuButton = styled(TopButton)`
 `
 
 const LinkStyle = styled(Link)`
+	max-height: 40px;
 	flex: 0 0 20%;
 	max-width: 20%;
 	@media ${(props) => props.theme.device.mobileL} {	
@@ -141,38 +145,40 @@ const TopBar = ({ dispatch }) => {
 	}, [userState])
 
 	return (
-		<TopBarContainer className="flex-row">
-			<LinkStyle to="/boards">
-				<BoardsButton type="button" onClick={BoardsButtonPressed}>Boards</BoardsButton>
-			</LinkStyle>
-			{useLocation().pathname.includes('/board/')
-				&& (
-					<UsersDropdown />
-				)}
-			{useLocation().pathname !== '/login' && emailHash
-				&& (
-					<>
-						<UserMenuContainer className="float-right">
-							<UserMenuButton link_transparent id="profileMenuButton" onClick={() => { setShowProfileMenu(!showProfileMenu) }}><UserAvatar user={user} noBorder /></UserMenuButton>
-						</UserMenuContainer>
-						<Dropdown show={showProfileMenu || false} setShowMenu={setShowProfileMenu} parentId="profileMenuButton" width={200} position={{ top: '50px', right: '0px' }} noTopBorder>
-							<Link to={`/profile/${user.id}`}>
-								<LabelDropdownButton light onClick={() => setShowProfileMenu(false)}>
-									<ButtonContainer>
-										Profile
+		<TopBarContainer >
+			<div className="flex-row" style={{width:'100%', position:'relative', height: '50px', display:'flex', flexWrap: 'wrap'}}>
+				<LinkStyle to="/boards">
+					<BoardsButton type="button" onClick={BoardsButtonPressed}>Boards</BoardsButton>
+				</LinkStyle>
+				{useLocation().pathname.includes('/board/')
+					&& (
+						<UsersDropdown />
+					)}
+				{useLocation().pathname !== '/login' && emailHash
+					&& (
+						<>
+							<UserMenuContainer className="float-right">
+								<UserMenuButton link_transparent id="profileMenuButton" onClick={() => { setShowProfileMenu(!showProfileMenu) }}><UserAvatar user={user} noBorder /></UserMenuButton>
+							</UserMenuContainer>
+							<Dropdown show={showProfileMenu || false} setShowMenu={setShowProfileMenu} parentId="profileMenuButton" width={200} position={{ top: '50px', right: '0px' }} noTopBorder>
+								<Link to={`/profile/${user.id}`}>
+									<LabelDropdownButton light onClick={() => setShowProfileMenu(false)}>
+										<ButtonContainer>
+											Profile
 									</ButtonContainer>
-								</LabelDropdownButton>
-							</Link>
-							<Link to="/login">
-								<LabelDropdownButton light onClick={LogoutButtonPressed}>
-									<ButtonContainer>
-										Log out
+									</LabelDropdownButton>
+								</Link>
+								<Link to="/login">
+									<LabelDropdownButton light onClick={LogoutButtonPressed}>
+										<ButtonContainer>
+											Log out
 									</ButtonContainer>
-								</LabelDropdownButton>
-							</Link>
-						</Dropdown>
-					</>
-				)}
+									</LabelDropdownButton>
+								</Link>
+							</Dropdown>
+						</>
+					)}
+			</div>
 		</TopBarContainer>
 	)
 }

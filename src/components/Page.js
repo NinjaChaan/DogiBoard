@@ -16,7 +16,7 @@ import TopBar from './TopBar'
 import LoginPage from './loginPage/loginPage'
 import { device } from '../devices'
 import BoardPage from './boardPage'
-import ProfilePage from './ProfilePage'
+import ProfilePage from './ProfilePage/ProfilePage'
 import { login } from '../redux/actions/index'
 import LoadingAnimation from './loadingAnimation'
 

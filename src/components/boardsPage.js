@@ -99,6 +99,7 @@ const BoardsPage = ({ dispatch }) => {
 			{boards.length > 0
 				&& (
 					<>
+						<div style={{ height: '50px' }} />
 						<Title>Boards</Title>
 						<BoardsContainer className="row">
 							{

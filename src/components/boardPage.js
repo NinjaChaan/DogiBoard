@@ -13,6 +13,7 @@ const ListTable = React.lazy(() => import('./listTable'))
 const CardWindow = React.lazy(() => import('./cardWindow/cardWindow'))
 
 const PageStyle = styled.div`
+padding-top: 50px;
 display: flex;
 position: relative;
 
