@@ -10,12 +10,23 @@ import StatusMessage from './StatusMessage'
 import UserAvatar from './UserAvatar'
 
 const ProfileContainer = styled.div`
-	margin: 10px auto auto 100px;
+	padding-right: 15px;
+	padding-left: 15px;
 	display: flex;
 	width: 100%;
 	text-align: center;
+
+	-ms-flex-preferred-size: 0;
+	flex-basis: 0;
+	-ms-flex-positive: 1;
+	flex-grow: 1;
+	min-width: 0;
+	max-width: 100%;
+	flex-direction: column;
+
 	@media ${(props) => props.theme.device.mobileL} {	
-		width: 60%;
+		flex-direction: row;
+		width: 100%;
 	}
 `
 
@@ -29,10 +40,13 @@ const ProfileTextarea = styled.input`
 `
 
 const SaveButton = styled(Button)`
-	margin: 0 0 100px 0;
 	width: 50%;
 	@media ${(props) => props.theme.device.mobileL} {	
 		width: 40%;
+	}
+	@media ${(props) => props.theme.device.laptop} { 
+		width: 40%;
+		margin: 0 0 100px 0;
 	}
 `
 
@@ -42,23 +56,27 @@ const TextSpan = styled.span`
 	font-weight: 600;
 `
 const AccountDetailsForm = styled.form`
-	margin: auto auto auto 100px;
-	flex: 0 0 70%;
-	max-width: 70%;
+	flex: 0 0 100%;
+	max-width: 100%;
 	@media ${(props) => props.theme.device.mobileL} {	
-		width: 70%;
+		flex: 0 0 50%;
+		max-width: 50%;
 	}
 	@media ${(props) => props.theme.device.laptop} { 
 		width: 50%;
 	}
 `
 const AvatarContainer = styled.div`
-	margin: 10px auto auto 100px;
-	flex: 0 0 30%;
-	max-width: 30%;
+	flex: 0 0 100%;
+	max-width: 100%;
 	text-align: center;
 	@media ${(props) => props.theme.device.mobileL} {	
-		width: 60%;
+		flex: 0 0 40%;
+		max-width: 40%;
+		margin: 0 auto;
+	}
+	@media ${(props) => props.theme.device.laptop} { 
+		width: 50%;
 	}
 `
 
