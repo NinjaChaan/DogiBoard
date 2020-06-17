@@ -10,8 +10,11 @@ import userService from '../services/users'
 import UserAvatar from './UserAvatar'
 
 const UsersButton = styled(Button)`
-	flex: 0 0 20%;
-	max-width: 20%;
+`
+
+const UsersButtonContainer = styled.div`
+	flex: 0 0 30%;
+	max-width: 30%;
 	@media ${(props) => props.theme.device.mobileL} {	
 		flex: 0 0 15%;
 		max-width: 15%;
@@ -118,6 +121,7 @@ const UserInfoContainer = styled.div`
 `
 
 const UserInfoCardContainer = styled.div`
+	min-width: 280px;
 	display: flex;
 	flex-wrap: wrap;
 `
@@ -127,8 +131,15 @@ const UserInfoUsername = styled(UserName)`
 	font-size: larger;
 `
 
-const EditProfileLink = styled.a`
+const EditProfileLink = styled.span`
 	color: rgb(100, 100, 100) !important;
+`
+
+const UsersDropdownStyle = styled(Dropdown)`
+	margin: 0 auto;
+	@media ${(props) => props.theme.device.mobileL} {	
+		margin: none;
+	}
 `
 
 const UsersDropdown = () => {
@@ -155,7 +166,7 @@ const UsersDropdown = () => {
 			}).filter((x) => x !== undefined)
 			Promise.all(promises).then((responses) => {
 				responses.map((response) => {
-					if (response.data) {
+					if (response && response.data) {
 						userArray.push(response.data)
 					}
 				})
@@ -206,47 +217,58 @@ const UsersDropdown = () => {
 
 	const openUserInfoMenu = (user) => {
 		const index = users.indexOf(user)
-		setClickedUser(user)
+		if (user !== clickedUser) {
+			setClickedUser(user)
+		} else {
+			setClickedUser(null)
+		}
 		setUserInfoId(`userButton-${user.id}`)
 		const rect = document.getElementById(`userButton-${user.id}`).getBoundingClientRect()
-		console.log(rect)
-		setUserInfoPos({ top: `${rect.top}px`, left: `${index * 50 + 20}px` })
-		setShowUserInfoMenu(true)
+		if (window.matchMedia('(min-width: 425px)').matches) {
+			setUserInfoPos({ top: `${rect.top}px`, left: `${index * 50 + 15}px` })
+		} else {
+			setUserInfoPos({ top: `${rect.top - 5}px`, left: '0' })
+		}
+		setShowUserInfoMenu(user !== clickedUser)
 	}
 
 	return (
-		<div style={{ userSelect: 'none' }} className="col">
-			<UsersButton id="usersMenuButton" onClick={() => { setShowUsersMenu(!showUsersMenu) }}>Users</UsersButton>
-			<Dropdown bgColor="rgb(228, 225, 225)" show={showUsersMenu || false} setShowMenu={setShowUsersMenu} parentId="usersMenuButton" width={300} position={{ top: '-2.5px', left: '5px' }} relativePos noTopBorder>
+		<div style={{ userSelect: 'none', display: 'flex' }} className="col">
+			<UsersButtonContainer>
+				<UsersButton id="usersMenuButton" onClick={() => { setShowUsersMenu(!showUsersMenu) }}>Users</UsersButton>
+			</UsersButtonContainer>
+			<UsersDropdownStyle bgColor="rgb(228, 225, 225)" show={showUsersMenu || false} setShowMenu={setShowUsersMenu} parentId="usersMenuButton" width={300} position={{ top: '43px', left: '-125px' }} relativePos noTopBorder>
 				{board && board.users
 					&& (
 						<>
 							<UsersContainer>
 								{users.map((user) => (
-									<>
-										<UsersUserButton id={`userButton-${user.id}`} key={user.id} onClick={() => { openUserInfoMenu(user) }}><UserAvatar user={user} /></UsersUserButton>
+									<div key={user.id}>
+										<UsersUserButton link_transparent id={`userButton-${user.id}`} key={user.id} onClick={() => { openUserInfoMenu(user) }}><UserAvatar user={user} /></UsersUserButton>
 
-									</>
+									</div>
 								))}
-								{clickedUser && (
-									<Dropdown bgColor="rgb(255, 255, 255)" show={showUserInfoMenu || false} setShowMenu={setShowUserInfoMenu} parentId={userInfoId} width={300} position={userInfoPos}>
+								<Dropdown bgColor="rgb(255, 255, 255)" show={showUserInfoMenu || false} setShowMenu={setShowUserInfoMenu} parentId={userInfoId} width={300} position={userInfoPos}>
+									{clickedUser && (
 										<UserInfoCardContainer>
 											<UserAvatar user={clickedUser} size="50" />
 											<div className="col">
-												<UserInfoUsername>{clickedUser.username}</UserInfoUsername>
-												{clickedUser.id === currentUser.id && (
+												<UserInfoUsername>{(clickedUser && clickedUser.username) || 'Default username'}</UserInfoUsername>
+
+												{clickedUser && clickedUser.id === currentUser.id && (
 													<Link to={`/profile/${clickedUser.id}`}>
 														<EditProfileLink onClick={() => setShowUserInfoMenu(false)}> Edit profile </EditProfileLink>
 													</Link>
 												)}
 											</div>
 										</UserInfoCardContainer>
-									</Dropdown>
-								)}
+									)}
+								</Dropdown>
 							</UsersContainer>
 							<h6>Invite to board</h6>
 							<UserTextarea spellCheck={false} placeholder="Enter email or username" value={inviteInput} onChange={handleIviteTextChange} />
-							{matchedUsers.length > 0
+							{
+								matchedUsers.length > 0
 								&& (
 
 									<div>
@@ -254,7 +276,7 @@ const UsersDropdown = () => {
 											const onBoard = board.users.includes(user.id)
 											return (
 												<MatchedUsersContainer className="col" selected={selectedUsers.indexOf(user) > -1} onBoard={onBoard} key={user.id}>
-													<UsersUserButton><UserAvatar user={user} title={false} /></UsersUserButton>
+													<UsersUserButton link_transparent><UserAvatar user={user} title={false} /></UsersUserButton>
 													<UserInfoContainer onBoard={onBoard} className="col" onMouseDown={() => selectUser(user, onBoard)}>
 														<UserName onBoard={onBoard}>{user.username}</UserName>
 														{onBoard && <UserInfo>(Already on board)</UserInfo>}
@@ -263,12 +285,13 @@ const UsersDropdown = () => {
 											)
 										})}
 									</div>
-								)}
-							<InviteButton onClick={inviteButtonPressed} disabled={selectedUsers.length < 1}>Invite</InviteButton>
+								)
+							}
+							<InviteButton onClick={inviteButtonPressed} disabled={selectedUsers.length < 1} > Invite</InviteButton>
 						</>
 					)}
-			</Dropdown>
-		</div>
+			</UsersDropdownStyle>
+		</div >
 	)
 }
 
