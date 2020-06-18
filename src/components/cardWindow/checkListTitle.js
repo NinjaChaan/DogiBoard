@@ -98,6 +98,7 @@ const ChecklistTitle = ({ selectedCard, title, dispatch }) => {
 
 	const blurTitle = () => {
 		setListTitleClass('textarea-checklist-title')
+		submitChecklistTitle()
 	}
 
 	return (

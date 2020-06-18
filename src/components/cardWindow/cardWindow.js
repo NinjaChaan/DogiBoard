@@ -154,7 +154,7 @@ const CardWindowContainer = ({ selectedCard, dispatch }) => {
 					<CardWindowMain className="row">
 						<MainContainerLeft>
 							<div style={{ display: 'flex' }}>
-								<h6 style={{ fontWeight: '600' }}>Description</h6>
+								<h6 style={{ fontWeight: '600', userSelect: 'none' }}>Description</h6>
 							</div>
 							<CardDescription />
 							{selectedCard.checklist

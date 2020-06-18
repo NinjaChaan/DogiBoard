@@ -17,11 +17,11 @@ const DropdownMenu = styled.div`
 		right: ${props.position.right || null};
 		left: ${props.position.left || null};
 		bottom: ${props.position.bottom || null};`
-	}
+}
 	${(props) => props.noTopBorder && css`
 		border-top-left-radius: 0;
 		border-top-right-radius: 0;`
-	}
+}
 
 
 
@@ -82,6 +82,7 @@ const Dropdown = ({
 	const handleClick = (e) => {
 		const parent = document.getElementById(parentId)
 		console.log(`dropwdown parent ${parentId}`, parent)
+		console.log('dropwdown width', width)
 
 		if (width === undefined) {
 			setWidth(parent.scrollWidth)
@@ -94,6 +95,12 @@ const Dropdown = ({
 		}
 		setShowMenu(false)
 	}
+
+	useEffect(() => {
+		if (width !== undefined) {
+			setWidth(width)
+		}
+	}, [width])
 
 	useEffect(() => {
 		if (parentId) {

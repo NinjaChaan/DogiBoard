@@ -21,6 +21,7 @@ const Title = styled.h1`
 	margin: auto;
 	width: 90%;
 	padding: 15px;
+	user-select: none;
 `
 
 const BoardLink = styled(Link)`

@@ -251,7 +251,7 @@ code {
 .textarea-card-title,
 .textarea-card-title-editing {
     min-width: 35px;
-    min-height: 37px;
+    min-height: 40px;
     width: 100%;
     font-size: 1.2rem;
     font-weight: 600;

@@ -70,7 +70,7 @@ const ListTitle = ({
 	}
 
 	return (
-		<textarea
+		<input
 			aria-label="Title of the list"
 			autoFocus={autoFocus}
 			value={title}

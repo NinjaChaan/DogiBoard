@@ -19,6 +19,7 @@ const TopBarContainer = styled.div`
 	flex-wrap: wrap;
 	width: 100%;
 	z-index: 1;
+	top: 0;
 `
 
 const TopButton = styled(Button)`

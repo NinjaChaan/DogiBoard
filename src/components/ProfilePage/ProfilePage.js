@@ -56,6 +56,7 @@ const TextSpan = styled.span`
 	text-align: left;
 	display: block;
 	font-weight: 600;
+	user-select: none;
 `
 const AccountDetailsForm = styled.form`
 	flex: 0 0 100%;

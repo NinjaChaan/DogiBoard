@@ -45,6 +45,8 @@ const UsersContainer = styled.div`
 	display: flex;
 	-ms-flex-wrap: wrap;
 	flex-wrap: wrap;
+	overflow-y: auto;
+	max-height: 90px;
 `
 const UserTextarea = styled.input`
 	height: 2rem;
@@ -239,60 +241,61 @@ const UsersDropdown = () => {
 			<UsersButtonContainer>
 				<UsersButton id="usersMenuButton" onClick={() => { setShowUsersMenu(!showUsersMenu) }}>Users</UsersButton>
 			</UsersButtonContainer>
-			<UsersDropdownStyle bgColor="rgb(228, 225, 225)" show={showUsersMenu || false} setShowMenu={setShowUsersMenu} parentId="usersMenuButton" width={300} position={{ top: '43px', left: '-125px' }} relativePos noTopBorder>
-				{board && board.users
-					&& (
-						<>
-							<UsersContainer>
-								{users.map((user) => (
-									<div key={user.id}>
-										<UsersUserButton link_transparent id={`userButton-${user.id}`} key={user.id} onClick={() => { openUserInfoMenu(user) }}><UserAvatar user={user} size="40" /></UsersUserButton>
+			{users && users.length > 0 && (
+				<UsersDropdownStyle bgColor="rgb(228, 225, 225)" show={showUsersMenu || false} setShowMenu={setShowUsersMenu} parentId="usersMenuButton" width={users.length > 12 ? 320 : 300} position={{ top: '43px', left: '-125px' }} relativePos noTopBorder>
+					{board && board.users
+						&& (
+							<>
+								<UsersContainer id="usersContainer">
+									{users.map((user) => (
+										<div key={user.id} style={{ margin: '3px' }}>
+											<UsersUserButton link_transparent id={`userButton-${user.id}`} key={user.id} onClick={() => { openUserInfoMenu(user) }}><UserAvatar user={user} size="40" noBorder /></UsersUserButton>
+										</div>
+									))}
+									<Dropdown bgColor="rgb(255, 255, 255)" show={showUserInfoMenu || false} setShowMenu={setShowUserInfoMenu} parentId={userInfoId} width={300} position={userInfoPos}>
+										{clickedUser && (
+											<UserInfoCardContainer>
+												<UsersUserButton link_transparent onClick={() => setBigAvatar(!bigAvatar)}><UserAvatar noBorderRadius={bigAvatar} user={clickedUser} size={bigAvatar ? '150' : '50'} /></UsersUserButton>
+												<div className="col">
+													<UserInfoUsername>{(clickedUser && clickedUser.username) || 'Default username'}</UserInfoUsername>
 
-									</div>
-								))}
-								<Dropdown bgColor="rgb(255, 255, 255)" show={showUserInfoMenu || false} setShowMenu={setShowUserInfoMenu} parentId={userInfoId} width={300} position={userInfoPos}>
-									{clickedUser && (
-										<UserInfoCardContainer>
-											<UsersUserButton link_transparent onClick={() => setBigAvatar(!bigAvatar)}><UserAvatar noBorderRadius={bigAvatar} user={clickedUser} size={bigAvatar ? '150' : '50'} /></UsersUserButton>
-											<div className="col">
-												<UserInfoUsername>{(clickedUser && clickedUser.username) || 'Default username'}</UserInfoUsername>
+													{clickedUser && clickedUser.id === currentUser.id && (
+														<Link to={`/profile/${clickedUser.id}`}>
+															<EditProfileLink onClick={() => setShowUserInfoMenu(false)}> Edit profile </EditProfileLink>
+														</Link>
+													)}
+												</div>
+											</UserInfoCardContainer>
+										)}
+									</Dropdown>
+								</UsersContainer>
+								<h6>Invite to board</h6>
+								<UserTextarea spellCheck={false} placeholder="Enter email or username" value={inviteInput} onChange={handleIviteTextChange} />
+								{
+									matchedUsers.length > 0
+									&& (
 
-												{clickedUser && clickedUser.id === currentUser.id && (
-													<Link to={`/profile/${clickedUser.id}`}>
-														<EditProfileLink onClick={() => setShowUserInfoMenu(false)}> Edit profile </EditProfileLink>
-													</Link>
-												)}
-											</div>
-										</UserInfoCardContainer>
-									)}
-								</Dropdown>
-							</UsersContainer>
-							<h6>Invite to board</h6>
-							<UserTextarea spellCheck={false} placeholder="Enter email or username" value={inviteInput} onChange={handleIviteTextChange} />
-							{
-								matchedUsers.length > 0
-								&& (
-
-									<div>
-										{matchedUsers.map((user) => {
-											const onBoard = board.users.includes(user.id)
-											return (
-												<MatchedUsersContainer className="col" selected={selectedUsers.indexOf(user) > -1} onBoard={onBoard} key={user.id}>
-													<UsersUserButton link_transparent><UserAvatar user={user} title={false} /></UsersUserButton>
-													<UserInfoContainer onBoard={onBoard} className="col" onMouseDown={() => selectUser(user, onBoard)}>
-														<UserName onBoard={onBoard}>{user.username}</UserName>
-														{onBoard && <UserInfo>(Already on board)</UserInfo>}
-													</UserInfoContainer>
-												</MatchedUsersContainer>
-											)
-										})}
-									</div>
-								)
-							}
-							<InviteButton onClick={inviteButtonPressed} disabled={selectedUsers.length < 1}> Invite</InviteButton>
-						</>
-					)}
-			</UsersDropdownStyle>
+										<div>
+											{matchedUsers.map((user) => {
+												const onBoard = board.users.includes(user.id)
+												return (
+													<MatchedUsersContainer className="col" selected={selectedUsers.indexOf(user) > -1} onBoard={onBoard} key={user.id}>
+														<UsersUserButton link_transparent><UserAvatar user={user} title={false} /></UsersUserButton>
+														<UserInfoContainer onBoard={onBoard} className="col" onMouseDown={() => selectUser(user, onBoard)}>
+															<UserName onBoard={onBoard}>{user.username}</UserName>
+															{onBoard && <UserInfo>(Already on board)</UserInfo>}
+														</UserInfoContainer>
+													</MatchedUsersContainer>
+												)
+											})}
+										</div>
+									)
+								}
+								<InviteButton onClick={inviteButtonPressed} disabled={selectedUsers.length < 1}> Invite</InviteButton>
+							</>
+						)}
+				</UsersDropdownStyle>
+			)}
 		</div>
 	)
 }

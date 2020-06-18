@@ -41,6 +41,11 @@ const SidebarModule = styled.div`
   	}
 `
 
+const CategoryTitle = styled.h6`
+	font-weight: 600;
+	user-select: none;
+`
+
 const LabelDropdownButton = styled(Button)`
 	padding-top: 3px;
 	border: 3px solid transparent;
@@ -94,7 +99,7 @@ const CardSidebarModule = ({ selectedCard, closeCardWindow, dispatch }) => {
 	return (
 		<>
 			<SidebarModule className="col">
-				<h6 style={{ fontWeight: '600' }}>Add to card</h6>
+				<CategoryTitle>Add to card</CategoryTitle>
 				{selectedCard.checklist
 					? null
 					: (
@@ -134,7 +139,7 @@ const CardSidebarModule = ({ selectedCard, closeCardWindow, dispatch }) => {
 
 			</SidebarModule>
 			<SidebarModule className="col">
-				<h6 style={{ fontWeight: '600' }}>Actions</h6>
+				<CategoryTitle>Actions</CategoryTitle>
 				<SidebarButton variant="light" className="btn-card-sidebar" text="Move" iconName="RiFileTransferLine" />
 				<SidebarButton variant="light" className="btn-card-sidebar" text="Copy" iconName="RiFileCopy2Line" />
 				<SidebarButton variant="warning_light" className="btn-card-sidebar" func={deleteCardPressed} text="Delete" iconName="RiDeleteBin2Line" />

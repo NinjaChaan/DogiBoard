@@ -22,6 +22,11 @@ const TextSpan = styled.span`
 	text-align: left;
 	display: block;
 	font-weight: 600;
+	user-select: none;
+`
+
+const Title = styled.h2`
+	user-select: none;
 `
 
 const SaveButton = styled(Button)`
@@ -47,6 +52,12 @@ const AvatarContainerDiv = styled.div`
 		width: 50%;
 		padding: 0 50px 0 50px;
 	}
+`
+
+const GravatarLink = styled.a`
+	font-size: small;
+	float: right;
+	padding-top: '3px';
 `
 
 const AvatarContainer = ({ user, gravatarEmail }) => {
@@ -77,11 +88,11 @@ const AvatarContainer = ({ user, gravatarEmail }) => {
 
 	return (
 		<AvatarContainerDiv>
-			<h1>Avatar</h1>
+			<Title>Avatar</Title>
 			<UserAvatar user={user} size="200" noBorder />
 			<TextSpan>
 				Gravatar email
-				<a href="https://en.gravatar.com/" target="_blank" rel="noopener noreferrer" style={{ fontSize: 'small', float: 'right', paddingTop: '3px' }}>What is Gravatar?</a>
+				<GravatarLink href="https://en.gravatar.com/" target="_blank" rel="noopener noreferrer">What is Gravatar?</GravatarLink>
 			</TextSpan>
 			<ProfileTextarea type="email" id="gravatarField" value={gravatarEmail} onChange={(e) => setGravatarEmail(e.target.value)} />
 			<SaveButton onClick={handleGravatarSubmit}>Save changes</SaveButton>

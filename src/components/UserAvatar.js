@@ -3,6 +3,7 @@ import md5 from 'md5'
 import styled, { css } from 'styled-components'
 
 const Avatar = styled.img`
+	user-select: none;
 	border-radius: 50%;
 	${(props) => props.noBorder || css`
 		border: 2px solid white;`
