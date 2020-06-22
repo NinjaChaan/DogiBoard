@@ -146,8 +146,13 @@ const TopBar = ({ dispatch }) => {
 	}, [userState])
 
 	return (
-		<TopBarContainer >
-			<div className="flex-row" style={{width:'100%', position:'relative', height: '50px', display:'flex', flexWrap: 'wrap'}}>
+		<TopBarContainer>
+			<div
+				className="flex-row"
+				style={{
+					width: '100%', position: 'relative', height: '50px', display: 'flex', flexWrap: 'wrap'
+				}}
+			>
 				<LinkStyle to="/boards">
 					<BoardsButton type="button" onClick={BoardsButtonPressed}>Boards</BoardsButton>
 				</LinkStyle>
@@ -159,21 +164,21 @@ const TopBar = ({ dispatch }) => {
 					&& (
 						<>
 							<UserMenuContainer className="float-right">
-								<UserMenuButton link_transparent id="profileMenuButton" onClick={() => { setShowProfileMenu(!showProfileMenu) }}><UserAvatar user={user} noBorder /></UserMenuButton>
+								<UserMenuButton link_transparent id="profileMenuButton" onClick={() => { setShowProfileMenu(!showProfileMenu) }}><UserAvatar size="45" user={user} noBorder /></UserMenuButton>
 							</UserMenuContainer>
 							<Dropdown show={showProfileMenu || false} setShowMenu={setShowProfileMenu} parentId="profileMenuButton" width={200} position={{ top: '50px', right: '0px' }} noTopBorder>
 								<Link to={`/profile/${user.id}`}>
 									<LabelDropdownButton light onClick={() => setShowProfileMenu(false)}>
 										<ButtonContainer>
 											Profile
-									</ButtonContainer>
+										</ButtonContainer>
 									</LabelDropdownButton>
 								</Link>
 								<Link to="/login">
 									<LabelDropdownButton light onClick={LogoutButtonPressed}>
 										<ButtonContainer>
 											Log out
-									</ButtonContainer>
+										</ButtonContainer>
 									</LabelDropdownButton>
 								</Link>
 							</Dropdown>

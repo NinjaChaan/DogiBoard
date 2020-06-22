@@ -14,6 +14,14 @@ const getOne = (id) => {
 	})
 	return request.then((response) => response).catch((error) => (error.response))
 }
+const getUserRole = (id, userId) => {
+	const request = axios.get(`${baseUrl}/${id}/userRole/${userId}`, {
+		headers: {
+			Authorization: `Bearer ${store.getState().user.token}`
+		}
+	})
+	return request.then((response) => response).catch((error) => (error.response))
+}
 
 const getAll = () => {
 	const request = axios.get(baseUrl)
@@ -64,5 +72,6 @@ export default {
 	update,
 	remove,
 	inviteUser,
-	respondToInvitation
+	respondToInvitation,
+	getUserRole
 }

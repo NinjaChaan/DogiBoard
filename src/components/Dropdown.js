@@ -81,8 +81,8 @@ const Dropdown = ({
 
 	const handleClick = (e) => {
 		const parent = document.getElementById(parentId)
-		console.log(`dropwdown parent ${parentId}`, parent)
-		console.log('dropwdown width', width)
+		// console.log(`dropwdown parent ${parentId}`, parent)
+		// console.log('dropwdown width', width)
 
 		if (width === undefined) {
 			setWidth(parent.scrollWidth)
@@ -103,6 +103,9 @@ const Dropdown = ({
 	}, [width])
 
 	useEffect(() => {
+		// setShowMenu(true)
+		// setTimeout(()=>setShowMenu(false), 50)
+		
 		if (parentId) {
 			// add when mounted
 			document.addEventListener('mousedown', handleClick) // return function to be called when unmounted

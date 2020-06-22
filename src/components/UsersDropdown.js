@@ -1,13 +1,16 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react'
-import { connect, useSelector } from 'react-redux'
-import { Link, useLocation } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 import Dropdown from './Dropdown'
 import Button from './Button'
 import boardService from '../services/boards'
 import userService from '../services/users'
-import UserAvatar from './UserAvatar'
+import AvatarStyle from './UserAvatar'
+import ac from '../utils/accessControl'
+import getRole from '../utils/getUserRole'
+import boardIncludesUser from '../utils/boardIncludesUser'
 
 const UsersButton = styled(Button)`
 `
@@ -84,7 +87,7 @@ const MatchedUsersContainer = styled.div`
 	}	
 
 	&:hover{
-		${(props) => !props.onBoard && css`
+		${(props) => !props.userOnBoard && css`
 			cursor: pointer;
 			background-color: rgba(0, 0, 0, 0.07);`
 	}		
@@ -103,7 +106,7 @@ const UserName = styled.span`
 	white-space: nowrap;
 	display: block;
 	
-	${(props) => (props.onBoard) && css`
+	${(props) => (props.userOnBoard) && css`
 		margin-bottom: -5px;
 		margin-top: 5px;`
 	}
@@ -117,7 +120,7 @@ const UserInfoContainer = styled.div`
 	flex: 0 0 80%;
 	max-width: 80%;
 	display: inline;
-	${(props) => !props.onBoard && css`
+	${(props) => !props.userOnBoard && css`
 		display: flex;
 		align-items: center;`
 	}
@@ -164,8 +167,8 @@ const UsersDropdown = () => {
 			const userArray = []
 			userArray.push(currentUser)
 			const promises = board.users.map((user) => {
-				if (user !== currentUser.id) {
-					return userService.getOne(user)
+				if (user.id !== currentUser.id) {
+					return userService.getOne(user.id)
 				}
 			}).filter((x) => x !== undefined)
 			Promise.all(promises).then((responses) => {
@@ -175,9 +178,17 @@ const UsersDropdown = () => {
 					}
 				})
 				setUsers(userArray)
+				console.log('users', userArray)
 			})
 		}
 	}, [board])
+
+	useEffect(() => {
+		if (currentUser.username) {
+			console.log(currentUser)
+			console.log('grrants', ac.can(currentUser.role).updateOwn('profile').granted)
+		}
+	}, [currentUser])
 
 	const handleIviteTextChange = (event) => {
 		if (event.key === 'Enter') {
@@ -198,8 +209,8 @@ const UsersDropdown = () => {
 		}
 	}
 
-	const selectUser = (user, onBoard) => {
-		if (!onBoard) {
+	const selectUser = (user, userOnBoard) => {
+		if (!userOnBoard) {
 			if (selectedUsers.indexOf(user) > -1) {
 				setSelectedUsers(selectedUsers.filter((u) => (u !== user)))
 			} else {
@@ -249,17 +260,16 @@ const UsersDropdown = () => {
 								<UsersContainer id="usersContainer">
 									{users.map((user) => (
 										<div key={user.id} style={{ margin: '3px' }}>
-											<UsersUserButton link_transparent id={`userButton-${user.id}`} key={user.id} onClick={() => { openUserInfoMenu(user) }}><UserAvatar user={user} size="40" noBorder /></UsersUserButton>
+											<UsersUserButton link_transparent id={`userButton-${user.id}`} key={user.id} onClick={() => { openUserInfoMenu(user) }}><AvatarStyle user={user} size="40" noBorder /></UsersUserButton>
 										</div>
 									))}
 									<Dropdown bgColor="rgb(255, 255, 255)" show={showUserInfoMenu || false} setShowMenu={setShowUserInfoMenu} parentId={userInfoId} width={300} position={userInfoPos}>
 										{clickedUser && (
 											<UserInfoCardContainer>
-												<UsersUserButton link_transparent onClick={() => setBigAvatar(!bigAvatar)}><UserAvatar noBorderRadius={bigAvatar} user={clickedUser} size={bigAvatar ? '150' : '50'} /></UsersUserButton>
+												<UsersUserButton link_transparent onClick={() => setBigAvatar(!bigAvatar)}><AvatarStyle noBorderRadius={bigAvatar} user={clickedUser} size={bigAvatar ? '150' : '50'} /></UsersUserButton>
 												<div className="col">
 													<UserInfoUsername>{(clickedUser && clickedUser.username) || 'Default username'}</UserInfoUsername>
-
-													{clickedUser && clickedUser.id === currentUser.id && (
+													{clickedUser && clickedUser.id === currentUser.id && ac.can(getRole(board.users, clickedUser.id)).updateOwn('profile').granted && (
 														<Link to={`/profile/${clickedUser.id}`}>
 															<EditProfileLink onClick={() => setShowUserInfoMenu(false)}> Edit profile </EditProfileLink>
 														</Link>
@@ -277,13 +287,13 @@ const UsersDropdown = () => {
 
 										<div>
 											{matchedUsers.map((user) => {
-												const onBoard = board.users.includes(user.id)
+												const userOnBoard = boardIncludesUser(board, user.id)
 												return (
-													<MatchedUsersContainer className="col" selected={selectedUsers.indexOf(user) > -1} onBoard={onBoard} key={user.id}>
-														<UsersUserButton link_transparent><UserAvatar user={user} title={false} /></UsersUserButton>
-														<UserInfoContainer onBoard={onBoard} className="col" onMouseDown={() => selectUser(user, onBoard)}>
-															<UserName onBoard={onBoard}>{user.username}</UserName>
-															{onBoard && <UserInfo>(Already on board)</UserInfo>}
+													<MatchedUsersContainer className="col" selected={selectedUsers.indexOf(user) > -1} userOnBoard={userOnBoard} key={user.id} onMouseDown={() => selectUser(user, userOnBoard)}>
+														<UsersUserButton link_transparent><AvatarStyle user={user} title={false} /></UsersUserButton>
+														<UserInfoContainer userOnBoard={userOnBoard} className="col">
+															<UserName userOnBoard={userOnBoard}>{user.username}</UserName>
+															{userOnBoard && <UserInfo>(Already on board)</UserInfo>}
 														</UserInfoContainer>
 													</MatchedUsersContainer>
 												)

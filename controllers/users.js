@@ -25,6 +25,11 @@ usersRouter.post('/', async (request, response, next) => {
 		username: body.username,
 		email: body.email,
 		passwordHash,
+		color: body.color || {
+			r: Math.floor(Math.random() * 256),
+			g: Math.floor(Math.random() * 256),
+			b: Math.floor(Math.random() * 256)
+		}
 	})
 
 	user.save()

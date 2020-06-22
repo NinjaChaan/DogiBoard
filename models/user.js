@@ -55,6 +55,18 @@ const userSchema = new mongoose.Schema({
 			ref: 'Board'
 		}
 	],
+	color: {
+		type: Object,
+		r: {
+			type: String
+		},
+		g: {
+			type: String
+		},
+		b: {
+			type: String
+		}
+	}
 })
 
 userSchema.plugin(uniqueValidator)

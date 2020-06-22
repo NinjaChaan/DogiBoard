@@ -1,10 +1,11 @@
 require('dotenv').config()
 const _ = require('underscore')
 const boardRouter = require('express').Router()
+const mongoose = require('mongoose')
 const User = require('../models/user')
 const Board = require('../models/board')
 const getUserUtil = require('../src/utils/getUser')
-
+const boardIncludesUser = require('../src/utils/boardIncludesUser')
 
 boardRouter.get('/stream/:id', async (request, response, next) => {
 	const user = await getUserUtil.getUser(request, response)
@@ -32,7 +33,7 @@ boardRouter.get('/stream/:id', async (request, response, next) => {
 				if (board) {
 					if (!authorized) {
 						if (board.users) {
-							if (board.users.includes(user._id)) {
+							if (boardIncludesUser(board, user._id)) {
 								authorized = true
 							} else {
 								response.writeHead(401).json({ error: 'You are not authorized to look at this board' })
@@ -88,8 +89,29 @@ boardRouter.get('/:id', async (request, response, next) => {
 	Board.findById(request.params.id)
 		.then((board) => {
 			if (board) {
-				if (board.users && board.users.includes(user._id)) {
+				if (board.users && boardIncludesUser(board, user._id)) {
 					response.json(board.toJSON())
+				} else {
+					response.status(401).json({ error: 'You are not authorized to look at this board' })
+					response.flush()
+					response.end()
+				}
+			} else {
+				response.status(404).end()
+			}
+		})
+		.catch((error) => next(error))
+})
+
+boardRouter.get('/:id/userRole/:userId', async (request, response, next) => {
+	const user = await getUserUtil.getUser(request, response)
+
+	Board.findById(request.params.id)
+		.then((board) => {
+			if (board) {
+				if (board.users && boardIncludesUser(board, user._id)) {
+					const foundUser = board.users.filter((u) => !_.isEqual(u._id, user._id))
+					response.json(foundUser.role.toJSON())
 				} else {
 					response.status(401).json({ error: 'You are not authorized to look at this board' })
 					response.flush()
@@ -133,12 +155,16 @@ boardRouter.put('/inviteUser/:id', async (request, response, next) => {
 			if (foundBoard) {
 				User.findById(body.userId).then((foundUser) => {
 					if (foundUser) {
+						const userToAdd = {
+							_id: mongoose.Types.ObjectId(body.userId),
+							role: 'user'
+						}
 						const board = ({
 							...foundBoard.toJSON(),
-							users: foundBoard.users.concat(body.userId)
+							users: foundBoard.users.concat(userToAdd)
 						})
-						if (foundBoard.users.includes(user._id)) {
-							if (!foundBoard.users.includes(foundUser._id)) {
+						if (boardIncludesUser(foundBoard, user._id)) {
+							if (!boardIncludesUser(foundBoard, foundUser._id)) {
 								Board.updateOne({ _id: request.params.id }, board).then(() => {
 									const updatedUser = ({
 										...foundUser.toJSON(),
@@ -182,7 +208,7 @@ boardRouter.put('/invitationResponse/:id', async (request, response, next) => {
 							...foundBoard.toJSON(),
 							users: body.answer ? foundBoard.users : foundBoard.users.filter((u) => !_.isEqual(u, foundUser._id))
 						})
-						if (foundBoard.users.includes(user._id)) {
+						if (boardIncludesUser(foundBoard, user._id)) {
 							Board.updateOne({ _id: request.params.id }, board).then(() => {
 								const updatedUser = ({
 									...foundUser.toJSON(),
@@ -222,8 +248,7 @@ boardRouter.put('/:id', async (request, response, next) => {
 					name: body.name || foundBoard.name,
 					lists: body.lists || foundBoard.lists
 				})
-				console.log('board', board)
-				if (foundBoard.users.includes(user._id)) {
+				if (boardIncludesUser(foundBoard, user._id)) {
 					Board.updateOne({ _id: request.params.id }, board).then(() => {
 						response.json(body)
 					})

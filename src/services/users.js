@@ -46,18 +46,11 @@ const update = (id, newObject) => {
 	})
 }
 
-const getGravatar = (id) => {
-	const request = axios.get(`${baseUrl}/${id}`, {
-		headers: {
-			Authorization: `Bearer ${store.getState().user.token}`
-		}
+const getGravatar = (email, size) => {
+	const request = axios.get(`https://www.gravatar.com/avatar/${email}.png?s=${size}&d=404`, { responseType: 'blob' })
+	return request.then((response) => response).catch((error) => {
+		return error.response
 	})
-	request.then((response) => {
-		if (response.data.gravatarEmail) {
-			return response.data.gravatarEmail
-		}
-		return response.data.email
-	}).catch((error) => (error.response))
 }
 
 const getClosestMatches = (query) => {
