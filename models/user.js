@@ -55,16 +55,24 @@ const userSchema = new mongoose.Schema({
 			ref: 'Board'
 		}
 	],
-	color: {
+	avatar: {
 		type: Object,
-		r: {
-			type: String
+		avatarType: {
+			type: String,
+			enum: ['gravatar', 'initials'],
+			default: 'gravatar'
 		},
-		g: {
-			type: String
-		},
-		b: {
-			type: String
+		color: {
+			type: Object,
+			r: {
+				type: String
+			},
+			g: {
+				type: String
+			},
+			b: {
+				type: String
+			}
 		}
 	}
 })

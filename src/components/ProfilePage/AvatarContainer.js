@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import md5 from 'md5'
 import styled, { keyframes } from 'styled-components'
 import { connect, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
 import Button from '../Button'
 import { updateUser } from '../../redux/actions/index'
 import userService from '../../services/users'
-import StatusMessage from '../StatusMessage'
 import UserAvatar from '../UserAvatar'
 
 const ProfileTextarea = styled.input`
@@ -23,6 +20,17 @@ const TextSpan = styled.span`
 	display: block;
 	font-weight: 600;
 	user-select: none;
+`
+
+const AvatarText = styled.span`
+	display: inline-block;
+	margin: 0 10px 0 5px;
+	user-select: none;
+`
+
+const AvatarTypeContainer = styled.div`
+	text-align: left;
+	margin: 10px 0;
 `
 
 const Title = styled.h2`
@@ -61,6 +69,8 @@ const GravatarLink = styled.a`
 `
 
 const AvatarContainer = ({ user, gravatarEmail }) => {
+	const [avatarType, setAvatarType] = useState('')
+
 	const handleGravatarSubmit = () => {
 		userService.updateGravatar(user.id, { gravatarEmail }).then((response) => {
 			console.log('gravatar change response', response)
@@ -90,6 +100,13 @@ const AvatarContainer = ({ user, gravatarEmail }) => {
 		<AvatarContainerDiv>
 			<Title>Avatar</Title>
 			<UserAvatar user={user} size="200" noBorder />
+			<AvatarTypeContainer>
+				<TextSpan>Avatar type</TextSpan>
+				<input type="radio" id="gravatar" name="avatarType" value="Gravatar" />
+				<AvatarText>Gravatar</AvatarText>
+				<input type="radio" id="initials" name="avatarType" value="Initials" />
+				<AvatarText>Initials</AvatarText>
+			</AvatarTypeContainer>
 			<TextSpan>
 				Gravatar email
 				<GravatarLink href="https://en.gravatar.com/" target="_blank" rel="noopener noreferrer">What is Gravatar?</GravatarLink>

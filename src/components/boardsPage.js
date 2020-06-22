@@ -96,11 +96,10 @@ const BoardsPage = ({ dispatch }) => {
 	}, [user])
 
 	return (
-		<div className="container">
+		<div className="container" style={{ marginTop: '60px' }}>
 			{boards.length > 0
 				&& (
 					<>
-						<div style={{ height: '50px' }} />
 						<Title>Boards</Title>
 						<BoardsContainer className="row">
 							{

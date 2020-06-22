@@ -25,10 +25,12 @@ usersRouter.post('/', async (request, response, next) => {
 		username: body.username,
 		email: body.email,
 		passwordHash,
-		color: body.color || {
-			r: Math.floor(Math.random() * 256),
-			g: Math.floor(Math.random() * 256),
-			b: Math.floor(Math.random() * 256)
+		avatar: {
+			color: body.color || {
+				r: Math.floor(Math.random() * 256),
+				g: Math.floor(Math.random() * 256),
+				b: Math.floor(Math.random() * 256)
+			}
 		}
 	})
 
@@ -138,10 +140,47 @@ usersRouter.put('/:id', async (request, response) => {
 						username: body.username || foundUser.username,
 						email: body.email || foundUser.email,
 						passwordHash: body.password ? passwordHash : foundUser.passwordHash,
-						boards: body.boards || foundUser.boards
+						boards: body.boards || foundUser.boards,
 					})
 					User.updateOne({ _id: request.params.id }, updatedUser).then(() => {
 						response.json({ response: `${foundUser.username} updated` })
+					})
+				} else {
+					response.status(401).json({ error: 'You are not authorized to edit this user' })
+				}
+			} else {
+				response.status(404).json({ error: 'User not found' })
+			}
+		}).catch((error) => {
+			response.status(404)
+			next(error)
+		})
+})
+
+usersRouter.put('/:id/avatar', async (request, response, next) => {
+	const { body } = request
+
+	console.log('gravatar update', request)
+
+	const user = await getUserUtil.getUser(request, response)
+
+	User.findById(request.params.id)
+		.then((foundUser) => {
+			if (foundUser) {
+				if (_.isEqual(foundUser, user)) {
+					const updatedUser = ({
+						...foundUser.toJSON(),
+						avatar: {
+							avatarType: body.avatar.avatarType || foundUser.avatar.avatarType,
+							color: (body.avatar && body.avatar.color) || (foundUser.avatar && foundUser.avatar.color) || {
+								r: Math.floor(Math.random() * 256),
+								g: Math.floor(Math.random() * 256),
+								b: Math.floor(Math.random() * 256)
+							}
+						}
+					})
+					User.updateOne({ _id: request.params.id }, updatedUser).then(() => {
+						response.json({ response: `${foundUser.username} gravatar updated` })
 					})
 				} else {
 					response.status(401).json({ error: 'You are not authorized to edit this user' })

@@ -46,6 +46,28 @@ const update = (id, newObject) => {
 	})
 }
 
+const updateAvatar = (id, newObject) => {
+	const request = axios.put(`${baseUrl}/${id}/avatar`, newObject, {
+		headers: {
+			Authorization: `Bearer ${store.getState().user.token}`
+		}
+	})
+	return request.then((response) => response).catch((error) => {
+		return error.response
+	})
+}
+
+const updateGravatar = (id, gravatarEmail) => {
+	const request = axios.put(`${baseUrl}/${id}/gravatar`, gravatarEmail, {
+		headers: {
+			Authorization: `Bearer ${store.getState().user.token}`
+		}
+	})
+	return request.then((response) => response).catch((error) => {
+		return error.response
+	})
+}
+
 const getGravatar = (email, size) => {
 	const request = axios.get(`https://www.gravatar.com/avatar/${email}.png?s=${size}&d=404`, { responseType: 'blob' })
 	return request.then((response) => response).catch((error) => {
@@ -62,17 +84,6 @@ const getClosestMatches = (query) => {
 	return request.then((response) => response).catch((error) => (error.response))
 }
 
-const updateGravatar = (id, gravatarEmail) => {
-	const request = axios.put(`${baseUrl}/${id}/gravatar`, gravatarEmail, {
-		headers: {
-			Authorization: `Bearer ${store.getState().user.token}`
-		}
-	})
-	return request.then((response) => response).catch((error) => {
-		return error.response
-	})
-}
-
 const remove = (id) => {
 	const request = axios.delete(`${baseUrl}/${id}`)
 	return request.then((response) => response.data)
@@ -86,6 +97,7 @@ export default {
 	getWithToken,
 	getOne,
 	updateGravatar,
+	updateAvatar,
 	getGravatar,
 	getClosestMatches
 }

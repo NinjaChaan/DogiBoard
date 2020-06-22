@@ -183,13 +183,6 @@ const UsersDropdown = () => {
 		}
 	}, [board])
 
-	useEffect(() => {
-		if (currentUser.username) {
-			console.log(currentUser)
-			console.log('grrants', ac.can(currentUser.role).updateOwn('profile').granted)
-		}
-	}, [currentUser])
-
 	const handleIviteTextChange = (event) => {
 		if (event.key === 'Enter') {
 			event.preventDefault()
@@ -266,13 +259,14 @@ const UsersDropdown = () => {
 									<Dropdown bgColor="rgb(255, 255, 255)" show={showUserInfoMenu || false} setShowMenu={setShowUserInfoMenu} parentId={userInfoId} width={300} position={userInfoPos}>
 										{clickedUser && (
 											<UserInfoCardContainer>
-												<UsersUserButton link_transparent onClick={() => setBigAvatar(!bigAvatar)}><AvatarStyle noBorderRadius={bigAvatar} user={clickedUser} size={bigAvatar ? '150' : '50'} /></UsersUserButton>
+												<UsersUserButton link_transparent onClick={() => setBigAvatar(!bigAvatar)}><AvatarStyle update noBorderRadius={bigAvatar} user={clickedUser} size={bigAvatar ? '150' : '50'} /></UsersUserButton>
 												<div className="col">
 													<UserInfoUsername>{(clickedUser && clickedUser.username) || 'Default username'}</UserInfoUsername>
-													{clickedUser && clickedUser.id === currentUser.id && ac.can(getRole(board.users, clickedUser.id)).updateOwn('profile').granted && (
+													{clickedUser && clickedUser.id === currentUser.id && (
 														<Link to={`/profile/${clickedUser.id}`}>
 															<EditProfileLink onClick={() => setShowUserInfoMenu(false)}> Edit profile </EditProfileLink>
 														</Link>
+														//ac.can(getRole(board.users, clickedUser.id)).updateOwn('profile').granted
 													)}
 												</div>
 											</UserInfoCardContainer>

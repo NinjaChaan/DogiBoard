@@ -19,7 +19,7 @@ const PageContainer = styled.div`
 `
 
 const LoginContainer = styled.div`
-	margin: 10px auto auto auto;
+	margin: 60px auto auto auto;
 	width: 100%;
 	text-align: center;
 	@media ${device.mobileL} {
@@ -72,18 +72,20 @@ const LoginPage = ({ dispatch }) => {
 		const pass = document.getElementById('passwordField').value
 		loginService.login({ username, password: pass }).then((response) => {
 			console.log('login response', response)
-			if (response.status === 200) {
-				setStatusType('success')
-				setStatusMessage('Logged in successfully')
-				setTimeout(() => {
-					if (Cookies.get('stayLogged') === 'true') {
-						Cookies.set('token', response.data.token, { expires: 365, secure: true })
-					}
-					dispatch(login({ loggedIn: true, token: response.data.token, user: response.data.user }))
-				}, 1000)
-			} else if (response.status === 401) {
-				setStatusType('error')
-				setStatusMessage(response.data.error)
+			if (response && response.status) {
+				if (response.status === 200) {
+					setStatusType('success')
+					setStatusMessage('Logged in successfully')
+					setTimeout(() => {
+						if (Cookies.get('stayLogged') === 'true') {
+							Cookies.set('token', response.data.token, { expires: 365, secure: true })
+						}
+						dispatch(login({ loggedIn: true, token: response.data.token, user: response.data.user }))
+					}, 1000)
+				} else if (response.status === 401) {
+					setStatusType('error')
+					setStatusMessage(response.data.error)
+				}
 			}
 		})
 	}

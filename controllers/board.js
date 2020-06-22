@@ -168,7 +168,7 @@ boardRouter.put('/inviteUser/:id', async (request, response, next) => {
 								Board.updateOne({ _id: request.params.id }, board).then(() => {
 									const updatedUser = ({
 										...foundUser.toJSON(),
-										invites: foundUser.invites.concat(foundBoard.id)
+										invites: foundUser.invites.concat(foundBoard._id)
 									})
 									User.updateOne({ _id: foundUser._id }, updatedUser).then(() => {
 										response.json({ response: `${foundUser.username} invited to ${foundBoard.name}`, data: updatedUser })
@@ -206,7 +206,7 @@ boardRouter.put('/invitationResponse/:id', async (request, response, next) => {
 					if (foundUser) {
 						const board = ({
 							...foundBoard.toJSON(),
-							users: body.answer ? foundBoard.users : foundBoard.users.filter((u) => !_.isEqual(u, foundUser._id))
+							users: body.answer ? foundBoard.users : foundBoard.users.filter((u) => !_.isEqual(u._id, foundUser._id))
 						})
 						if (boardIncludesUser(foundBoard, user._id)) {
 							Board.updateOne({ _id: request.params.id }, board).then(() => {

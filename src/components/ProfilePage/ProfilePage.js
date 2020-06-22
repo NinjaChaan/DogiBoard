@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import md5 from 'md5'
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 import { connect, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
 import Button from '../Button'
 import { updateUser } from '../../redux/actions/index'
 import userService from '../../services/users'
 import StatusMessage from '../StatusMessage'
-import UserAvatar from '../UserAvatar'
 import AvatarContainer from './AvatarContainer'
 
 const ProfileContainer = styled.div`
@@ -80,7 +77,6 @@ const ProfilePage = ({ dispatch }) => {
 	const [currentPassword, setCurrentPassword] = useState('')
 	const [statusMessage, setStatusMessage] = useState('')
 	const [statusType, setStatusType] = useState('')
-	const [emailHash, setEmailHash] = useState('')
 
 	const handleSubmit = (event) => {
 		event.preventDefault()
@@ -136,10 +132,8 @@ const ProfilePage = ({ dispatch }) => {
 				setEmail(user.email)
 				if (user.gravatarEmail) {
 					setGravatarEmail(user.gravatarEmail)
-					setEmailHash(md5(user.gravatarEmail))
 				} else {
 					setGravatarEmail(user.email)
-					setEmailHash(md5(user.email))
 				}
 			}
 		}
