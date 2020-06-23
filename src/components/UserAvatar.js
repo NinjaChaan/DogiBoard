@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { connect, useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 import md5 from 'md5'
 import styled, { css } from 'styled-components'
 import { updateUser } from '../redux/actions/index'
@@ -9,6 +10,7 @@ import getBrightness from '../utils/getColorBrightness'
 const AvatarStyle = styled.img`
 	user-select: none;
 	border-radius: 50%;
+	background-color: white;
 	${(props) => props.size && css`
 		width: ${props.size}px;
 		height: ${props.size}px;
@@ -63,6 +65,8 @@ const UserAvatar = ({
 	const [gravatar, setGravatar] = useState('0')
 	const [rgb, setRgb] = useState({})
 	const [keepUpdated, setKeepUpdated] = useState(true)
+	const [initials, setInitials] = useState('')
+	const [gravatarFailed, setGravatarFailed] = useState(false)
 
 	const updateAvatarSettings = (type) => {
 		if (user === currentUser) {
@@ -78,16 +82,15 @@ const UserAvatar = ({
 			const upUser = {
 				...user,
 				avatar: {
-					avatarType: type
+					avatarType: type,
+					color: user.avatar.color,
+					gravatarEmail: user.avatar.gravatarEmail,
+					initials: initials !== '' ? initials : user.avatar.initials
 				}
 			}
 
-			console.log('user update', upUser)
-
 			userService.updateAvatar(user.id, updatedUser).then((res) => {
-				console.log('profile change response', res)
 				if (res.status === 200) {
-					console.log('Profile changes saved successfully')
 					dispatch(updateUser(upUser))
 				} else if (res.status === 400 || res.status === 401 || res.status === 404) {
 					console.log(res.data.error)
@@ -99,21 +102,64 @@ const UserAvatar = ({
 	}
 
 	const tryLoadingGravatar = () => {
-		if (user.gravatarEmail || user.email) {
-			userService.getGravatar(md5(user.gravatarEmail || user.email), size < 100 ? size * 2 : size * 1.5)
+		if ((user.avatar && user.avatar.gravatarEmail) || user.email) {
+			userService.getGravatar(md5(user.avatar.gravatarEmail || user.email), size < 100 ? size * 2 : size * 1.5)
 				.then((response) => {
 					if (response.status) {
-						if (response.status === 200) {
+						const manual = window.location.pathname.includes('/profile/') ? false : null
+						if (response.status === 200 || response.status === 418) {
 							const fileReaderInstance = new FileReader()
 							fileReaderInstance.readAsDataURL(response.data)
 							fileReaderInstance.onload = () => {
 								const base64data = fileReaderInstance.result
 								setGravatar(base64data)
-								updateAvatarSettings('gravatar')
+								//updateAvatarSettings('gravatar')
+
+								if (response.status === 200) {
+									const upUser = {
+										...user,
+										avatar: {
+											avatarType: user.avatar.avatarType,
+											color: user.avatar.color,
+											gravatarEmail: user.avatar.gravatar,
+											initials: initials !== '' ? initials : user.avatar.initials,
+											manual
+										}
+									}
+									dispatch(updateUser(upUser))
+								}
+							}
+							if (response.status === 418) {
+								console.log('418')
+								const upUser = {
+									...user,
+									avatar: {
+										avatarType: user.avatar.avatarType,
+										color: user.avatar.color,
+										gravatarEmail: user.avatar.gravatarEmail,
+										initials: initials !== '' ? initials : user.avatar.initials,
+										gravatarFailed: true,
+										manual
+									}
+								}
+								dispatch(updateUser(upUser))
 							}
 						} else if (response.status === 404) {
-							setGravatar('initials')
-							updateAvatarSettings('initials')
+							setGravatar('404')
+
+							const upUser = {
+								...user,
+								avatar: {
+									avatarType: type,
+									color: user.avatar.color,
+									gravatarEmail: user.avatar.gravatarEmail,
+									initials: initials !== '' ? initials : user.avatar.initials,
+									gravatarFailed: true,
+									manual
+								}
+							}
+							dispatch(updateUser(upUser))
+							//updateAvatarSettings('initials')
 						}
 					} else {
 						console.log('complete failure!')
@@ -126,18 +172,34 @@ const UserAvatar = ({
 		if (keepUpdated) {
 			if (user) {
 				if (user.avatar) {
-					if (user.avatar.avatarType === 'gravatar') {
-						tryLoadingGravatar()
-					} else if (user.avatar.avatarType === 'initials') {
-						setGravatar('initials')
-						if (user.avatar.color) {
-							setRgb(user.avatar.color)
-						} else {
-							setRgb({
-								r: Math.floor(Math.random() * 256),
-								g: Math.floor(Math.random() * 256),
-								b: Math.floor(Math.random() * 256)
-							})
+					console.log('user avatar')
+					if (!gravatarFailed) {
+						if (user.avatar.manual !== false) {
+							if (user.avatar.gravatarFailed) {
+								setGravatarFailed(true)
+							}
+							if (user.avatar.initials) {
+								setInitials(user.avatar.initials)
+							} else {
+								setInitials(user.username[0])
+							}
+							if (user.avatar.avatarType === 'gravatar') {
+								tryLoadingGravatar()
+							} else if (user.avatar.avatarType === 'initials') {
+								setGravatar('initials')
+								if (user.avatar.color) {
+									setRgb(user.avatar.color)
+								} else {
+									console.log('no avatartype?', user.avatar)
+									setRgb({
+										r: Math.floor(Math.random() * 256),
+										g: Math.floor(Math.random() * 256),
+										b: Math.floor(Math.random() * 256)
+									})
+								}
+							} else {
+								tryLoadingGravatar()
+							}
 						}
 					}
 				} else {
@@ -152,7 +214,7 @@ const UserAvatar = ({
 					}
 				}
 			}
-			setKeepUpdated(update)
+			// setKeepUpdated(update)
 		}
 	}, [user, size])
 
@@ -163,7 +225,7 @@ const UserAvatar = ({
 					<AvatarStyle size={size} src={gravatar} title={title ? (user && user.username) : null} alt={`User ${(user && user.username) || 'Default'}'s avatar`} noBorder={noBorder} round={!noBorderRadius} />
 				)}
 			{gravatar === 'initials' && user.username && rgb && (
-				<TextAvatar rgb={rgb} brightness={getBrightness(rgb)} size={size} title={title ? (user && user.username) : null} alt={`User ${(user && user.username) || 'Default'}'s avatar`} noBorder={noBorder} round={!noBorderRadius} initials={`${user.username[0]}`} />
+				<TextAvatar rgb={rgb} brightness={getBrightness(rgb)} size={size} title={title ? (user && user.username) : null} alt={`User ${(user && user.username) || 'Default'}'s avatar`} noBorder={noBorder} round={!noBorderRadius} initials={initials} />
 			)}
 		</>
 	)

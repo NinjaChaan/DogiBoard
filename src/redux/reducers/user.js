@@ -24,6 +24,7 @@ const userReducer = (state = initialState, action) => {
 				loggedOut: true
 			}
 		case 'UPDATE_USER':
+			console.log('user reducer', action.payload)
 			return {
 				...state,
 				user: action.payload

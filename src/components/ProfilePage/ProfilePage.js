@@ -141,7 +141,7 @@ const ProfilePage = ({ dispatch }) => {
 
 	return (
 		<ProfileContainer>
-			<AvatarContainer user={user} gravatarEmail={gravatarEmail} />
+			<AvatarContainer user={user} setStatusType={setStatusType} setStatusMessage={setStatusMessage} />
 			<AccountDetailsForm onSubmit={handleSubmit}>
 				<StatusMessage statusMessage={statusMessage} statusType={statusType} />
 				<TextSpan>Username</TextSpan>

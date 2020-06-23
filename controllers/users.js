@@ -21,6 +21,14 @@ usersRouter.post('/', async (request, response, next) => {
 
 	const passwordHash = await hashPassword(body.password)
 
+	const matches = body.username.match(/\b(\w)/g)
+	let initials = matches.join('')
+	console.log(initials)
+
+	if (initials.length > 2) {
+		initials = initials[0] + initials[1]
+	}
+
 	const user = new User({
 		username: body.username,
 		email: body.email,
@@ -30,7 +38,9 @@ usersRouter.post('/', async (request, response, next) => {
 				r: Math.floor(Math.random() * 256),
 				g: Math.floor(Math.random() * 256),
 				b: Math.floor(Math.random() * 256)
-			}
+			},
+			initials,
+			gravatarEmail: body.email
 		}
 	})
 
@@ -171,12 +181,14 @@ usersRouter.put('/:id/avatar', async (request, response, next) => {
 					const updatedUser = ({
 						...foundUser.toJSON(),
 						avatar: {
-							avatarType: body.avatar.avatarType || foundUser.avatar.avatarType,
+							avatarType: (body.avatar && body.avatar.avatarType) || (foundUser.avatar && foundUser.avatar.avatarType),
 							color: (body.avatar && body.avatar.color) || (foundUser.avatar && foundUser.avatar.color) || {
 								r: Math.floor(Math.random() * 256),
 								g: Math.floor(Math.random() * 256),
 								b: Math.floor(Math.random() * 256)
-							}
+							},
+							initials: (body.avatar && body.avatar.initials) || (foundUser.avatar && foundUser.avatar.initials) || foundUser.username[0],
+							gravatarEmail: (body.avatar && body.gravatarEmail) || (foundUser.avatar && foundUser.gravatarEmail) || foundUser.email
 						}
 					})
 					User.updateOne({ _id: request.params.id }, updatedUser).then(() => {

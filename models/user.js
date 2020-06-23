@@ -73,6 +73,10 @@ const userSchema = new mongoose.Schema({
 			b: {
 				type: String
 			}
+		},
+		initials: {
+			type: String,
+			maxlength: 2
 		}
 	}
 })

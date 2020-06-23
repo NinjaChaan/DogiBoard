@@ -71,6 +71,16 @@ const updateGravatar = (id, gravatarEmail) => {
 const getGravatar = (email, size) => {
 	const request = axios.get(`https://www.gravatar.com/avatar/${email}.png?s=${size}&d=404`, { responseType: 'blob' })
 	return request.then((response) => response).catch((error) => {
+		console.log('error', error.response.status)
+		if (error.response.status === 404) {
+			console.log('404 got', error.response.status)
+			const req = axios.get(`https://www.gravatar.com/avatar/${email}.png?s=${size}&d=robohash`, { responseType: 'blob' })
+			return req.then((response) => { response.status = 418; return response }).catch((err) => {
+				console.log('deep error')
+				return err.response
+			})
+		}
+		console.log('shallow error')
 		return error.response
 	})
 }

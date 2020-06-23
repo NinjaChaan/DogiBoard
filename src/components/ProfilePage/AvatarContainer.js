@@ -68,20 +68,44 @@ const GravatarLink = styled.a`
 	padding-top: '3px';
 `
 
-const AvatarContainer = ({ user, gravatarEmail }) => {
+const GravatarError = styled.span`
+	display: block;
+	font-size: small;
+	font-weight: 600;
+	text-align: left;
+	color: crimson;
+`
+
+const AvatarContainer = ({ user, setStatusMessage, setStatusType, dispatch }) => {
+	const [initials, setInitials] = useState('')
+	const [gravatarEmail, setGravatarEmail] = useState('')
 	const [avatarType, setAvatarType] = useState('')
 
-	const handleGravatarSubmit = () => {
-		userService.updateGravatar(user.id, { gravatarEmail }).then((response) => {
-			console.log('gravatar change response', response)
+	const handleAvatarSubmit = () => {
+		const updatedUser = {
+			avatar: {
+				avatarType,
+				color: user.avatar.color,
+				gravatarEmail,
+				initials
+			}
+		}
+
+		const upUser = {
+			...user,
+			avatar: {
+				avatarType,
+				color: user.avatar.color,
+				gravatarEmail,
+				initials
+			}
+		}
+		userService.updateAvatar(user.id, updatedUser).then((response) => {
+			console.log('avatar change response', response)
 			if (response.status === 200) {
 				setStatusType('success')
-				setStatusMessage('Gravatar email saved successfully')
-				const updatedUser = {
-					...user,
-					gravatarEmail
-				}
-				dispatch(updateUser(updatedUser))
+				setStatusMessage('Avatar settings saved successfully')
+				dispatch(updateUser(upUser))
 			} else if (response.status === 400 || response.status === 401 || response.status === 404) {
 				setStatusType('error')
 				setStatusMessage(response.data.error)
@@ -96,25 +120,108 @@ const AvatarContainer = ({ user, gravatarEmail }) => {
 		})
 	}
 
+	const handleRadioChange = (type) => {
+		setStatusType('')
+		setStatusMessage('')
+		setAvatarType(type)
+		if (user.avatar && user.avatar.avatarType === type) {
+			return
+		}
+		const updatedUser = {
+			avatar: {
+				avatarType: type
+			}
+		}
+
+		const upUser = {
+			...user,
+			avatar: {
+				avatarType: type,
+				color: user.avatar.color,
+				gravatar: gravatarEmail,
+				initials,
+				manual: true
+			}
+		}
+
+		userService.updateAvatar(user.id, updatedUser).then((res) => {
+			if (res.status === 200) {
+				dispatch(updateUser(upUser))
+			} else if (res.status === 400 || res.status === 401 || res.status === 404) {
+				console.log(res.data.error)
+			} else {
+				console.log(res.data)
+			}
+		})
+	}
+
+	useEffect(() => {
+		if (user) {
+			if (user.email) {
+				if (user.avatar && user.avatar.gravatarEmail) {
+					setGravatarEmail(user.avatar.gravatarEmail)
+				} else {
+					setGravatarEmail(user.email)
+				}
+			}
+			if (user.avatar) {
+				if (user.avatar.avatarType) {
+					setAvatarType(user.avatar.avatarType)
+				}
+				if (user.avatar.initials) {
+					setInitials(user.avatar.initials)
+				} else {
+					setInitials(user.username[0])
+				}
+				if (user.avatar.gravatarFailed) {
+					// setStatusType('error')
+					// setStatusMessage('Loading gravatar failed. Do you have a Gravatar account?')
+				}
+			}
+		}
+	}, [user])
+
 	return (
 		<AvatarContainerDiv>
 			<Title>Avatar</Title>
 			<UserAvatar user={user} size="200" noBorder />
 			<AvatarTypeContainer>
 				<TextSpan>Avatar type</TextSpan>
-				<input type="radio" id="gravatar" name="avatarType" value="Gravatar" />
+				<input type="radio" id="gravatar" name="avatarType" value="Gravatar" onChange={() => handleRadioChange('gravatar')} checked={user.avatar.avatarType === 'gravatar'} />
 				<AvatarText>Gravatar</AvatarText>
-				<input type="radio" id="initials" name="avatarType" value="Initials" />
+				<input type="radio" id="initials" name="avatarType" value="Initials" onChange={() => handleRadioChange('initials')} checked={user.avatar.avatarType === 'initials'} />
 				<AvatarText>Initials</AvatarText>
 			</AvatarTypeContainer>
-			<TextSpan>
-				Gravatar email
-				<GravatarLink href="https://en.gravatar.com/" target="_blank" rel="noopener noreferrer">What is Gravatar?</GravatarLink>
-			</TextSpan>
-			<ProfileTextarea type="email" id="gravatarField" value={gravatarEmail} onChange={(e) => setGravatarEmail(e.target.value)} />
-			<SaveButton onClick={handleGravatarSubmit}>Save changes</SaveButton>
+			{user.avatar && user.avatar.avatarType && user.avatar.avatarType === 'gravatar'
+				&& (
+					<>
+						<TextSpan>
+							Gravatar email
+							{user.avatar && !user.avatar.gravatarFailed
+								&& (<GravatarLink href="https://en.gravatar.com/" target="_blank" rel="noopener noreferrer">What is Gravatar?</GravatarLink>)}
+						</TextSpan>
+						{user.avatar && user.avatar.gravatarFailed
+							&& (
+								<GravatarError>
+									Failed to load Gravatar. Do you have a Gravatar account?
+									<GravatarLink href="https://en.gravatar.com/" target="_blank" rel="noopener noreferrer">What is Gravatar?</GravatarLink>
+								</GravatarError>
+							)}
+						<ProfileTextarea type="email" id="gravatarField" value={gravatarEmail} onChange={(e) => setGravatarEmail(e.target.value)} />
+					</>
+				)}
+			{user.avatar && user.avatar.avatarType && user.avatar.avatarType === 'initials'
+				&& (
+					<>
+						<TextSpan>
+							Initials
+						</TextSpan>
+						<ProfileTextarea maxLength={2} id="initialsField" value={initials} onChange={(e) => setInitials(e.target.value)} />
+					</>
+				)}
+			<SaveButton onClick={handleAvatarSubmit}>Save changes</SaveButton>
 		</AvatarContainerDiv>
 	)
 }
 
-export default AvatarContainer
+export default connect(null, null)(AvatarContainer)
