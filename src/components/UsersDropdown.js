@@ -155,6 +155,7 @@ const UsersDropdown = () => {
 	const [showUserInfoMenu, setShowUserInfoMenu] = useState(false)
 	const [clickedUser, setClickedUser] = useState()
 	const [userInfoId, setUserInfoId] = useState('')
+	const [userInfoIds, setUserInfoIds] = useState([])
 	const [userInfoPos, setUserInfoPos] = useState({})
 	const [users, setUsers] = useState([])
 	const [inviteInput, setInviteInput] = useState('')
@@ -165,7 +166,9 @@ const UsersDropdown = () => {
 	useEffect(() => {
 		if (board && board.users) {
 			const userArray = []
+			const userIds = []
 			userArray.push(currentUser)
+			userIds.push(`userButton-${currentUser.id}`)
 			const promises = board.users.map((user) => {
 				if (user.id !== currentUser.id) {
 					return userService.getOne(user.id)
@@ -175,10 +178,11 @@ const UsersDropdown = () => {
 				responses.map((response) => {
 					if (response && response.data) {
 						userArray.push(response.data)
+						userIds.push(`userButton-${response.data.id}`)
 					}
 				})
 				setUsers(userArray)
-				console.log('users', userArray)
+				setUserInfoIds(userIds)
 			})
 		}
 	}, [board])
@@ -223,6 +227,11 @@ const UsersDropdown = () => {
 		setSelectedUsers([])
 	}
 
+	useEffect(() => {
+		setClickedUser(!showUserInfoMenu ? null : clickedUser)
+		setBigAvatar(showUserInfoMenu && bigAvatar)
+	}, [showUserInfoMenu])
+
 	const openUserInfoMenu = (user) => {
 		const index = users.indexOf(user)
 		if (user !== clickedUser) {
@@ -256,10 +265,12 @@ const UsersDropdown = () => {
 											<UsersUserButton link_transparent id={`userButton-${user.id}`} key={user.id} onClick={() => { openUserInfoMenu(user) }}><AvatarStyle user={user} size="40" noBorder /></UsersUserButton>
 										</div>
 									))}
-									<Dropdown bgColor="rgb(255, 255, 255)" show={showUserInfoMenu || false} setShowMenu={setShowUserInfoMenu} parentId={userInfoId} width={300} position={userInfoPos}>
+									<Dropdown callBack={setBigAvatar} bgColor="rgb(255, 255, 255)" show={showUserInfoMenu || false} setShowMenu={setShowUserInfoMenu} parentId={userInfoId} ids={userInfoIds} width={300} position={userInfoPos}>
 										{clickedUser && (
 											<UserInfoCardContainer>
-												<UsersUserButton link_transparent onClick={() => setBigAvatar(!bigAvatar)}><AvatarStyle update noBorderRadius={bigAvatar} user={clickedUser} size={bigAvatar ? '150' : '50'} /></UsersUserButton>
+												<UsersUserButton link_transparent onClick={() => setBigAvatar(!bigAvatar)}>
+													<AvatarStyle update noBorderRadius={bigAvatar} user={clickedUser} size={bigAvatar ? '150' : '50'} quality={4} />
+												</UsersUserButton>
 												<div className="col">
 													<UserInfoUsername>{(clickedUser && clickedUser.username) || 'Default username'}</UserInfoUsername>
 													{clickedUser && clickedUser.id === currentUser.id && (

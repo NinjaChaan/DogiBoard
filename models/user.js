@@ -59,7 +59,7 @@ const userSchema = new mongoose.Schema({
 		type: Object,
 		avatarType: {
 			type: String,
-			enum: ['gravatar', 'initials'],
+			enum: ['gravatar', 'robohash', 'initials'],
 			default: 'gravatar'
 		},
 		color: {

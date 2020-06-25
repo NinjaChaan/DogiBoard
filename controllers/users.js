@@ -170,8 +170,6 @@ usersRouter.put('/:id', async (request, response) => {
 usersRouter.put('/:id/avatar', async (request, response, next) => {
 	const { body } = request
 
-	console.log('gravatar update', request)
-
 	const user = await getUserUtil.getUser(request, response)
 
 	User.findById(request.params.id)
@@ -188,7 +186,7 @@ usersRouter.put('/:id/avatar', async (request, response, next) => {
 								b: Math.floor(Math.random() * 256)
 							},
 							initials: (body.avatar && body.avatar.initials) || (foundUser.avatar && foundUser.avatar.initials) || foundUser.username[0],
-							gravatarEmail: (body.avatar && body.gravatarEmail) || (foundUser.avatar && foundUser.gravatarEmail) || foundUser.email
+							gravatarEmail: (body.avatar && body.avatar.gravatarEmail) || (foundUser.avatar && foundUser.avatar.gravatarEmail) || foundUser.email
 						}
 					})
 					User.updateOne({ _id: request.params.id }, updatedUser).then(() => {

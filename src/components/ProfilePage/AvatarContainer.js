@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import styled, { keyframes } from 'styled-components'
+import styled, { css } from 'styled-components'
 import { connect, useSelector } from 'react-redux'
+import { HuePicker } from 'react-color'
 import Button from '../Button'
 import { updateUser } from '../../redux/actions/index'
 import userService from '../../services/users'
 import UserAvatar from '../UserAvatar'
+import RadioButton from '../RadioButton'
 
 const ProfileTextarea = styled.input`
 	height: 2rem;
@@ -13,6 +15,10 @@ const ProfileTextarea = styled.input`
 	margin-bottom: 20px;
 	border-radius: 4px;
 	padding-left: 5px;
+
+	${(props) => props.noBottomMargin && css`
+		margin-bottom: 0px;
+	`}
 `
 
 const TextSpan = styled.span`
@@ -30,7 +36,7 @@ const AvatarText = styled.span`
 
 const AvatarTypeContainer = styled.div`
 	text-align: left;
-	margin: 10px 0;
+	margin: 10px 0 0 0;
 `
 
 const Title = styled.h2`
@@ -68,24 +74,43 @@ const GravatarLink = styled.a`
 	padding-top: '3px';
 `
 
-const GravatarError = styled.span`
+const AvatarInfoText = styled.span`
 	display: block;
 	font-size: small;
 	font-weight: 600;
 	text-align: left;
-	color: crimson;
+	margin-bottom: 5px;
+
+	${(props) => props.color && css`
+		color: ${props.color};
+	`}
 `
 
-const AvatarContainer = ({ user, setStatusMessage, setStatusType, dispatch }) => {
+const HueSelector = styled(HuePicker)`
+	margin-bottom: 20px;
+	width: 100% !important;
+`
+const RadioContainer = styled.div`
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+`
+
+const AvatarContainer = ({
+	user, setStatusMessage, setStatusType, dispatch
+}) => {
 	const [initials, setInitials] = useState('')
 	const [gravatarEmail, setGravatarEmail] = useState('')
 	const [avatarType, setAvatarType] = useState('')
+	const [avatarColor, setAvatarColor] = useState({ r: 100, g: 100, b: 100 })
+	const [sliderColor, setSliderColor] = useState({ r: 100, g: 100, b: 100 })
 
 	const handleAvatarSubmit = () => {
 		const updatedUser = {
 			avatar: {
 				avatarType,
-				color: user.avatar.color,
+				color: avatarColor,
 				gravatarEmail,
 				initials
 			}
@@ -95,9 +120,10 @@ const AvatarContainer = ({ user, setStatusMessage, setStatusType, dispatch }) =>
 			...user,
 			avatar: {
 				avatarType,
-				color: user.avatar.color,
+				color: avatarColor,
 				gravatarEmail,
-				initials
+				initials,
+				settingsChanged: true
 			}
 		}
 		userService.updateAvatar(user.id, updatedUser).then((response) => {
@@ -138,9 +164,10 @@ const AvatarContainer = ({ user, setStatusMessage, setStatusType, dispatch }) =>
 			avatar: {
 				avatarType: type,
 				color: user.avatar.color,
-				gravatar: gravatarEmail,
+				gravatarEmail,
 				initials,
-				manual: true
+				manual: true,
+				settingsChanged: true
 			}
 		}
 
@@ -157,14 +184,12 @@ const AvatarContainer = ({ user, setStatusMessage, setStatusType, dispatch }) =>
 
 	useEffect(() => {
 		if (user) {
-			if (user.email) {
-				if (user.avatar && user.avatar.gravatarEmail) {
+			if (user.avatar) {
+				if (user.avatar.gravatarEmail) {
 					setGravatarEmail(user.avatar.gravatarEmail)
 				} else {
 					setGravatarEmail(user.email)
 				}
-			}
-			if (user.avatar) {
 				if (user.avatar.avatarType) {
 					setAvatarType(user.avatar.avatarType)
 				}
@@ -177,35 +202,67 @@ const AvatarContainer = ({ user, setStatusMessage, setStatusType, dispatch }) =>
 					// setStatusType('error')
 					// setStatusMessage('Loading gravatar failed. Do you have a Gravatar account?')
 				}
+				if (user.avatar.color) {
+					setAvatarColor(user.avatar.color)
+					setSliderColor(user.avatar.color)
+				}
 			}
 		}
 	}, [user])
 
+	const handleColorChange = (color, event) => {
+		setAvatarColor(color.rgb)
+		setSliderColor(color.rgb)
+
+		const upUser = {
+			...user,
+			avatar: {
+				avatarType,
+				color: color.rgb,
+				gravatarEmail,
+				initials
+			}
+		}
+		dispatch(updateUser(upUser))
+	}
+
+	const handleColorSliderChange = (color, event) => {
+		setSliderColor(color.rgb)
+	}
+
 	return (
 		<AvatarContainerDiv>
 			<Title>Avatar</Title>
-			<UserAvatar user={user} size="200" noBorder />
+			<UserAvatar user={user} size="150" noBorder />
 			<AvatarTypeContainer>
 				<TextSpan>Avatar type</TextSpan>
-				<input type="radio" id="gravatar" name="avatarType" value="Gravatar" onChange={() => handleRadioChange('gravatar')} checked={user.avatar.avatarType === 'gravatar'} />
-				<AvatarText>Gravatar</AvatarText>
-				<input type="radio" id="initials" name="avatarType" value="Initials" onChange={() => handleRadioChange('initials')} checked={user.avatar.avatarType === 'initials'} />
-				<AvatarText>Initials</AvatarText>
+				<RadioContainer>
+					<RadioButton id="gravatar" name="avatarType" value="Gravatar" callBack={handleRadioChange} checked={user.avatar.avatarType === 'gravatar'} />
+					<RadioButton id="robo" name="avatarType" value="Robot" callBack={handleRadioChange} checked={user.avatar.avatarType === 'robo'} />
+					<RadioButton id="initials" name="avatarType" value="Initials" callBack={handleRadioChange} checked={user.avatar.avatarType === 'initials'} />
+				</RadioContainer>
 			</AvatarTypeContainer>
-			{user.avatar && user.avatar.avatarType && user.avatar.avatarType === 'gravatar'
+			{user.avatar && user.avatar.avatarType && (user.avatar.avatarType === 'gravatar' || user.avatar.avatarType === 'robo')
 				&& (
 					<>
 						<TextSpan>
 							Gravatar email
-							{user.avatar && !user.avatar.gravatarFailed
-								&& (<GravatarLink href="https://en.gravatar.com/" target="_blank" rel="noopener noreferrer">What is Gravatar?</GravatarLink>)}
+							{/* {!user.avatar.gravatarFailed
+								&& (<GravatarLink href="https://en.gravatar.com/" target="_blank" rel="noopener noreferrer">What is Gravatar?</GravatarLink>)} */}
 						</TextSpan>
-						{user.avatar && user.avatar.gravatarFailed
+						{user.avatar.avatarType === 'gravatar' && user.avatar.gravatarFailed
 							&& (
-								<GravatarError>
+								<AvatarInfoText color="crimson">
 									Failed to load Gravatar. Do you have a Gravatar account?
 									<GravatarLink href="https://en.gravatar.com/" target="_blank" rel="noopener noreferrer">What is Gravatar?</GravatarLink>
-								</GravatarError>
+								</AvatarInfoText>
+							)}
+						{user.avatar.avatarType === 'robo'
+							&& (
+								<AvatarInfoText>
+									Gravatar email is used to generate a robot
+									<GravatarLink href="https://en.gravatar.com/" target="_blank" rel="noopener noreferrer">What is Gravatar?</GravatarLink>
+								</AvatarInfoText>
 							)}
 						<ProfileTextarea type="email" id="gravatarField" value={gravatarEmail} onChange={(e) => setGravatarEmail(e.target.value)} />
 					</>
@@ -216,7 +273,18 @@ const AvatarContainer = ({ user, setStatusMessage, setStatusType, dispatch }) =>
 						<TextSpan>
 							Initials
 						</TextSpan>
-						<ProfileTextarea maxLength={2} id="initialsField" value={initials} onChange={(e) => setInitials(e.target.value)} />
+						<AvatarInfoText>
+							Max 3 letters
+						</AvatarInfoText>
+						<ProfileTextarea noBottomMargin maxLength={3} id="initialsField" value={initials} onChange={(e) => setInitials(e.target.value)} />
+						<TextSpan>
+							Color
+						</TextSpan>
+						{(window.matchMedia('(max-width: 425px)').matches && (
+							<HueSelector color={sliderColor} onChange={handleColorSliderChange} onChangeComplete={handleColorChange} />
+						)) || (
+								<HueSelector color={sliderColor} onChange={handleColorChange} />
+							)}
 					</>
 				)}
 			<SaveButton onClick={handleAvatarSubmit}>Save changes</SaveButton>

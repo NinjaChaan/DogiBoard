@@ -17,11 +17,11 @@ const DropdownMenu = styled.div`
 		right: ${props.position.right || null};
 		left: ${props.position.left || null};
 		bottom: ${props.position.bottom || null};`
-}
+	}
 	${(props) => props.noTopBorder && css`
 		border-top-left-radius: 0;
 		border-top-right-radius: 0;`
-}
+	}
 
 
 
@@ -74,23 +74,31 @@ const DropdownMenu = styled.div`
 `
 
 const Dropdown = ({
-	children, show, setShowMenu, parentId, width, position, relativePos, bgColor, noTopBorder, noShadow
+	children, show, setShowMenu, parentId, ids, width, position, relativePos, bgColor, noTopBorder, noShadow
 }) => {
 	const menu = useRef()
 	const [menuWidth, setWidth] = useState(0)
 
+	// check if any provided ids element clicked
+	const idsContain = (target) => {
+		for (let i = 0; i < ids.length; i++) {
+			if (document.getElementById(ids[i]).contains(target)) {
+				return true
+			}
+		}
+		return false
+	}
+
 	const handleClick = (e) => {
 		const parent = document.getElementById(parentId)
-		// console.log(`dropwdown parent ${parentId}`, parent)
-		// console.log('dropwdown width', width)
 
 		if (width === undefined) {
 			setWidth(parent.scrollWidth)
 		} else {
 			setWidth(width)
 		}
-		if (menu.current.contains(e.target) || parent.contains(e.target)) {
-			// inside click
+		// check if menu itself, parent of menu or any provided element clicked
+		if (menu.current.contains(e.target) || parent.contains(e.target) || (ids && idsContain(e.target))) {
 			return
 		}
 		setShowMenu(false)
@@ -105,7 +113,7 @@ const Dropdown = ({
 	useEffect(() => {
 		// setShowMenu(true)
 		// setTimeout(()=>setShowMenu(false), 50)
-		
+
 		if (parentId) {
 			// add when mounted
 			document.addEventListener('mousedown', handleClick) // return function to be called when unmounted
