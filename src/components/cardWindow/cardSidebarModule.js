@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { connect } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { connect, useSelector } from 'react-redux'
 import styled, { css } from 'styled-components'
 import {
 	RiBug2Line,
@@ -15,7 +15,9 @@ import {
 import SidebarButton from './sidebarButton'
 import Dropdown from '../Dropdown'
 import Button from '../Button'
+import AvatarStyle from '../UserAvatar'
 import { device } from '../../devices'
+import userService from '../../services/users'
 
 const ButtonContainer = styled.div`
 width: 100%;
@@ -63,8 +65,138 @@ const LabelDropdownButton = styled(Button)`
 	}
 `
 
+const UsersContainer = styled.div`
+	/* display: -ms-flexbox;
+	display: flex;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap; */
+	overflow-y: auto;
+	/* max-height: 90px; */
+	/* -ms-flex-preferred-size: 0;
+	flex-basis: 0;
+	-ms-flex-positive: 1;
+	flex-grow: 1; */
+	min-width: 0;
+	max-width: 100%;
+`
+
+const UsersDropdownStyle = styled(Dropdown)`
+	margin: 0 auto;
+	@media ${(props) => props.theme.device.mobileL} {	
+		margin: none;
+	}
+`
+
+const UserButton = styled(Button)`
+	display: contents;
+	padding-top: 0px;
+	background-color: transparent;
+	width: 45px;
+	height: 45px;
+	margin: 5.5px 5.5px 0px 5.5px;
+	margin-left: 0px;
+
+	&:hover{
+		background-color: transparent;
+	}
+`
+
+const UserName = styled.span`
+	/* margin: auto auto auto 10px; */
+	font-weight: 600;
+	/* display: -ms-flexbox;
+	display: flex;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap; */
+	/* text-overflow: ellipsis;
+	overflow: hidden; */
+	white-space: nowrap;
+	/* display: block; */
+	display: inline-block;
+	
+	${(props) => (props.userOnBoard) && css`
+		margin-bottom: -5px;
+		margin-top: 5px;
+	`}
+`
+
+const MatchedUsersContainer = styled.div`
+	display: -ms-flexbox;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-wrap: wrap;
+	-webkit-flex-wrap: wrap;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+	margin-bottom: 5px;
+	cursor: default;
+	border: 2px solid transparent;
+	max-width: 280px;
+	padding: 2px 5px;
+	border-radius: 4px;
+	width: 100%;
+
+	${(props) => props.selected && css`
+		border: 2px solid #557dff;
+		border-radius: 4px;
+	`}	
+
+	&:hover{
+		${(props) => !props.userOnBoard && css`
+			cursor: pointer;
+			background-color: rgba(0, 0, 0, 0.07);
+		`}		
+	}
+`
+
+const UserInfoContainer = styled.div`
+	/* -ms-flex-preferred-size: 0;
+	flex-basis: 0;
+	-ms-flex-positive: 1;
+	flex-grow: 1;
+	min-width: 0;
+	flex: 0 0 75%;
+	max-width: 75%; */
+	display: inline-block;
+	padding-left: 10px;
+	${(props) => !props.userOnBoard && css`
+		display: flex;
+		align-items: center;
+	`}
+`
+
+const UserInfo = styled.span`
+	font-size: smaller;
+`
+
 const CardSidebarModule = ({ selectedCard, closeCardWindow, dispatch }) => {
+	const currentUser = useSelector((state) => state.user.user)
+	const board = useSelector((state) => state.board.board)
 	const [showLabelMenu, setShowLabelMenu] = useState(false)
+	const [showUsersMenu, setShowUsersMenu] = useState(false)
+	const [users, setUsers] = useState([])
+
+	useEffect(() => {
+		if (board && board.users) {
+			const userArray = []
+			userArray.push(currentUser)
+			const promises = board.users.map((user) => {
+				if (user.id !== currentUser.id) {
+					return userService.getOne(user.id)
+				}
+			}).filter((x) => x !== undefined)
+			Promise.all(promises).then((responses) => {
+				responses.map((response) => {
+					if (response && response.data) {
+						userArray.push(response.data)
+					}
+				})
+				setUsers(userArray)
+			})
+		}
+	}, [board])
 
 	const deleteCardPressed = () => {
 		dispatch(deleteCard(selectedCard))
@@ -105,7 +237,25 @@ const CardSidebarModule = ({ selectedCard, closeCardWindow, dispatch }) => {
 					: (
 						<SidebarButton variant="light" className="btn-card-sidebar" func={addChecklistPressed} text="Checklist" iconName="RiCheckboxLine" />
 					)}
-				<SidebarButton variant="light" className="btn-card-sidebar" func={addChecklistPressed} text="Members" iconName="RiUserAddLine" />
+				<SidebarButton id="memberButton" variant="light" className="btn-card-sidebar" func={() => { setShowUsersMenu(!showUsersMenu) }} text="Members" iconName="RiUserAddLine" />
+				{board && users && users.length > 0 && (
+					<UsersDropdownStyle maxContent padding="5px" bgColor="rgb(228, 225, 225)" show={showUsersMenu || false} setShowMenu={setShowUsersMenu} parentId="memberButton">
+						<UsersContainer id="usersContainer">
+							{users.map((user) => (
+								<div key={user.id} style={{ width: '100%' }}>
+									{/* <UserButton link_transparent id={`userButton-${user.id}`} key={user.id} onClick={() => { openUserInfoMenu(user) }}><AvatarStyle user={user} size="40" noBorder /></UserButton> */}
+									<MatchedUsersContainer className="col" key={user.id}>
+										<UserButton link_transparent><AvatarStyle user={user} title={false} size="30" noMargin /></UserButton>
+										<UserInfoContainer>
+											<UserName>{user.username}</UserName>
+											{/* {userOnBoard && <UserInfo>(Already on board)</UserInfo>} */}
+										</UserInfoContainer>
+									</MatchedUsersContainer>
+								</div>
+							))}
+						</UsersContainer>
+					</UsersDropdownStyle>
+				)}
 				<SidebarButton id="labelButton" variant="light" className="btn-card-sidebar" func={() => { setShowLabelMenu(!showLabelMenu) }} text="Label" iconName="RiBookmark2Line" />
 
 				<Dropdown show={showLabelMenu || false} setShowMenu={setShowLabelMenu} parentId="labelButton">

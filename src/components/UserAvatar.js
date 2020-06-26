@@ -28,7 +28,7 @@ const TextAvatar = styled.div`
 	border-radius: 100%;
 	vertical-align: middle;
 	display: flex;
-	margin: 0 auto;
+	
 
 	color: ${(props) => (props.brightness ? '#0e0e0e' : '#f1f1f1')};
 	background-color: ${(props) => `rgb(${props.rgb.r}, ${props.rgb.g}, ${props.rgb.b})`};
@@ -44,6 +44,9 @@ const TextAvatar = styled.div`
 	${(props) => props.noBorderRadius && css`
 		border-radius: 0px;
 	`}
+	${(props) => props.noMargin || css`
+		margin: 0 auto;
+	`}
 
 	&::before {
 		display: flex;	
@@ -58,7 +61,7 @@ const TextAvatar = styled.div`
 	`}
 `
 
-const UserAvatar = ({ user, title = true, noBorder, noBorderRadius, size = '50', quality = 2, dispatch
+const UserAvatar = ({ user, title = true, noBorder, noBorderRadius, noMargin = false, size = '50', quality = 2, dispatch
 }) => {
 	const currentUser = useSelector((state) => state.user.user)
 	const [gravatar, setGravatar] = useState('0')
@@ -221,7 +224,7 @@ const UserAvatar = ({ user, title = true, noBorder, noBorderRadius, size = '50',
 					<AvatarStyle size={size} src={gravatar} title={title ? (user && user.username) : null} alt={`User ${(user && user.username) || 'Default'}'s avatar`} noBorder={noBorder} round={!noBorderRadius} />
 				)}
 			{gravatar === 'initials' && user.username && rgb && (
-				<TextAvatar rgb={rgb} brightness={getBrightness(rgb)} size={size} title={title ? (user && user.username) : null} alt={`User ${(user && user.username) || 'Default'}'s avatar`} noBorder={noBorder} round={!noBorderRadius} initials={initials} />
+				<TextAvatar noMargin={noMargin} rgb={rgb} brightness={getBrightness(rgb)} size={size} title={title ? (user && user.username) : null} alt={`User ${(user && user.username) || 'Default'}'s avatar`} noBorder={noBorder} round={!noBorderRadius} initials={initials} />
 			)}
 		</>
 	)

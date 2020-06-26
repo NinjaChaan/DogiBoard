@@ -51,6 +51,7 @@ const UsersContainer = styled.div`
 	overflow-y: auto;
 	max-height: 90px;
 `
+
 const UserTextarea = styled.input`
 	height: 2rem;
 	resize: none;
@@ -80,17 +81,18 @@ const MatchedUsersContainer = styled.div`
 	border: 2px solid transparent;
 	max-width: 280px;
 	padding: 0px;
+	border-radius: 4px;
 
 	${(props) => props.selected && css`
 		border: 2px solid #557dff;
-		border-radius: 4px;`
-	}	
+		border-radius: 4px;
+	`}	
 
 	&:hover{
 		${(props) => !props.userOnBoard && css`
 			cursor: pointer;
-			background-color: rgba(0, 0, 0, 0.07);`
-	}		
+			background-color: rgba(0, 0, 0, 0.07);
+		`}		
 	}
 `
 
@@ -108,8 +110,8 @@ const UserName = styled.span`
 	
 	${(props) => (props.userOnBoard) && css`
 		margin-bottom: -5px;
-		margin-top: 5px;`
-	}
+		margin-top: 5px;
+	`}
 `
 
 const UserInfo = styled.span`
@@ -122,8 +124,8 @@ const UserInfoContainer = styled.div`
 	display: inline;
 	${(props) => !props.userOnBoard && css`
 		display: flex;
-		align-items: center;`
-	}
+		align-items: center;
+	`}
 `
 
 const UserInfoCardContainer = styled.div`

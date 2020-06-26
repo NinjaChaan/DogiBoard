@@ -9,7 +9,7 @@ const DropdownMenu = styled.div`
 
 	box-shadow: ${(props) => !props.noShadow && '0px 1px 5px 0px rgba(0,0,0,0.5)'};
 
-	padding: 10px;
+	padding: ${(props) => props.padding || '10px'};
 	border-radius: 4px;
 
 	${(props) => props.position && css`
@@ -37,8 +37,12 @@ const DropdownMenu = styled.div`
 	opacity: 0;
 	transform: scaleY(0);
 	max-height: 0; 
-
 	width: ${(props) => props.width}px;
+	
+	${(props) => props.maxContent && css`
+		width: max-content;
+		min-width: ${props.width}px;
+	`}
 
 	&.show{
 		opacity: 1;
@@ -74,7 +78,7 @@ const DropdownMenu = styled.div`
 `
 
 const Dropdown = ({
-	children, show, setShowMenu, parentId, ids, width, position, relativePos, bgColor, noTopBorder, noShadow
+	children, show, setShowMenu, parentId, ids, width, padding, position, relativePos, bgColor, noTopBorder, noShadow, maxContent
 }) => {
 	const menu = useRef()
 	const [menuWidth, setWidth] = useState(0)
@@ -123,7 +127,7 @@ const Dropdown = ({
 		}
 	}, [parentId])
 	return (
-		<DropdownMenu noShadow={noShadow} noTopBorder={noTopBorder} bgColor={bgColor} width={menuWidth} position={position} relativePos={relativePos} className={show && 'show'} ref={menu}>
+		<DropdownMenu maxContent={maxContent} padding={padding} noShadow={noShadow} noTopBorder={noTopBorder} bgColor={bgColor} width={menuWidth} position={position} relativePos={relativePos} className={show && 'show'} ref={menu}>
 			{children}
 		</DropdownMenu>
 	)

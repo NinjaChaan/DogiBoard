@@ -307,7 +307,7 @@ code {
     border-radius: 2px;
     display: none;
     margin: 48px 0 80px;
-    overflow: hidden;
+    /* overflow: hidden; */
     position: relative;
     width: 800px;
     z-index: 25;
