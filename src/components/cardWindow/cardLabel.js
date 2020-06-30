@@ -17,7 +17,7 @@ const LabelContainer = styled.div`
 	padding: 5px;
 	padding-top: 8px;
 	/* border-radius: 4px; */
-	width: 110%;
+	width: 100%;
 	padding-left: 25px;
 
 	background-color: ${(props) => (props.label === 'bug' && '#f43b3b')

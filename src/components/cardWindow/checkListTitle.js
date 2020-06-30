@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { connect } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import { setSelectedCard, updateChecklist } from '../../redux/actions/index'
 
-const mapStateToProps = (state) => ({
-	selectedCard: state.selectedCard,
-	title: state.selectedCard.checklist.name
-})
-
-
-const ChecklistTitle = ({ selectedCard, title, dispatch }) => {
+const ChecklistTitle = ({ dispatch }) => {
+	const selectedCard = useSelector((state) => state.selectedCard)
 	const [titleText, setTitleText] = useState('Checklist')
 	const [listTitleClass, setListTitleClass] = useState('textarea-checklist-title')
 
 	useEffect(() => {
-		setTitleText(title)
+		setTitleText(selectedCard.name)
 	}, [selectedCard])
 
 	const calculateHeight = () => {
@@ -115,4 +110,4 @@ const ChecklistTitle = ({ selectedCard, title, dispatch }) => {
 		/>
 	)
 }
-export default connect(mapStateToProps, null)(ChecklistTitle)
+export default connect(null, null)(ChecklistTitle)

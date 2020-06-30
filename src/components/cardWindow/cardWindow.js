@@ -1,6 +1,6 @@
-import React, { useEffect, Suspense } from 'react'
-import { connect } from 'react-redux'
-import { setSelectedCard } from '../../redux/actions/index'
+import React, { useEffect, useState, Suspense } from 'react'
+import { connect, useSelector } from 'react-redux'
+import { setSelectedCard, updateCard } from '../../redux/actions/index'
 import Button from 'react-bootstrap/Button'
 import CardLabel from './cardLabel'
 import styled from 'styled-components'
@@ -8,7 +8,9 @@ import CardTitle from './cardTitle'
 import CardDescription from './cardDescription'
 import CardSidebarModule from './cardSidebarModule'
 import { device } from '../../devices'
+import AvatarStyle from '../UserAvatar'
 import LoadingAnimation from '../loadingAnimation'
+import userService from '../../services/users'
 const Checklist = React.lazy(() => import('./checklist'))
 
 const CardWindowMain = styled.div`
@@ -107,12 +109,53 @@ const CardHeader = styled.div`
     width: 100%;
 `
 
-const mapStateToProps = (state) => {
-	// console.log('state at cardwindiw', state.selectedCard)
-	return { selectedCard: state.selectedCard }
-}
+const UsersUserButton = styled(Button)`
+	display: contents;
+	padding-top: 0px;
+	background-color: transparent;
+	width: 45px;
+	height: 45px;
+	margin: 5.5px 5.5px 0px 5.5px;
+	margin-left: 0px;
 
-const CardWindowContainer = ({ selectedCard, dispatch }) => {
+	&:hover{
+		background-color: transparent;
+	}
+`
+
+const UsersContainer = styled.div`
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+	overflow-y: auto;
+	max-height: 90px;
+`
+
+const CardWindowContainer = ({ dispatch }) => {
+	const currentUser = useSelector((state) => state.user.user)
+	const selectedCard = useSelector((state) => state.selectedCard)
+	const [members, setMembers] = useState([])
+
+	useEffect(() => {
+		if (selectedCard && selectedCard.members) {
+			const userArray = []
+			const promises = selectedCard.members.map((user) => {
+				if (user.id !== currentUser.id) {
+					return userService.getOne(user.id)
+				}
+			}).filter((x) => x !== undefined)
+			Promise.all(promises).then((responses) => {
+				responses.map((response) => {
+					if (response && response.data) {
+						userArray.push(response.data)
+					}
+				})
+				setMembers(userArray)
+			})
+		}
+	}, [selectedCard])
+
 	const closeCardWindow = () => {
 		document.getElementById('window-overlay').style.display = 'none'
 		const selectedCard = {
@@ -136,6 +179,25 @@ const CardWindowContainer = ({ selectedCard, dispatch }) => {
 	const handleChildClick = (e) => {
 		e.stopPropagation()
 	}
+
+	const toggleMember = (member) => {
+		let membs = []
+		if (members) {
+			membs = members
+		}
+		if (members && members.indexOf(member) > -1) {
+			membs.push(smembers.filter((u) => (u !== user)))
+		} else {
+			membs.push(member)
+		}
+		const updatedCard = {
+			...selectedCard,
+			members: membs
+		}
+		console.log('update card memb', dispatch(updateCard(updatedCard)))
+		console.log('set', dispatch(setSelectedCard(updatedCard)))
+	}
+
 	return (
 		<WindowOverlay id="window-overlay" className="window-overlay" onClick={closeCardWindow}>
 			<CardWindow id="card-window" className="window row" tabIndex="0" onClick={handleChildClick}>
@@ -157,6 +219,19 @@ const CardWindowContainer = ({ selectedCard, dispatch }) => {
 								<h6 style={{ fontWeight: '600', userSelect: 'none' }}>Description</h6>
 							</div>
 							<CardDescription />
+							{selectedCard.members && members.length > 0
+								&& (
+									<>
+										<h6 style={{ userSelect: 'none' }}>Members</h6>
+										<UsersContainer id="usersContainer">
+											{members.map((member) => (
+												<div key={member.id} style={{ margin: '3px' }}>
+													<UsersUserButton link_transparent={1} id={`userButton-${member.id}`} key={member.id} onClick={() => { toggleMember(member) }}><AvatarStyle user={member} size="40" noBorder /></UsersUserButton>
+												</div>
+											))}
+										</UsersContainer>
+									</>
+								)}
 							{selectedCard.checklist
 								? <Suspense fallback={<></>}>
 									<Checklist selectedCard={selectedCard} />
@@ -174,4 +249,4 @@ const CardWindowContainer = ({ selectedCard, dispatch }) => {
 	)
 }
 
-export default connect(mapStateToProps, null)(CardWindowContainer)
+export default connect(null, null)(CardWindowContainer)

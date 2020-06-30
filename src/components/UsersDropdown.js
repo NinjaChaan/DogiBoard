@@ -257,7 +257,7 @@ const UsersDropdown = () => {
 				<UsersButton id="usersMenuButton" onClick={() => { setShowUsersMenu(!showUsersMenu) }}>Users</UsersButton>
 			</UsersButtonContainer>
 			{users && users.length > 0 && (
-				<UsersDropdownStyle bgColor="rgb(228, 225, 225)" show={showUsersMenu || false} setShowMenu={setShowUsersMenu} parentId="usersMenuButton" width={users.length > 12 ? 320 : 300} position={{ top: '43px', left: '-125px' }} relativePos noTopBorder>
+				<UsersDropdownStyle bgColor="rgb(225, 225, 225)" show={showUsersMenu || false} setShowMenu={setShowUsersMenu} parentId="usersMenuButton" width={users.length > 12 ? 320 : 300} position={{ top: '43px', left: '-125px' }} relativePos noTopBorder>
 					{board && board.users
 						&& (
 							<>

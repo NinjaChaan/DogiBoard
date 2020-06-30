@@ -36,6 +36,7 @@
         "mongoose-unique-validator": "^2.0.3",
         "morgan": "^1.10.0",
         "node-zopfli-es": "^1.0.4",
+        "polished": "^3.6.5",
         "popper.js": "^1.16.1",
         "prop-types": "^15.7.2",
         "react": "^16.13.1",

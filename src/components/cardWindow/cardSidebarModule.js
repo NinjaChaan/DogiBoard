@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect, useSelector } from 'react-redux'
 import styled, { css } from 'styled-components'
+import { darken } from 'polished'
 import {
 	RiBug2Line,
 	RiStarLine,
@@ -54,9 +55,9 @@ const LabelDropdownButton = styled(Button)`
 
 	background-color: ${(props) => props.backgroundColor || Button.backgroundColor};
 
-	&:hover, &:focus, &:active{
-		background-color: ${(props) => props.backgroundColor || Button.backgroundColor};
-		${(props) => props.backgroundColor && css`filter: brightness(90%);`}
+	&:hover{
+		background-color: ${(props) => darken(0.1, props.backgroundColor) || Button.backgroundColor};
+		/* ${(props) => props.backgroundColor && css`filter: brightness(90%);`} */
 		border: 3px solid transparent;
 	}
 
@@ -113,6 +114,7 @@ const UserName = styled.span`
 	white-space: nowrap;
 	/* display: block; */
 	display: inline-block;
+	user-select: none;
 	
 	${(props) => (props.userOnBoard) && css`
 		margin-bottom: -5px;
@@ -171,9 +173,10 @@ const UserInfo = styled.span`
 	font-size: smaller;
 `
 
-const CardSidebarModule = ({ selectedCard, closeCardWindow, dispatch }) => {
+const CardSidebarModule = ({ closeCardWindow, dispatch }) => {
 	const currentUser = useSelector((state) => state.user.user)
 	const board = useSelector((state) => state.board.board)
+	const selectedCard = useSelector((state) => state.selectedCard)
 	const [showLabelMenu, setShowLabelMenu] = useState(false)
 	const [showUsersMenu, setShowUsersMenu] = useState(false)
 	const [users, setUsers] = useState([])
@@ -228,6 +231,34 @@ const CardSidebarModule = ({ selectedCard, closeCardWindow, dispatch }) => {
 		dispatch(setSelectedCard(newCard))
 		dispatch(updateChecklist(newChecklist))
 	}
+
+	const toggleMember = (member) => {
+		let members = []
+		if (selectedCard.members) {
+			members = selectedCard.members
+			console.log(members)
+			console.log(member, ' index ', members.indexOf(member))
+		}
+		for (let i = 0; i < members.length; i++) {
+			if (members[i].id === member.id) {
+				members.push(members.filter((u) => (u.id !== member.id)))
+			} else {
+				members.push(member)
+			}
+		}
+		if (members.length < 1) {
+			members.push(member)
+		}
+
+		const updatedCard = {
+			...selectedCard,
+			members
+		}
+		console.log(members)
+		console.log('update card memb', dispatch(updateCard(updatedCard)))
+		console.log('set', dispatch(setSelectedCard(updatedCard)))
+	}
+
 	return (
 		<>
 			<SidebarModule className="col">
@@ -244,7 +275,7 @@ const CardSidebarModule = ({ selectedCard, closeCardWindow, dispatch }) => {
 							{users.map((user) => (
 								<div key={user.id} style={{ width: '100%' }}>
 									{/* <UserButton link_transparent id={`userButton-${user.id}`} key={user.id} onClick={() => { openUserInfoMenu(user) }}><AvatarStyle user={user} size="40" noBorder /></UserButton> */}
-									<MatchedUsersContainer className="col" key={user.id}>
+									<MatchedUsersContainer className="col" key={user.id} onMouseDown={() => { toggleMember(user) }}>
 										<UserButton link_transparent><AvatarStyle user={user} title={false} size="30" noMargin /></UserButton>
 										<UserInfoContainer>
 											<UserName>{user.username}</UserName>
@@ -260,7 +291,7 @@ const CardSidebarModule = ({ selectedCard, closeCardWindow, dispatch }) => {
 
 				<Dropdown show={showLabelMenu || false} setShowMenu={setShowLabelMenu} parentId="labelButton">
 					<IconContext.Provider value={{ size: 18, style: { marginTop: '3px', marginLeft: '5px', marginRight: '5px' } }}>
-						<LabelDropdownButton className={selectedCard.label || 'selected'} light onClick={() => updateCardLabelPressed(null)}>
+						<LabelDropdownButton className={selectedCard.label || 'selected'} light backgroundColor="#ffffff" onClick={() => updateCardLabelPressed(null)}>
 							<ButtonContainer>
 								{React.createElement(RiCloseLine, { size: 20, style: { marginLeft: '3px' } })}
 								No label

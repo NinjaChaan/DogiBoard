@@ -8,6 +8,7 @@ import {
 	RiToolsLine
 } from 'react-icons/ri'
 import { MdBugReport, MdStar } from 'react-icons/md'
+import { toTitleCase } from '../utils/stringUtils'
 
 const ChecklistArea = styled.div`
 	display: inline-block;
@@ -78,7 +79,7 @@ const CardInfo = ({ card }) => {
 		return (
 			<>
 				{React.createElement(riIcon, {
-					size: 20, title: `This task is a ${card.label}`, fill: fillColor, style: { marginBottom: '5px', marginRight: '3px' }
+					size: 20, title: toTitleCase(card.label), fill: fillColor, style: { marginBottom: '5px', marginRight: '3px' }
 				})}
 			</>
 		)

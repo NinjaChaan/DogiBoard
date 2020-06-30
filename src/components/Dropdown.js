@@ -5,7 +5,7 @@ const DropdownMenu = styled.div`
 	display: inline-table;
 	position: absolute;
 	z-index: 2000;
-	background-color: ${(props) => props.bgColor || 'rgb(252, 252, 252)'};
+	background-color: ${(props) => props.bgColor || 'rgb(225, 225, 225)'};
 
 	box-shadow: ${(props) => !props.noShadow && '0px 1px 5px 0px rgba(0,0,0,0.5)'};
 
@@ -16,14 +16,13 @@ const DropdownMenu = styled.div`
 		top: ${props.position.top || null};
 		right: ${props.position.right || null};
 		left: ${props.position.left || null};
-		bottom: ${props.position.bottom || null};`
-	}
+		bottom: ${props.position.bottom || null};
+	`}
+
 	${(props) => props.noTopBorder && css`
 		border-top-left-radius: 0;
-		border-top-right-radius: 0;`
-	}
-
-
+		border-top-right-radius: 0;
+	`}
 
 	position: ${(props) => props.relativePos && 'relative'};
 
