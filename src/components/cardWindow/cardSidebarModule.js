@@ -181,10 +181,16 @@ const CardSidebarModule = ({ closeCardWindow, dispatch }) => {
 	const [showUsersMenu, setShowUsersMenu] = useState(false)
 	const [users, setUsers] = useState([])
 
+	const memberOnTask = (member) => {
+		if (selectedCard.members) {
+			return selectedCard.members.findIndex((u) => (u === member.id)) > -1
+		}
+		return false
+	}
+
 	useEffect(() => {
 		if (board && board.users) {
 			const userArray = []
-			userArray.push(currentUser)
 			const promises = board.users.map((user) => {
 				if (user.id !== currentUser.id) {
 					return userService.getOne(user.id)
@@ -196,6 +202,13 @@ const CardSidebarModule = ({ closeCardWindow, dispatch }) => {
 						userArray.push(response.data)
 					}
 				})
+				for (let i = 0; i < userArray.length; i++) {
+					if (memberOnTask(userArray[i])) {
+						userArray.splice(0, 0, userArray.splice(i, 1)[0])
+					}
+				}
+
+				userArray.splice(0, 0, currentUser)
 				setUsers(userArray)
 			})
 		}
@@ -233,30 +246,22 @@ const CardSidebarModule = ({ closeCardWindow, dispatch }) => {
 	}
 
 	const toggleMember = (member) => {
-		let members = []
-		if (selectedCard.members) {
-			members = selectedCard.members
-			console.log(members)
-			console.log(member, ' index ', members.indexOf(member))
-		}
-		for (let i = 0; i < members.length; i++) {
-			if (members[i].id === member.id) {
-				members.push(members.filter((u) => (u.id !== member.id)))
-			} else {
-				members.push(member)
-			}
-		}
-		if (members.length < 1) {
-			members.push(member)
+		const members = selectedCard.members || []
+
+		const findIndex = members.findIndex((u) => (u === member.id))
+
+		if (findIndex > -1) {
+			members.splice(findIndex, 1)
+		} else {
+			members.push(member.id)
 		}
 
 		const updatedCard = {
 			...selectedCard,
 			members
 		}
-		console.log(members)
-		console.log('update card memb', dispatch(updateCard(updatedCard)))
-		console.log('set', dispatch(setSelectedCard(updatedCard)))
+		dispatch(updateCard(updatedCard))
+		dispatch(setSelectedCard(updatedCard))
 	}
 
 	return (
@@ -279,7 +284,7 @@ const CardSidebarModule = ({ closeCardWindow, dispatch }) => {
 										<UserButton link_transparent><AvatarStyle user={user} title={false} size="30" noMargin /></UserButton>
 										<UserInfoContainer>
 											<UserName>{user.username}</UserName>
-											{/* {userOnBoard && <UserInfo>(Already on board)</UserInfo>} */}
+											{memberOnTask(user) && <UserName style={{ right: '5px', position: 'absolute' }}>✓</UserName>}
 										</UserInfoContainer>
 									</MatchedUsersContainer>
 								</div>

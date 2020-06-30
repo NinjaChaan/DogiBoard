@@ -64,7 +64,7 @@ const BoardPage = ({ match, dispatch }) => {
 			eventSource.onerror = (e) => console.log(e)
 			eventSource.onmessage = (e) => {
 				const data = JSON.parse(e.data)
-				console.log('stream data', data)
+				// console.log('stream data', data)
 
 				if (!_.isEqual(data, board)) {
 					setIgnoreNextUpdate(true)

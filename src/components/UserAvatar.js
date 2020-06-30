@@ -71,12 +71,13 @@ const UserAvatar = ({ user, title = true, noBorder, noBorderRadius, noMargin = f
 	const [gravatarFailed, setGravatarFailed] = useState(false)
 	const [prevType, setPrevType] = useState('')
 	const [prevUser, setPrevUser] = useState('')
+	const [loadedUser, setLoadedUser] = useState(null)
 
 	const updateAvatarSettings = (type) => {
-		if (user.id !== currentUser.id) {
+		if (loadedUser.id !== currentUser.id) {
 			return
 		}
-		if (user.avatar && user.avatar.avatarType === type) {
+		if (loadedUser.avatar && loadedUser.avatar.avatarType === type) {
 			return
 		}
 		const updatedUser = {
@@ -86,16 +87,16 @@ const UserAvatar = ({ user, title = true, noBorder, noBorderRadius, noMargin = f
 		}
 
 		const upUser = {
-			...user,
+			...loadedUser,
 			avatar: {
 				avatarType: type,
-				color: user.avatar.color,
-				gravatarEmail: user.avatar.gravatarEmail,
-				initials: initials !== '' ? initials : user.avatar.initials
+				color: loadedUser.avatar.color,
+				gravatarEmail: loadedUser.avatar.gravatarEmail,
+				initials: initials !== '' ? initials : loadedUser.avatar.initials
 			}
 		}
 
-		userService.updateAvatar(user.id, updatedUser).then((res) => {
+		userService.updateAvatar(loadedUser.id, updatedUser).then((res) => {
 			if (res.status === 200) {
 				dispatch(updateUser(upUser))
 			} else if (res.status === 400 || res.status === 401 || res.status === 404) {
@@ -107,9 +108,9 @@ const UserAvatar = ({ user, title = true, noBorder, noBorderRadius, noMargin = f
 	}
 
 	const tryLoadingGravatar = () => {
-		if (((user.avatar && user.avatar.gravatarEmail) || user.email) && ((user.avatar.avatarType !== prevType || user.id !== prevUser.id) || user.avatar.settingsChanged)) {
-			setPrevType(user.avatar.avatarType)
-			userService.getGravatar(md5(user.avatar.gravatarEmail || user.email), size * quality, user.avatar && user.avatar.avatarType)
+		if (((loadedUser.avatar && loadedUser.avatar.gravatarEmail) || loadedUser.email) && ((loadedUser.avatar.avatarType !== prevType || loadedUser.id !== prevUser.id) || loadedUser.avatar.settingsChanged)) {
+			setPrevType(loadedUser.avatar.avatarType)
+			userService.getGravatar(md5(loadedUser.avatar.gravatarEmail || loadedUser.email), size * quality, loadedUser.avatar && loadedUser.avatar.avatarType)
 				.then((response) => {
 					if (response.status) {
 						const manual = window.location.pathname.includes('/profile/') ? false : null
@@ -120,27 +121,27 @@ const UserAvatar = ({ user, title = true, noBorder, noBorderRadius, noMargin = f
 								const base64data = fileReaderInstance.result
 								setGravatar(base64data)
 
-								if (response.status === 200 && user.id === currentUser.id) {
+								if (response.status === 200 && loadedUser.id === currentUser.id) {
 									const upUser = {
-										...user,
+										...loadedUser,
 										avatar: {
-											avatarType: user.avatar.avatarType,
-											color: user.avatar.color,
-											gravatarEmail: user.avatar.gravatarEmail,
-											initials: initials !== '' ? initials : user.avatar.initials
+											avatarType: loadedUser.avatar.avatarType,
+											color: loadedUser.avatar.color,
+											gravatarEmail: loadedUser.avatar.gravatarEmail,
+											initials: initials !== '' ? initials : loadedUser.avatar.initials
 										}
 									}
 									dispatch(updateUser(upUser))
 								}
 							}
-							if (response.status === 418 && user.id === currentUser.id) {
+							if (response.status === 418 && loadedUser.id === currentUser.id) {
 								const upUser = {
-									...user,
+									...loadedUser,
 									avatar: {
-										avatarType: user.avatar.avatarType,
-										color: user.avatar.color,
-										gravatarEmail: user.avatar.gravatarEmail,
-										initials: initials !== '' ? initials : user.avatar.initials,
+										avatarType: loadedUser.avatar.avatarType,
+										color: loadedUser.avatar.color,
+										gravatarEmail: loadedUser.avatar.gravatarEmail,
+										initials: initials !== '' ? initials : loadedUser.avatar.initials,
 										gravatarFailed: true
 									}
 								}
@@ -149,14 +150,14 @@ const UserAvatar = ({ user, title = true, noBorder, noBorderRadius, noMargin = f
 						} else if (response.status === 404) {
 							setGravatar('404')
 							setGravatarFailed(true)
-							if (user.id === currentUser.id) {
+							if (loadedUser.id === currentUser.id) {
 								const upUser = {
-									...user,
+									...loadedUser,
 									avatar: {
 										avatarType: type,
-										color: user.avatar.color,
-										gravatarEmail: user.avatar.gravatarEmail,
-										initials: initials !== '' ? initials : user.avatar.initials,
+										color: loadedUser.avatar.color,
+										gravatarEmail: loadedUser.avatar.gravatarEmail,
+										initials: initials !== '' ? initials : loadedUser.avatar.initials,
 										gravatarFailed: true,
 										manual
 									}
@@ -173,24 +174,36 @@ const UserAvatar = ({ user, title = true, noBorder, noBorderRadius, noMargin = f
 	}
 
 	useEffect(() => {
+		if (user) {
+			if (!user.id) {
+				userService.getOne(user).then((response) => {
+					setLoadedUser(response.data)
+				})
+			} else {
+				setLoadedUser(user)
+			}
+		}
+	}, [user])
+
+	useEffect(() => {
 		if (keepUpdated) {
-			if (user) {
-				setPrevUser(user)
-				if (user.avatar) {
-					if (user.avatar.manual !== false) {
-						if (user.avatar.initials) {
-							setInitials(user.avatar.initials)
+			if (loadedUser) {
+				setPrevUser(loadedUser)
+				if (loadedUser.avatar) {
+					if (loadedUser.avatar.manual !== false) {
+						if (loadedUser.avatar.initials) {
+							setInitials(loadedUser.avatar.initials)
 						} else {
-							setInitials(user.username[0])
+							setInitials(loadedUser.username[0])
 						}
-						if (user.avatar.avatarType === 'gravatar') {
+						if (loadedUser.avatar.avatarType === 'gravatar') {
 							tryLoadingGravatar()
-						} else if (user.avatar.avatarType === 'initials') {
+						} else if (loadedUser.avatar.avatarType === 'initials') {
 							setGravatar('initials')
-							if (user.avatar.color) {
-								setRgb(user.avatar.color)
+							if (loadedUser.avatar.color) {
+								setRgb(loadedUser.avatar.color)
 							} else {
-								console.log('no avatartype?', user.avatar)
+								console.log('no avatartype?', loadedUser.avatar)
 								setRgb({
 									r: Math.floor(Math.random() * 256),
 									g: Math.floor(Math.random() * 256),
@@ -215,16 +228,16 @@ const UserAvatar = ({ user, title = true, noBorder, noBorderRadius, noMargin = f
 			}
 			// setKeepUpdated(update)
 		}
-	}, [user, size])
+	}, [loadedUser, size])
 
 	return (
 		<>
 			{gravatar !== 'initials' && gravatar !== '0'
 				&& (
-					<AvatarStyle size={size} src={gravatar} title={title ? (user && user.username) : null} alt={`User ${(user && user.username) || 'Default'}'s avatar`} noBorder={noBorder} round={!noBorderRadius} />
+					<AvatarStyle size={size} src={gravatar} title={title ? (loadedUser && loadedUser.username) : null} alt={`User ${(loadedUser && loadedUser.username) || 'Default'}'s avatar`} noBorder={noBorder} round={!noBorderRadius} />
 				)}
-			{gravatar === 'initials' && user.username && rgb && (
-				<TextAvatar noMargin={noMargin} rgb={rgb} brightness={getBrightness(rgb)} size={size} title={title ? (user && user.username) : null} alt={`User ${(user && user.username) || 'Default'}'s avatar`} noBorder={noBorder} round={!noBorderRadius} initials={initials} />
+			{gravatar === 'initials' && loadedUser.username && rgb && (
+				<TextAvatar noMargin={noMargin} rgb={rgb} brightness={getBrightness(rgb)} size={size} title={title ? (loadedUser && loadedUser.username) : null} alt={`User ${(loadedUser && loadedUser.username) || 'Default'}'s avatar`} noBorder={noBorder} round={!noBorderRadius} initials={initials} />
 			)}
 		</>
 	)

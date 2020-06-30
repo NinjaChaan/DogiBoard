@@ -141,8 +141,10 @@ const CardWindowContainer = ({ dispatch }) => {
 		if (selectedCard && selectedCard.members) {
 			const userArray = []
 			const promises = selectedCard.members.map((user) => {
-				if (user.id !== currentUser.id) {
-					return userService.getOne(user.id)
+				if (user !== currentUser.id) {
+					return userService.getOne(user)
+				} else {
+					userArray.splice(0, 0, currentUser)
 				}
 			}).filter((x) => x !== undefined)
 			Promise.all(promises).then((responses) => {
@@ -181,21 +183,22 @@ const CardWindowContainer = ({ dispatch }) => {
 	}
 
 	const toggleMember = (member) => {
-		let membs = []
-		if (members) {
-			membs = members
-		}
-		if (members && members.indexOf(member) > -1) {
-			membs.push(smembers.filter((u) => (u !== user)))
+		const members = selectedCard.members || []
+
+		const findIndex = members.findIndex((u) => (u === member.id))
+
+		if (findIndex > -1) {
+			members.splice(findIndex, 1)
 		} else {
-			membs.push(member)
+			members.push(member)
 		}
+
 		const updatedCard = {
 			...selectedCard,
-			members: membs
+			members
 		}
-		console.log('update card memb', dispatch(updateCard(updatedCard)))
-		console.log('set', dispatch(setSelectedCard(updatedCard)))
+		dispatch(updateCard(updatedCard))
+		dispatch(setSelectedCard(updatedCard))
 	}
 
 	return (
