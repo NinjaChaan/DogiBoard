@@ -11,6 +11,7 @@ import { device } from '../../devices'
 import AvatarStyle from '../UserAvatar'
 import LoadingAnimation from '../loadingAnimation'
 import userService from '../../services/users'
+import Dropdown from '../Dropdown'
 const Checklist = React.lazy(() => import('./checklist'))
 
 const CardWindowMain = styled.div`
@@ -128,14 +129,46 @@ const UsersContainer = styled.div`
 	display: flex;
 	-ms-flex-wrap: wrap;
 	flex-wrap: wrap;
-	overflow-y: auto;
+	/* overflow-y: auto; */
 	max-height: 90px;
+`
+const RemoveUser = styled.span`
+	color: rgb(100, 100, 100) !important;
+	user-select: none;
+
+	&:hover{
+		text-decoration: underline;
+		cursor: pointer;
+	}
+`
+
+const UserName = styled.span`
+	/* margin: auto auto auto 10px; */
+	font-weight: 600;
+	/* display: -ms-flexbox;
+	display: flex;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap; */
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	display: block;
+	user-select: none;
+	
+	${(props) => (props.userOnBoard) && css`
+		margin-bottom: -5px;
+		margin-top: 5px;
+	`}
 `
 
 const CardWindowContainer = ({ dispatch }) => {
 	const currentUser = useSelector((state) => state.user.user)
 	const selectedCard = useSelector((state) => state.selectedCard)
 	const [members, setMembers] = useState([])
+	const [showUserMenu, setShowUserMenu] = useState(false)
+	const [clickedUser, setClickedUser] = useState()
+	const [userInfoId, setUserInfoId] = useState('')
+	const [userInfoPos, setUserInfoPos] = useState({})
 
 	useEffect(() => {
 		if (selectedCard && selectedCard.members) {
@@ -182,16 +215,13 @@ const CardWindowContainer = ({ dispatch }) => {
 		e.stopPropagation()
 	}
 
-	const toggleMember = (member) => {
+	const removeMember = (member) => {
+		setShowUserMenu(false)
 		const members = selectedCard.members || []
 
 		const findIndex = members.findIndex((u) => (u === member.id))
 
-		if (findIndex > -1) {
-			members.splice(findIndex, 1)
-		} else {
-			members.push(member)
-		}
+		members.splice(findIndex, 1)
 
 		const updatedCard = {
 			...selectedCard,
@@ -199,6 +229,20 @@ const CardWindowContainer = ({ dispatch }) => {
 		}
 		dispatch(updateCard(updatedCard))
 		dispatch(setSelectedCard(updatedCard))
+	}
+
+	const openUserInfoMenu = (member) => {
+		const index = members.indexOf(member)
+		setClickedUser(member)
+		setUserInfoId(`userButton-${member.id}`)
+		const rect = document.getElementById(`userButton-${member.id}`).getBoundingClientRect()
+		console.log(rect)
+		if (window.matchMedia('(min-width: 425px)').matches) {
+			setUserInfoPos({ top: '155px', left: `${index * 46 + 20}px` })
+		} else {
+			setUserInfoPos({ top: `${rect.top + 50}px`, left: '0' })
+		}
+		setShowUserMenu(true)
 	}
 
 	return (
@@ -225,13 +269,24 @@ const CardWindowContainer = ({ dispatch }) => {
 							{selectedCard.members && members.length > 0
 								&& (
 									<>
-										<h6 style={{ userSelect: 'none' }}>Members</h6>
+										<h6 style={{ userSelect: 'none', margin: '5px 0 5px 0' }}>Members</h6>
 										<UsersContainer id="usersContainer">
 											{members.map((member) => (
-												<div key={member.id} style={{ margin: '3px' }}>
-													<UsersUserButton link_transparent={1} id={`userButton-${member.id}`} key={member.id} onClick={() => { toggleMember(member) }}><AvatarStyle user={member} size="40" noBorder /></UsersUserButton>
+												<div key={member.id} style={{ margin: '0 3px' }}>
+													<UsersUserButton link_transparent id={`userButton-${member.id}`} key={member.id} onClick={() => { openUserInfoMenu(member) }}><AvatarStyle user={member} size="40" noBorder /></UsersUserButton>
 												</div>
 											))}
+											<Dropdown show={showUserMenu || false} setShowMenu={setShowUserMenu} parentId={userInfoId} width={300} position={userInfoPos}>
+												{clickedUser && (
+													<UsersContainer>
+														<AvatarStyle update user={clickedUser} size={'50'} quality={4} />
+														<div className="col">
+															<UserName>{(clickedUser && clickedUser.username) || 'Default username'}</UserName>
+															<RemoveUser onClick={() => removeMember(clickedUser)}> Remove from task </RemoveUser>
+														</div>
+													</UsersContainer>
+												)}
+											</Dropdown>
 										</UsersContainer>
 									</>
 								)}
