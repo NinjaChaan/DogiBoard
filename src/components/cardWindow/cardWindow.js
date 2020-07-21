@@ -8,10 +8,10 @@ import CardTitle from './cardTitle'
 import CardDescription from './cardDescription'
 import CardSidebarModule from './cardSidebarModule'
 import { device } from '../../devices'
-import AvatarStyle from '../UserAvatar'
 import LoadingAnimation from '../loadingAnimation'
-import userService from '../../services/users'
 import Dropdown from '../Dropdown'
+import userService from '../../services/users'
+import UserAvatar from '../UserAvatar'
 const Checklist = React.lazy(() => import('./checklist'))
 
 const CardWindowMain = styled.div`
@@ -236,7 +236,6 @@ const CardWindowContainer = ({ dispatch }) => {
 		setClickedUser(member)
 		setUserInfoId(`userButton-${member.id}`)
 		const rect = document.getElementById(`userButton-${member.id}`).getBoundingClientRect()
-		console.log(rect)
 		if (window.matchMedia('(min-width: 425px)').matches) {
 			setUserInfoPos({ top: '155px', left: `${index * 46 + 20}px` })
 		} else {
@@ -273,13 +272,13 @@ const CardWindowContainer = ({ dispatch }) => {
 										<UsersContainer id="usersContainer">
 											{members.map((member) => (
 												<div key={member.id} style={{ margin: '0 3px' }}>
-													<UsersUserButton link_transparent id={`userButton-${member.id}`} key={member.id} onClick={() => { openUserInfoMenu(member) }}><AvatarStyle user={member} size="40" noBorder /></UsersUserButton>
+													<UsersUserButton link_transparent id={`userButton-${member.id}`} key={member.id} onClick={() => { openUserInfoMenu(member) }}><UserAvatar user={member} size="40" noBorder /></UsersUserButton>
 												</div>
 											))}
 											<Dropdown show={showUserMenu || false} setShowMenu={setShowUserMenu} parentId={userInfoId} width={300} position={userInfoPos}>
 												{clickedUser && (
 													<UsersContainer>
-														<AvatarStyle update user={clickedUser} size={'50'} quality={4} />
+														<UserAvatar update user={clickedUser} size='50' quality={4} />
 														<div className="col">
 															<UserName>{(clickedUser && clickedUser.username) || 'Default username'}</UserName>
 															<RemoveUser onClick={() => removeMember(clickedUser)}> Remove from task </RemoveUser>

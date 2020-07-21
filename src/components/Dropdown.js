@@ -82,6 +82,10 @@ const Dropdown = ({
 	const menu = useRef()
 	const [menuWidth, setWidth] = useState(0)
 
+	const handleChildClick = (e) => {
+		e.stopPropagation()
+	}
+
 	// check if any provided ids element clicked
 	const idsContain = (target) => {
 		for (let i = 0; i < ids.length; i++) {
@@ -126,7 +130,7 @@ const Dropdown = ({
 		}
 	}, [parentId])
 	return (
-		<DropdownMenu maxContent={maxContent} padding={padding} noShadow={noShadow} noTopBorder={noTopBorder} bgColor={bgColor} width={menuWidth} position={position} relativePos={relativePos} className={show && 'show'} ref={menu}>
+		<DropdownMenu maxContent={maxContent} padding={padding} noShadow={noShadow} noTopBorder={noTopBorder} bgColor={bgColor} width={menuWidth} position={position} relativePos={relativePos} className={show && 'show'} ref={menu} onClick={handleChildClick}>
 			{children}
 		</DropdownMenu>
 	)

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { connect, useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 import md5 from 'md5'
+import _ from 'underscore'
 import styled, { css } from 'styled-components'
 import { updateUser } from '../redux/actions/index'
 import userService from '../services/users'
@@ -61,11 +62,16 @@ const TextAvatar = styled.div`
 	`}
 `
 
-const UserAvatar = ({ user, title = true, noBorder, noBorderRadius, noMargin = false, size = '50', quality = 2, dispatch
+const UserAvatar = ({
+	user, title = true, noBorder, noBorderRadius, noMargin = false, size = '50', quality = 2, dispatch
 }) => {
 	const currentUser = useSelector((state) => state.user.user)
 	const [gravatar, setGravatar] = useState('0')
-	const [rgb, setRgb] = useState({})
+	const [rgb, setRgb] = useState({
+		r: Math.floor(Math.random() * 256),
+		g: Math.floor(Math.random() * 256),
+		b: Math.floor(Math.random() * 256)
+	})
 	const [keepUpdated, setKeepUpdated] = useState(true)
 	const [initials, setInitials] = useState('')
 	const [gravatarFailed, setGravatarFailed] = useState(false)
@@ -166,6 +172,8 @@ const UserAvatar = ({ user, title = true, noBorder, noBorderRadius, noMargin = f
 							}
 							//updateAvatarSettings('initials')
 						}
+					} else if (response.cached) {
+						setGravatar(response.data)
 					} else {
 						console.log('complete failure!')
 					}
@@ -186,7 +194,8 @@ const UserAvatar = ({ user, title = true, noBorder, noBorderRadius, noMargin = f
 	}, [user])
 
 	useEffect(() => {
-		if (keepUpdated) {
+		console.log('lduser', loadedUser)
+		if (keepUpdated && !_.isEqual(prevUser, loadedUser)) {
 			if (loadedUser) {
 				setPrevUser(loadedUser)
 				if (loadedUser.avatar) {
