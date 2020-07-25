@@ -172,6 +172,7 @@ code {
     margin-left: 5px;
     margin-bottom: 10px;
     font-weight: bold;
+    font-size: .9rem;
 }
 
 .textarea-add-list:hover {
@@ -183,7 +184,7 @@ code {
     min-height: 34px;
     height: 30px;
     width: 223px;
-    font-size: 1rem;
+    font-size: .9rem;
     font-weight: 600;
     margin-top: 10px;
     margin-left: 10px;

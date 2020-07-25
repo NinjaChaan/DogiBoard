@@ -56,6 +56,10 @@ const boardReducer = (state = initialState, action) => {
 		case 'ADD_LIST':
 			board = { ...board, lists: board.lists.concat(action.payload) }
 			break
+		case 'DELETE_LIST':
+			const lists = board.lists.filter((c) => c.id !== action.payload.id)
+			board = { ...board, lists }
+			break
 		case 'UPDATE_CARD':
 			board = {
 				...board,

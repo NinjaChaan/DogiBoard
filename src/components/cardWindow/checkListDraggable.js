@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/mouse-events-have-key-events */
 import React, { useState } from 'react'
 import { Draggable } from 'react-beautiful-dnd'
-import { connect } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { isMobile } from 'react-device-detect'
 import Button from '../Button'
@@ -58,9 +58,8 @@ const mapStateToProps = (state) => ({
 	selectedCard: state.selectedCard
 })
 
-const CheckListDraggable = ({
-	i, checkItem, selectedCard, dispatch, calculateProgress
-}) => {
+const CheckListDraggable = ({ i, checkItem, dispatch, calculateProgress }) => {
+	const selectedCard = useSelector((state) => state.selectedCard)
 	const [editing, setEditing] = useState(false)
 	const [dragging, setDragging] = useState(false)
 	const [hovering, setHovering] = useState(false)
@@ -188,4 +187,4 @@ const CheckListDraggable = ({
 	)
 }
 
-export default connect(mapStateToProps, null)(CheckListDraggable)
+export default connect(null, null)(CheckListDraggable)

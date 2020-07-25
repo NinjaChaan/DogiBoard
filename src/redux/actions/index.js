@@ -121,6 +121,13 @@ export const addList = ({ name }) => ({
 	}
 })
 
+export const deleteList = ({ id }) => ({
+	type: 'DELETE_LIST',
+	payload: {
+		id
+	}
+})
+
 export const updateListTitle = ({ name, id }) => ({
 	type: 'UPDATE_LIST_TITLE',
 	payload: {

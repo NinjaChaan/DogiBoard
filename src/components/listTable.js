@@ -1,19 +1,20 @@
 import React, { useState, useEffect, Suspense } from 'react'
 import Button from 'react-bootstrap/Button'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
-import { connect } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import CardListContainer from './cardList'
 import { updateListOrder } from '../redux/actions/index'
 import LoadingAnimation from './loadingAnimation'
 const AddList = React.lazy(() => import('./addList'))
 
 
-const mapStateToProps = (state) => {
-	// console.log('state', state.listReducer)
-	return { lists: state.board.board ? state.board.board.lists : [] }
-}
+// const mapStateToProps = (state) => {
+// 	console.log('state change', state.listReducer)
+// 	return { lists: state.board.board ? state.board.board.lists : [] }
+// }
 
-const ListTable = ({ lists, dispatch }) => {
+const ListTable = ({ dispatch }) => {
+	const lists = useSelector((state) => state.board.board.lists)
 	const [showingAddAnother, setShowingAddAnother] = useState(true)
 	const [dragging, setDragging] = useState(false)
 
@@ -176,4 +177,4 @@ const ListTable = ({ lists, dispatch }) => {
 		</table>
 	)
 }
-export default connect(mapStateToProps)(ListTable)
+export default connect(null, null)(ListTable)

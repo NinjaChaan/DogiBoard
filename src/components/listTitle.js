@@ -9,31 +9,31 @@ const ListTitle = ({
 	const [title, setTitle] = useState(listTitle)
 
 	const field = document.getElementById(`${classType}Title${id.toString()}`)
-	if (field) {
-		field.style.height = 'inherit'
+	// if (field) {
+	// 	field.style.height = 'inherit'
 
-		// Get the computed styles for the element
-		const computed = window.getComputedStyle(field)
+	// 	// Get the computed styles for the element
+	// 	const computed = window.getComputedStyle(field)
 
-		// Calculate the height
-		const height = parseInt(computed.getPropertyValue('border-top-width'), 10)
-			+ parseInt(computed.getPropertyValue('padding-top'), 10)
-			+ field.scrollHeight
-			+ parseInt(computed.getPropertyValue('padding-bottom'), 10)
-			+ parseInt(computed.getPropertyValue('border-bottom-width'), 10)
-		field.style.height = `${height}px`
+	// 	// Calculate the height
+	// 	const height = parseInt(computed.getPropertyValue('border-top-width'), 10)
+	// 		+ parseInt(computed.getPropertyValue('padding-top'), 10)
+	// 		+ field.scrollHeight
+	// 		+ parseInt(computed.getPropertyValue('padding-bottom'), 10)
+	// 		+ parseInt(computed.getPropertyValue('border-bottom-width'), 10)
+	// 	field.style.height = `${height}px`
 
-		if (field.scrollHeight > 168) {
-			field.style.overflow = 'auto'
-			if (document.activeElement === field) {
-				field.scrollTop = field.scrollHeight
-			} else {
-				field.scrollTop = 0
-			}
-		} else {
-			field.style.overflow = 'hidden'
-		}
-	}
+	// 	if (field.scrollHeight > 168) {
+	// 		field.style.overflow = 'auto'
+	// 		if (document.activeElement === field) {
+	// 			field.scrollTop = field.scrollHeight
+	// 		} else {
+	// 			field.scrollTop = 0
+	// 		}
+	// 	} else {
+	// 		field.style.overflow = 'hidden'
+	// 	}
+	// }
 
 
 	const handleKeyPress = (event) => {
@@ -71,6 +71,7 @@ const ListTitle = ({
 
 	return (
 		<input
+			style={{ flex: '0 0 80%', maxWidth: '80%' }}
 			aria-label="Title of the list"
 			autoFocus={autoFocus}
 			value={title}

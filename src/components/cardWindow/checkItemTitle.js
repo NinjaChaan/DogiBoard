@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { connect } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import { setSelectedCard, updateChecklist } from '../../redux/actions/index'
 
 const InputField = styled.input`
@@ -16,14 +16,13 @@ const InputField = styled.input`
 	overflow: auto !important;
 `
 
-const mapStateToProps = (state) => ({
-	selectedCard: state.selectedCard
-})
+// const mapStateToProps = (state) => ({
+// 	selectedCard: state.selectedCard
+// })
 
 
-const CheckItemTitle = ({
-	selectedCard, checkItem, setEditing, dispatch
-}) => {
+const CheckItemTitle = ({ checkItem, setEditing, dispatch }) => {
+	const selectedCard = useSelector((state) => state.selectedCard)
 	const [listTitleClass, setListTitleClass] = useState('textarea-checkItem-title')
 	const [title, setTitle] = useState(checkItem.name)
 	const [editingTitle, setEditingTitle] = useState(false)
@@ -171,4 +170,4 @@ const CheckItemTitle = ({
 		</span>
 	)
 }
-export default connect(mapStateToProps, null)(CheckItemTitle)
+export default connect(null, null)(CheckItemTitle)

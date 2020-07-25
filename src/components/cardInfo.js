@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { connect, useSelector } from 'react-redux'
 import styled, { css } from 'styled-components'
 import {
@@ -15,6 +15,7 @@ import Dropdown from './Dropdown'
 import userService from '../services/users'
 import UserAvatar from './UserAvatar'
 import Button from './Button'
+import { useMemo } from 'react'
 
 const ChecklistArea = styled.div`
 	display: inline-block;
@@ -99,14 +100,73 @@ const UserButtonContainer = styled.div`
 	`}
 `
 
-const CardInfo = ({ card, dispatch }) => {
-	const [allChecksDone, setAllChecksDone] = useState(false)
-	const [checksCount, setChecksCount] = useState(0)
-	const [doneChecksCount, setDoneChecksCount] = useState(0)
+const Members = ({ card, members, dispatch }) => {
 	const [showUserMenu, setShowUserMenu] = useState(false)
 	const [clickedUser, setClickedUser] = useState()
 	const [userInfoId, setUserInfoId] = useState('')
 	const [userInfoPos, setUserInfoPos] = useState({})
+
+	const removeMember = (member) => {
+		setShowUserMenu(false)
+
+		const newMembers = card.members.filter((u) => (u !== member.id))
+
+		const updatedCard = {
+			...card,
+			members: newMembers
+		}
+
+		dispatch(updateCard(updatedCard))
+		dispatch(setSelectedCard(updatedCard))
+	}
+
+	const openUserInfoMenu = (member) => {
+		const index = members.indexOf(member)
+		setClickedUser(member)
+		setUserInfoId(`userButton-${member.id}`)
+		const rect = document.getElementById(`userButton-${member.id}`).getBoundingClientRect()
+		if (window.matchMedia('(min-width: 425px)').matches) {
+			setUserInfoPos({ top: '70px', right: `${(members * -30) + -350}px` })
+		} else {
+			setUserInfoPos({ top: `${rect.top - 50}px`, left: '0' })
+		}
+		setShowUserMenu(true)
+	}
+
+	const handleChildClick = (e) => {
+		e.stopPropagation()
+	}
+
+	console.log('render info')
+	if (members && members.length > 0) {
+		return (
+			<UsersContainer id="usersContainer">
+				{members.map((member) => (
+					<UserButtonContainer key={member.id} initials={member.avatar && member.avatar.avatarType === 'initials'} onClick={handleChildClick}>
+						<UsersUserButton link_transparent id={`userButton-${member.id}`} key={member.id} onClick={() => { openUserInfoMenu(member) }}><UserAvatar user={member} size="25" noBorder /></UsersUserButton>
+					</UserButtonContainer>
+				))}
+				<Dropdown show={showUserMenu || false} setShowMenu={setShowUserMenu} parentId={userInfoId} width={300} position={userInfoPos}>
+					{clickedUser && (
+						<UsersContainer>
+							<UserAvatar user={clickedUser} size="50" quality={4} />
+							<div className="col">
+								<UserName>{(clickedUser && clickedUser.username) || 'Default username'}</UserName>
+								<RemoveUser onClick={() => removeMember(clickedUser)}> Remove from task </RemoveUser>
+							</div>
+						</UsersContainer>
+					)}
+				</Dropdown>
+			</UsersContainer>
+		)
+	}
+	return (null)
+}
+
+const CardInfo = ({ card, dispatch }) => {
+	const [allChecksDone, setAllChecksDone] = useState(false)
+	const [checksCount, setChecksCount] = useState(0)
+	const [doneChecksCount, setDoneChecksCount] = useState(0)
 	const [members, setMembers] = useState([])
 
 	let riIcon
@@ -129,16 +189,15 @@ const CardInfo = ({ card, dispatch }) => {
 	}
 
 	useEffect(() => {
+		console.log('card info')
 		if (card.checklist) {
 			setChecksCount(card.checklist.checkItems.length)
 			setDoneChecksCount(card.checklist.checkItems.filter((item) => item.done).length)
 			setAllChecksDone(card.checklist.checkItems.length === card.checklist.checkItems.filter((item) => item.done).length || false)
 		}
-		console.log('card', card)
 		if (card && card.members) {
 			userService.getMany(card.members).then((userArray) => {
 				if (userArray.map((x) => x.id).join('') !== members.map((x) => x.id).join('')) {
-					console.log('members change', userArray.map((x) => x.id).join(''), members.map((x) => x.id).join(''))
 					setMembers(userArray)
 				}
 			})
@@ -167,66 +226,11 @@ const CardInfo = ({ card, dispatch }) => {
 		</>
 	)
 
-	const removeMember = (member) => {
-		setShowUserMenu(false)
 
-		const newMembers = card.members.filter((u) => (u !== member.id))
-
-		const updatedCard = {
-			...card,
-			members: newMembers
-		}
-
-		dispatch(updateCard(updatedCard))
-		dispatch(setSelectedCard(updatedCard))
-	}
-
-	const openUserInfoMenu = (member) => {
-		// const index = members.indexOf(member)
-		// setClickedUser(member)
-		// setUserInfoId(`userButton-${member.id}`)
-		// const rect = document.getElementById(`userButton-${member.id}`).getBoundingClientRect()
-		// if (window.matchMedia('(min-width: 425px)').matches) {
-		// 	setUserInfoPos({ top: '155px', left: `${index * 46 + 20}px` })
-		// } else {
-		// 	setUserInfoPos({ top: `${rect.top - 50}px`, left: '0' })
-		// }
-		// setShowUserMenu(true)
-	}
-
-	const handleChildClick = (e) => {
-		e.stopPropagation()
-	}
 	// <UserButtonContainer key={member.id} initials={member.avatar && member.avatar.avatarType === 'initials'} onClick={handleChildClick}>
 	// 						<UsersUserButton link_transparent id={`userButton-${member.id}`} key={member.id} onClick={() => { openUserInfoMenu(member) }}><UserAvatar user={member} size="25" noBorder /></UsersUserButton>
 	// 					</UserButtonContainer>
 
-	const Members = () => {
-		console.log('members', members)
-		if (members && members.length > 0) {
-			return (
-				<UsersContainer id="usersContainer">
-					{members.map((member) => (
-						<UserButtonContainer key={member.id} initials={member.avatar && member.avatar.avatarType === 'initials'} >
-							<UsersUserButton link_transparent id={`userButton-${member.id}`} key={member.id} onClick={() => { openUserInfoMenu(member) }}><UserAvatar user={member} size="25" noBorder /></UsersUserButton>
-						</UserButtonContainer>
-					))}
-					<Dropdown show={showUserMenu || false} setShowMenu={setShowUserMenu} parentId={userInfoId} width={300} position={userInfoPos}>
-						{clickedUser && (
-							<UsersContainer>
-								<UserAvatar user={clickedUser} size="50" quality={4} />
-								<div className="col">
-									<UserName>{(clickedUser && clickedUser.username) || 'Default username'}</UserName>
-									<RemoveUser onClick={() => removeMember(clickedUser)}> Remove from task </RemoveUser>
-								</div>
-							</UsersContainer>
-						)}
-					</Dropdown>
-				</UsersContainer>
-			)
-		}
-		return (null)
-	}
 
 	return (
 		<InfoContainer>
@@ -234,7 +238,7 @@ const CardInfo = ({ card, dispatch }) => {
 				? <Label />
 				: null}
 			<Checklist />
-			<Members />
+			<Members members={members} card={card} dispatch={dispatch} />
 		</InfoContainer>
 	)
 }

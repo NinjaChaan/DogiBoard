@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import Button from 'react-bootstrap/Button'
-import { connect } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import { updateCard, setSelectedCard } from '../../redux/actions/index'
 
-const mapStateToProps = (state) => {
-	// console.log('state at cardwindiw', state.selectedCard)
-	const description = state.selectedCard.description || ''
-	return (
-		({
-			selectedCard: state.selectedCard,
-			description
-		})
-	)
-}
+// const mapStateToProps = (state) => {
+// 	// console.log('state at cardwindiw', state.selectedCard)
+// 	const description = state.selectedCard.description || ''
+// 	return (
+// 		({
+// 			selectedCard: state.selectedCard,
+// 			description
+// 		})
+// 	)
+// }
 
-const CardDescription = ({ selectedCard, description, dispatch }) => {
+const CardDescription = ({ description, dispatch }) => {
+	const selectedCard = useSelector((state) => state.selectedCard)
 	const [descriptionText, setDescriptionText] = useState('')
 	const [oldText, setOldText] = useState(selectedCard.description)
 	const [showButtons, setShowButtons] = useState(false)
@@ -104,4 +105,4 @@ const CardDescription = ({ selectedCard, description, dispatch }) => {
 	)
 }
 
-export default connect(mapStateToProps, null)(CardDescription)
+export default connect(null, null)(CardDescription)

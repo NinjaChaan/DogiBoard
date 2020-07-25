@@ -2,6 +2,8 @@
 import React, { useState, Suspense } from 'react'
 import styled from 'styled-components'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
+import { connect, useSelector } from 'react-redux'
+import { deleteList } from '../redux/actions/index'
 import Button from './Button'
 import AddCard from './addCard'
 import ListTitle from './listTitle'
@@ -14,6 +16,20 @@ const LinkButton = styled(Button)`
 	display: inline-block;
 	justify-content: left;
 	padding-bottom: 30px;
+`
+const DeleteButton = styled(Button)`
+	flex: 0 0 10%;
+	max-width: 10%;
+	margin: 13px 0 0 0;
+	padding: .175rem .75rem;
+	height: 30px;
+`
+
+const TitleContainer = styled.div`
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
 `
 
 const CardList = ({
@@ -44,7 +60,7 @@ const CardList = ({
 	)
 
 const CardListContainer = ({
-	listTitle, cards, index, setCards, id, dragging
+	listTitle, cards, index, setCards, id, dragging, dispatch
 }) => {
 	const [showingAddAnother, setShowingAddAnother] = useState(true)
 
@@ -63,6 +79,10 @@ const CardListContainer = ({
 	const unFocusTitle = () => {
 		const titleElement = document.getElementById(`listTitle${id.toString()}`)
 		titleElement.blur()
+	}
+
+	const removeList = () => {
+		dispatch(deleteList({ id }))
 	}
 
 	if (dragging) {
@@ -85,16 +105,20 @@ const CardListContainer = ({
 									<div
 										aria-label="Edit title"
 										className="dragHandle"
+										style={{ width: '85%' }}
 										{...provided.dragHandleProps}
 										onClick={() => focusTitle()}
 										onMouseDown={() => unFocusTitle()}
 									/>
-									<ListTitle
-										listTitle={listTitle}
-										id={id}
-										card={false}
-										classType="list"
-									/>
+									<TitleContainer>
+										<ListTitle
+											listTitle={listTitle}
+											id={id}
+											card={false}
+											classType="list"
+										/>
+										<DeleteButton warning_light onMouseDown={removeList}>✕</DeleteButton>
+									</TitleContainer>
 								</td>
 							</tr>
 						</thead>
@@ -119,4 +143,4 @@ const CardListContainer = ({
 		</Draggable>
 	)
 }
-export default CardListContainer
+export default connect(null, null)(CardListContainer)

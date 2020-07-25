@@ -1,15 +1,14 @@
 import React, { useState } from 'react'
-import { connect } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import { updateCard, setSelectedCard } from '../../redux/actions/index'
 
-const mapStateToProps = (state) => ({
-	selectedCard: state.selectedCard
-})
+// const mapStateToProps = (state) => ({
+// 	selectedCard: state.selectedCard
+// })
 
 
-const CardTitle = ({
-	selectedCard, id, dispatch, listId
-}) => {
+const CardTitle = ({ id, dispatch, listId }) => {
+	const selectedCard = useSelector((state) => state.selectedCard)
 	const [listTitleClass, setListTitleClass] = useState('textarea-card-title')
 
 	const calculateHeight = () => {
@@ -99,4 +98,4 @@ const CardTitle = ({
 		/>
 	)
 }
-export default connect(mapStateToProps, null)(CardTitle)
+export default connect(null, null)(CardTitle)

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef, useMemo } from 'react'
 import { connect, useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 import md5 from 'md5'
@@ -182,19 +182,24 @@ const UserAvatar = ({
 	}
 
 	useEffect(() => {
+		console.log('user effect', user)
+		console.log('user effect loaded', loadedUser)
+		console.log('equal?', loadedUser && loadedUser.id === user.id)
 		if (user) {
-			if (!user.id) {
-				userService.getOne(user).then((response) => {
-					setLoadedUser(response.data)
-				})
-			} else {
-				setLoadedUser(user)
+			if (!(loadedUser && loadedUser.id === user.id)) {
+				if (!user.id) {
+					userService.getOne(user).then((response) => {
+						setLoadedUser(response.data)
+					})
+				} else {
+					setLoadedUser(user)
+				}
 			}
 		}
 	}, [user])
 
 	useEffect(() => {
-		console.log('lduser', loadedUser)
+		console.log('avatar effect')
 		if (keepUpdated && !_.isEqual(prevUser, loadedUser)) {
 			if (loadedUser) {
 				setPrevUser(loadedUser)
@@ -238,7 +243,7 @@ const UserAvatar = ({
 			// setKeepUpdated(update)
 		}
 	}, [loadedUser, size])
-
+	console.log('render avatar')
 	return (
 		<>
 			{gravatar !== 'initials' && gravatar !== '0'
@@ -252,4 +257,4 @@ const UserAvatar = ({
 	)
 }
 
-export default connect(null, null)(UserAvatar)
+export default connect(null, null)(React.memo(UserAvatar))
