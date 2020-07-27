@@ -64,9 +64,7 @@ usersRouter.get('/search/:query', async (request, response) => {
 	const users = await User.find({})
 	console.log('query?', request.params.query)
 
-	const dict = users.map((u) => {
-		return { key: stringSimilarity.compareTwoStrings(request.params.query.toLowerCase(), u.username.toLowerCase()), value: u }
-	})
+	const dict = users.map((u) => ({ key: stringSimilarity.compareTwoStrings(request.params.query.toLowerCase(), u.username.toLowerCase()), value: u }))
 	keys = Object.keys(dict)
 
 	dict.sort((a, b) => b.key - a.key)
@@ -113,6 +111,34 @@ usersRouter.get('/:id/boards', async (request, response) => {
 	User.findById(request.params.id).populate('boards')
 		.then((user) => {
 			response.json(user.toJSON())
+		})
+})
+
+usersRouter.put('/:id/boards', async (request, response) => {
+	const { body } = request
+
+	const user = await getUserUtil.getUser(request, response)
+
+	User.findById(request.params.id)
+		.then((foundUser) => {
+			if (foundUser) {
+				if (_.isEqual(foundUser, user)) {
+					const updatedUser = ({
+						...foundUser.toJSON(),
+						boards: body.boards || foundUser.boards,
+					})
+					User.updateOne({ _id: request.params.id }, updatedUser).then(() => {
+						response.json({ response: `${foundUser.username} updated` })
+					})
+				} else {
+					response.status(401).json({ error: 'You are not authorized to edit this user' })
+				}
+			} else {
+				response.status(404).json({ error: 'User not found' })
+			}
+		}).catch((error) => {
+			response.status(404)
+			next(error)
 		})
 })
 

@@ -1,4 +1,6 @@
-import React, { useEffect, useState, useRef, useMemo } from 'react'
+import React, {
+	useEffect, useState, useRef, useMemo
+} from 'react'
 import { connect, useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 import md5 from 'md5'
@@ -170,7 +172,7 @@ const UserAvatar = ({
 								}
 								dispatch(updateUser(upUser))
 							}
-							//updateAvatarSettings('initials')
+							// updateAvatarSettings('initials')
 						}
 					} else if (response.cached) {
 						setGravatar(response.data)

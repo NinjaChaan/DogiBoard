@@ -67,7 +67,9 @@ const RadioText = styled.span`
 	user-select: none;
 `
 
-const RadioButton = ({ id, name, value, checked, callBack }) => (
+const RadioButton = ({
+	id, name, value, checked, callBack
+}) => (
 	<Item>
 		<Radio type="radio" name={name} value={value} onChange={() => callBack(id)} checked={checked} />
 		<RadioButtonLabel />

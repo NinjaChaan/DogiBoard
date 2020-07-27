@@ -279,7 +279,7 @@ const UsersDropdown = () => {
 														<Link to={`/profile/${clickedUser.id}`}>
 															<EditProfileLink onClick={() => setShowUserInfoMenu(false)}> Edit profile </EditProfileLink>
 														</Link>
-														//ac.can(getRole(board.users, clickedUser.id)).updateOwn('profile').granted
+														// ac.can(getRole(board.users, clickedUser.id)).updateOwn('profile').granted
 													)}
 												</div>
 											</UserInfoCardContainer>

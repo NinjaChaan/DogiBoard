@@ -283,8 +283,8 @@ const AvatarContainer = ({
 						{(window.matchMedia('(max-width: 425px)').matches && (
 							<HueSelector color={sliderColor} onChange={handleColorSliderChange} onChangeComplete={handleColorChange} />
 						)) || (
-								<HueSelector color={sliderColor} onChange={handleColorChange} />
-							)}
+							<HueSelector color={sliderColor} onChange={handleColorChange} />
+						)}
 					</>
 				)}
 			<SaveButton onClick={handleAvatarSubmit}>Save changes</SaveButton>

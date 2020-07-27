@@ -58,7 +58,9 @@ const mapStateToProps = (state) => ({
 	selectedCard: state.selectedCard
 })
 
-const CheckListDraggable = ({ i, checkItem, dispatch, calculateProgress }) => {
+const CheckListDraggable = ({
+	i, checkItem, dispatch, calculateProgress
+}) => {
 	const selectedCard = useSelector((state) => state.selectedCard)
 	const [editing, setEditing] = useState(false)
 	const [dragging, setDragging] = useState(false)

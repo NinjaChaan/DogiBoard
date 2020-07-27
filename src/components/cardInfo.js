@@ -1,4 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, {
+	useState, useRef, useEffect, useMemo
+} from 'react'
 import { connect, useSelector } from 'react-redux'
 import styled, { css } from 'styled-components'
 import {
@@ -15,7 +17,7 @@ import Dropdown from './Dropdown'
 import userService from '../services/users'
 import UserAvatar from './UserAvatar'
 import Button from './Button'
-import { useMemo } from 'react'
+
 
 const ChecklistArea = styled.div`
 	display: inline-block;

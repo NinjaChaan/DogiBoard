@@ -46,8 +46,8 @@ const getOneCached = (id) => {
 
 const getMany = (ids) => Promise.all(ids.map((id) => getOneCached(id))
 	.filter((x) => x !== undefined)).then((results) => results.map(
-		(result) => result.data
-	))
+	(result) => result.data
+))
 
 
 const create = (newObject) => {
@@ -61,9 +61,16 @@ const update = (id, newObject) => {
 			Authorization: `Bearer ${store.getState().user.token}`
 		}
 	})
-	return request.then((response) => response).catch((error) => {
-		return error.response
+	return request.then((response) => response).catch((error) => error.response)
+}
+
+const updateBoards = (id, newObject) => {
+	const request = axios.put(`${baseUrl}/${id}/boards`, newObject, {
+		headers: {
+			Authorization: `Bearer ${store.getState().user.token}`
+		}
 	})
+	return request.then((response) => response).catch((error) => error.response)
 }
 
 const updateAvatar = (id, newObject) => {
@@ -73,9 +80,7 @@ const updateAvatar = (id, newObject) => {
 		}
 	})
 	gravatarCache = []
-	return request.then((response) => response).catch((error) => {
-		return error.response
-	})
+	return request.then((response) => response).catch((error) => error.response)
 }
 
 const updateGravatar = (id, gravatarEmail) => {
@@ -85,9 +90,7 @@ const updateGravatar = (id, gravatarEmail) => {
 		}
 	})
 	gravatarCache = []
-	return request.then((response) => response).catch((error) => {
-		return error.response
-	})
+	return request.then((response) => response).catch((error) => error.response)
 }
 
 
@@ -154,5 +157,6 @@ export default {
 	updateGravatar,
 	updateAvatar,
 	getGravatar,
-	getClosestMatches
+	getClosestMatches,
+	updateBoards
 }
