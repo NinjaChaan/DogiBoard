@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import { connect, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import { RiDeleteBin2Line } from 'react-icons/ri'
+import { RiDeleteBin2Line, RiDragMove2Line } from 'react-icons/ri'
+import { MdDragHandle } from 'react-icons/md'
 import Button from './Button'
 import { setBoard, updateUser, updateBoards } from '../redux/actions/index'
 import boardService from '../services/boards'
@@ -200,8 +201,16 @@ const BoardsPage = ({ dispatch }) => {
 																	{...dragProvided.dragHandleProps}
 																/>
 																<BoardButton
+																	style={{ justifyContent: 'left' }}
 																	onClick={() => { OpenBoard(board) }}
 																>
+																	<MdDragHandle
+																		draggable="false"
+																		size={20}
+																		style={{
+																			position: 'relative', left: '0px', marginTop: '2px', marginRight: '30px', pointerEvents: 'none'
+																		}}
+																	/>
 																	{board.name}
 																</BoardButton>
 															</BoardLink>
