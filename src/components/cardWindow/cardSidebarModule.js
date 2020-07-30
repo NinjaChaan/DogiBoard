@@ -11,7 +11,7 @@ import {
 import { MdBugReport, MdStar } from 'react-icons/md'
 import { IconContext } from 'react-icons'
 import {
-	setSelectedCard, updateChecklist, updateCard, deleteCard
+	setSelectedCard, updateChecklist, updateCard, deleteCard, addCard
 } from '../../redux/actions/index'
 import SidebarButton from './sidebarButton'
 import Dropdown from '../Dropdown'
@@ -264,6 +264,14 @@ const CardSidebarModule = ({ closeCardWindow, dispatch }) => {
 		dispatch(setSelectedCard(updatedCard))
 	}
 
+	const copyCard = () => {
+		const newCard = {
+			card: selectedCard,
+			listId: selectedCard.listId
+		}
+		dispatch(addCard(newCard))
+	}
+
 	return (
 		<>
 			<SidebarModule className="col">
@@ -327,7 +335,7 @@ const CardSidebarModule = ({ closeCardWindow, dispatch }) => {
 			<SidebarModule className="col">
 				<CategoryTitle>Actions</CategoryTitle>
 				<SidebarButton variant="light" className="btn-card-sidebar" text="Move" iconName="RiFileTransferLine" />
-				<SidebarButton variant="light" className="btn-card-sidebar" text="Copy" iconName="RiFileCopy2Line" />
+				<SidebarButton variant="light" className="btn-card-sidebar" text="Copy" iconName="RiFileCopy2Line" func={copyCard} />
 				<SidebarButton variant="warning_light" className="btn-card-sidebar" func={deleteCardPressed} text="Delete" iconName="RiDeleteBin2Line" />
 			</SidebarModule>
 		</>

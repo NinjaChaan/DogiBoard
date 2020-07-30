@@ -38,8 +38,12 @@ const AddCard = ({ listId, changeShowAddAnother, dispatch }) => {
 		if (cardText.length > 0) {
 			let newCard = {}
 
+			const card = {
+				name: cardText
+			}
+
 			newCard = {
-				name: cardText,
+				card,
 				listId
 			}
 			changeShowAddAnother(true)

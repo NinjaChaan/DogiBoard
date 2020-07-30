@@ -63,10 +63,10 @@ export const updateCard = (updatedCard) => ({
 		...updatedCard
 	}
 })
-export const addCard = ({ name, listId }) => ({
+export const addCard = ({ card, listId }) => ({
 	type: 'ADD_CARD',
 	payload: {
-		name,
+		...card,
 		id: nextCardId(),
 		listId
 	}
