@@ -6,12 +6,13 @@ import {
 	RiBug2Line,
 	RiStarLine,
 	RiCloseLine,
-	RiToolsLine
+	RiToolsLine,
+	RiArrowDropDownLine
 } from 'react-icons/ri'
 import { MdBugReport, MdStar } from 'react-icons/md'
 import { IconContext } from 'react-icons'
 import {
-	setSelectedCard, updateChecklist, updateCard, deleteCard, addCard
+	setSelectedCard, updateChecklist, updateCard, deleteCard, addCard, updateList, updateListOrder
 } from '../../redux/actions/index'
 import SidebarButton from './sidebarButton'
 import Dropdown from '../Dropdown'
@@ -19,6 +20,7 @@ import Button from '../Button'
 import AvatarStyle from '../UserAvatar'
 import { device } from '../../devices'
 import userService from '../../services/users'
+import getListName from '../../utils/getListName'
 
 const ButtonContainer = styled.div`
 width: 100%;
@@ -54,15 +56,29 @@ const LabelDropdownButton = styled(Button)`
 	border: 3px solid transparent;
 
 	background-color: ${(props) => props.backgroundColor || Button.backgroundColor};
+	color: ${(props) => props.color || Button.color};
 
 	&:hover{
-		background-color: ${(props) => darken(0.1, props.backgroundColor) || Button.backgroundColor};
+		background-color: ${(props) => darken(0.05, props.backgroundColor) || Button.backgroundColor};
 		/* ${(props) => props.backgroundColor && css`filter: brightness(90%);`} */
 		border: 3px solid transparent;
+		color: ${(props) => props.color || Button.color};
 	}
 
 	&.selected{
 		border: 3px solid #fff;
+	}
+`
+
+const ListDropdownButton = styled(Button)`
+	padding-top: 5px;
+
+	background-color: ${(props) => props.backgroundColor || Button.backgroundColor};
+	color: ${(props) => props.color || Button.color};
+
+	&:hover{
+		background-color: ${(props) => darken(0.05, props.backgroundColor) || Button.backgroundColor};
+		color: ${(props) => props.color || Button.color};
 	}
 `
 
@@ -179,7 +195,12 @@ const CardSidebarModule = ({ closeCardWindow, dispatch }) => {
 	const selectedCard = useSelector((state) => state.selectedCard)
 	const [showLabelMenu, setShowLabelMenu] = useState(false)
 	const [showUsersMenu, setShowUsersMenu] = useState(false)
+	const [showMoveMenu, setShowMoveMenu] = useState(false)
+	const [showCopyMenu, setShowCopyMenu] = useState(false)
+	const [showMoveListMenu, setShowMoveListMenu] = useState(false)
+	const [showCopyListMenu, setShowCopyListMenu] = useState(false)
 	const [users, setUsers] = useState([])
+	const [selectedList, setSelectedList] = useState(null)
 
 	const memberOnTask = (member) => {
 		if (selectedCard.members) {
@@ -213,6 +234,12 @@ const CardSidebarModule = ({ closeCardWindow, dispatch }) => {
 			})
 		}
 	}, [board])
+
+	useEffect(() => {
+		console.log('selectedcard', selectedCard)
+		setSelectedList(board.lists.find((list) => list.id === selectedCard.listId))
+		console.log('selectedList', selectedList)
+	}, [selectedCard])
 
 	const deleteCardPressed = () => {
 		dispatch(deleteCard(selectedCard))
@@ -267,18 +294,71 @@ const CardSidebarModule = ({ closeCardWindow, dispatch }) => {
 	const copyCard = () => {
 		const newCard = {
 			card: selectedCard,
-			listId: selectedCard.listId
+			listId: selectedList.id
 		}
 		dispatch(addCard(newCard))
+	}
+
+	const selectList = (list) => {
+		console.log('new lsiut', list)
+		setSelectedList(list)
+		setShowMoveListMenu(false)
+		setShowCopyListMenu(false)
+	}
+
+	const moveCard = () => {
+		console.log('current id', selectedCard.listId)
+
+		if (selectedList.id === selectedCard.listId) {
+			console.log('same list')
+			return
+		}
+
+		const updatedList = {
+			...selectedList,
+			cards: selectedList.cards.concat(selectedCard)
+		}
+
+		const originalList = board.lists.find((list) => list.id === selectedCard.listId)
+		console.log('originalList', originalList)
+
+		const originalListUpdated = {
+			...originalList,
+			cards: selectedList.cards.filter((card) => card.id !== selectedCard.id)
+		}
+		const updatedCard = {
+			...selectedCard,
+			listId: selectedList.id
+		}
+
+		console.log('originalListUpdated', originalListUpdated)
+		setShowMoveMenu(false)
+
+		const newLists = Array.from(board.lists)
+		console.log(newLists)
+		// newLists = newLists.filter((list) => list.id !== originalList.id)
+		// newLists = newLists.filter((list) => list.id !== selectedList.id)
+		// newLists.push(originalListUpdated)
+		// newLists.push(updatedList)
+		const olistId = board.lists.findIndex((list) => list.id === originalList.id)
+		newLists.splice(olistId, 1)
+		newLists.splice(olistId, 0, originalListUpdated)
+		newLists.splice(board.lists.findIndex((list) => list.id === selectedList.id), 1)
+		newLists.splice(board.lists.findIndex((list) => list.id === selectedList.id), 0, updatedList)
+		console.log(newLists)
+		dispatch(updateListOrder(newLists))
+		dispatch(updateCard(updatedCard))
+		dispatch(setSelectedCard(updatedCard))
+		// dispatch(updateList(updatedList))
+		// dispatch(updateList(originalListUpdated))
 	}
 
 	return (
 		<>
 			<SidebarModule className="col">
 				<CategoryTitle>Add to card</CategoryTitle>
-				{selectedCard.checklist
-					? null
-					: (
+				{!selectedCard.checklist
+					&& (
 						<SidebarButton variant="light" className="btn-card-sidebar" func={addChecklistPressed} text="Checklist" iconName="RiCheckboxLine" />
 					)}
 				<SidebarButton id="memberButton" variant="light" className="btn-card-sidebar" func={() => { setShowUsersMenu(!showUsersMenu) }} text="Members" iconName="RiUserAddLine" />
@@ -334,8 +414,84 @@ const CardSidebarModule = ({ closeCardWindow, dispatch }) => {
 			</SidebarModule>
 			<SidebarModule className="col">
 				<CategoryTitle>Actions</CategoryTitle>
-				<SidebarButton variant="light" className="btn-card-sidebar" text="Move" iconName="RiFileTransferLine" />
-				<SidebarButton variant="light" className="btn-card-sidebar" text="Copy" iconName="RiFileCopy2Line" func={copyCard} />
+				<SidebarButton id="moveButton" variant="light" className="btn-card-sidebar" text="Move" iconName="RiFileTransferLine" func={() => { setShowMoveMenu(!showMoveMenu) }} />
+				<Dropdown width={300} show={showMoveMenu || false} setShowMenu={setShowMoveMenu} parentId="moveButton">
+					{showMoveMenu && selectedCard.id
+						&& (
+							<>
+								<ListDropdownButton
+									id="listMenuButton"
+									backgroundColor="#ffffff"
+									color="#000000"
+									style={{ justifyContent: 'initial', whiteSpace: 'pre' }}
+									onClick={() => { setShowMoveListMenu(!showMoveListMenu) }}
+								>
+									{`${selectedList.name}	`}
+									<RiArrowDropDownLine size={30} style={{ position: 'absolute', right: '10px' }} />
+								</ListDropdownButton>
+								<Dropdown maxContent show={showMoveListMenu || false} setShowMenu={setShowMoveListMenu} parentId="listMenuButton">
+									{board.lists.map((list) => (
+										<ListDropdownButton
+											key={list.id}
+											noBorderRadius
+											backgroundColor={selectedList && list.id === selectedList.id ? 'rgb(70,110,240)' : 'white'}
+											color={selectedList && list.id === selectedList.id ? 'white' : 'black'}
+											style={{ justifyContent: 'initial', whiteSpace: 'pre' }}
+											onClick={() => { selectList(list) }}
+										>
+											{list.name}
+										</ListDropdownButton>
+									))}
+								</Dropdown>
+							</>
+						)}
+					<Button
+						disabled={selectedList && selectedCard.listId === selectedList.id}
+						style={{ marginBottom: '0px', width: '50%' }}
+						onClick={moveCard}
+						title={selectedList && selectedCard.listId === selectedList.id ? 'Task is already in that list' : null}
+					>
+						Move
+					</Button>
+				</Dropdown>
+				<SidebarButton id="copyButton" variant="light" className="btn-card-sidebar" text="Copy" iconName="RiFileCopy2Line" func={() => { setShowCopyMenu(!showCopyMenu) }} />
+				<Dropdown width={300} show={showCopyMenu || false} setShowMenu={setShowCopyMenu} parentId="copyButton">
+					{showCopyMenu && selectedCard.id
+						&& (
+							<>
+								<ListDropdownButton
+									id="listMenuButton"
+									backgroundColor="#ffffff"
+									color="#000000"
+									style={{ justifyContent: 'initial', whiteSpace: 'pre' }}
+									onClick={() => { setShowCopyListMenu(!showCopyListMenu) }}
+								>
+									{`${selectedList.name}	`}
+									<RiArrowDropDownLine size={30} style={{ position: 'absolute', right: '10px' }} />
+								</ListDropdownButton>
+								<Dropdown maxContent show={showCopyListMenu || false} setShowMenu={setShowCopyListMenu} parentId="listMenuButton">
+									{board.lists.map((list) => (
+										<ListDropdownButton
+											key={list.id}
+											noBorderRadius
+											backgroundColor={selectedList && list.id === selectedList.id ? 'rgb(70,110,240)' : 'white'}
+											color={selectedList && list.id === selectedList.id ? 'white' : 'black'}
+											style={{ justifyContent: 'initial', whiteSpace: 'pre' }}
+											onClick={() => { selectList(list) }}
+										>
+											{list.name}
+										</ListDropdownButton>
+									))}
+								</Dropdown>
+							</>
+						)}
+					<Button
+						style={{ marginBottom: '0px', width: '50%' }}
+						onClick={copyCard}
+					>
+						Copy
+					</Button>
+				</Dropdown>
 				<SidebarButton variant="warning_light" className="btn-card-sidebar" func={deleteCardPressed} text="Delete" iconName="RiDeleteBin2Line" />
 			</SidebarModule>
 		</>

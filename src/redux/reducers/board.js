@@ -117,6 +117,15 @@ const boardReducer = (state = initialState, action) => {
 				)
 			}
 			break
+		case 'UPDATE_LIST':
+			const updatedLists = board.lists.map((list) => {
+				if (list.id === action.payload.listId) {
+					return { ...action.payload }
+				}
+				return list
+			})
+			board = { ...board, lists: updatedLists }
+			break
 		default:
 			return state
 	}

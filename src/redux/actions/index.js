@@ -140,6 +140,12 @@ export const updateListOrder = (lists) => ({
 	type: 'UPDATE_LIST_ORDER',
 	payload: lists
 })
+export const updateList = (updatedList) => ({
+	type: 'UPDATE_LIST',
+	payload: {
+		...updatedList
+	}
+})
 
 export const setLists = (lists) => ({
 	type: 'SET_LISTS',

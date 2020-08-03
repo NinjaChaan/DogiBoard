@@ -195,7 +195,7 @@ const CardWindowContainer = ({ dispatch }) => {
 		document.getElementById('window-overlay').style.display = 'none'
 		const selectedCard = {
 		}
-		dispatch(setSelectedCard(selectedCard))
+		dispatch(setSelectedCard(null))
 	}
 
 	function downHandler({ key }) {
