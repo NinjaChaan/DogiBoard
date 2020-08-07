@@ -131,7 +131,7 @@ boardRouter.post('/', async (request, response, next) => {
 
 	const board = new Board({
 		name: body.name,
-		lists: body.lists,
+		lists: body.lists || [],
 		users: [user._id],
 		creator: user._id
 	})
@@ -142,7 +142,12 @@ boardRouter.post('/', async (request, response, next) => {
 
 	await user.save()
 
-	response.json(savedBoard.toJSON())
+	const res = {
+		board: savedBoard,
+		user
+	}
+
+	response.json(res)
 })
 
 boardRouter.put('/inviteUser/:id', async (request, response, next) => {

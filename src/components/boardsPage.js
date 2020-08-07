@@ -32,6 +32,11 @@ const BoardLink = styled(Link)`
 	margin: 15px;
 `
 
+const CreateBoardContainer = styled.div`
+	margin: 15px;
+	max-width: 200px;
+`
+
 const InviteButtonsContainer = styled.div`
 	margin: 5px 10px 10px 10px;
 	display: -ms-flexbox;
@@ -56,7 +61,7 @@ const BoardTitle = styled.span`
 
 const BoardContainer = styled.div`
 	width: 200px;
-	margin: 15px;	
+	/* margin: 15px;	 */
 	color: white;
 	font-size: larger;
 	font-weight: 600;
@@ -94,11 +99,43 @@ const DeleteText = styled.span`
 	}
 `
 
+const BoardNameInput = styled.input`
+	width: 95%;
+	margin: 10px 5px 5px 5px;
+	border-radius: 4px;
+`
+
+const BoardCreatorButton = styled(Button)`
+	margin: 5px 5px;
+	width: 50%;
+	flex: 0 0 45%;
+`
+
+const BoardButtonContainer = styled.div`
+	display: flex;
+`
+
+const BoardCreator = styled.div`
+	padding: 6px;
+	background-color: rgb(85,125,255);
+	border-radius: 4px;
+	justify-content: 'center';
+	height: 'auto';
+`
+
+const BoardCreatorSpan = styled.span`
+	text-align: center;
+	color: white;
+	font-weight: 600;
+`
+
 const BoardsPage = ({ dispatch }) => {
 	const user = useSelector((state) => state.user.user)
 	const [boards, setBoards] = useState([])
 	const [invites, setInvites] = useState([])
 	const [dragging, setDragging] = useState(false)
+	const [creatingBoard, setCreatingBoard] = useState(false)
+	const [newBoardName, setNewBoardName] = useState('')
 	const OpenBoard = (board) => {
 		dispatch(setBoard({ board }))
 	}
@@ -121,6 +158,7 @@ const BoardsPage = ({ dispatch }) => {
 	}
 
 	useEffect(() => {
+		console.log(user)
 		if (user.boards) {
 			setBoards(user.boards)
 		}
@@ -168,8 +206,39 @@ const BoardsPage = ({ dispatch }) => {
 		setDragging(true)
 	}
 
+	const closeCreateBoard = () => {
+		setNewBoardName('')
+		setCreatingBoard(false)
+	}
+
+	const createNewBoard = (e) => {
+		e.stopPropagation()
+
+		closeCreateBoard()
+
+		const newBoard = {
+			name: newBoardName
+		}
+		boardService.createBoard(newBoard).then((res) => {
+			userService.getOne(user.id).then((u) => {
+				console.log(u)
+				dispatch(updateUser(u.data))
+			})
+		})
+	}
+
+	const handleTextChange = (event) => {
+		if (event.key === 'Enter') {
+			event.preventDefault()
+		}
+		setNewBoardName(event.target.value)
+	}
+
+	const handleChildClick = (e) => {
+		e.stopPropagation()
+	}
 	return (
-		<div className="container" style={{ marginTop: '60px' }}>
+		<div className="container" style={{ marginTop: '60px' }} onClick={closeCreateBoard}>
 			<DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
 				{boards.length > 0
 					&& (
@@ -218,6 +287,49 @@ const BoardsPage = ({ dispatch }) => {
 													</Draggable>
 												))
 											}
+											{!creatingBoard && (
+												<CreateBoardContainer onClick={handleChildClick}>
+													<BoardButton
+														style={{ justifyContent: 'center', height: 'auto' }}
+														onClick={() => { setCreatingBoard(true) }}
+													>
+														<BoardCreatorSpan>Create a new board</BoardCreatorSpan>
+													</BoardButton>
+												</CreateBoardContainer>
+											)}
+
+											{creatingBoard && (
+												<CreateBoardContainer onClick={handleChildClick}>
+													<BoardCreator>
+														<div
+															style={{ display: 'grid' }}
+														>
+															<BoardCreatorSpan>Create a new board</BoardCreatorSpan>
+															<BoardNameInput
+																autoFocus
+																placeholder="Enter board name"
+																value={newBoardName}
+																onChange={handleTextChange}
+															/>
+															<BoardButtonContainer>
+																<BoardCreatorButton
+																	success={newBoardName.length >= 3}
+																	onClick={createNewBoard}
+																	disabled={newBoardName.length < 3}
+																>
+																	Create
+																</BoardCreatorButton>
+																<BoardCreatorButton
+																	warning
+																	onClick={closeCreateBoard}
+																>
+																	Cancel
+																</BoardCreatorButton>
+															</BoardButtonContainer>
+														</div>
+													</BoardCreator>
+												</CreateBoardContainer>
+											)}
 											{provided.placeholder}
 										</div>
 									)}
@@ -243,7 +355,8 @@ const BoardsPage = ({ dispatch }) => {
 							</Droppable>
 						</>
 					)}
-				{invites.length > 0
+				{
+					invites.length > 0
 					&& (
 						<>
 							<Title>Invites</Title>
@@ -263,7 +376,8 @@ const BoardsPage = ({ dispatch }) => {
 								}
 							</BoardsContainer>
 						</>
-					)}
+					)
+				}
 			</DragDropContext>
 		</div>
 	)

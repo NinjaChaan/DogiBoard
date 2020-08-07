@@ -28,12 +28,16 @@ const getAll = () => {
 	return request.then((response) => response.data).catch((error) => (error.message))
 }
 
-const create = (newObject) => {
-	const request = axios.post(baseUrl, newObject)
+const createBoard = (newObject) => {
+	const request = axios.post(baseUrl, newObject, {
+		headers: {
+			Authorization: `Bearer ${store.getState().user.token}`
+		}
+	})
 	return request.then((response) => response.data).catch((error) => (error.message))
 }
 
-const update = (id, newObject) => {
+const updateBoard = (id, newObject) => {
 	const request = axios.put(`${baseUrl}/${id}`, newObject, {
 		headers: {
 			Authorization: `Bearer ${store.getState().user.token}`
@@ -68,8 +72,8 @@ const remove = (id) => {
 export default {
 	getOne,
 	getAll,
-	create,
-	update,
+	createBoard,
+	updateBoard,
 	remove,
 	inviteUser,
 	respondToInvitation,
