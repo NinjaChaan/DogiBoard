@@ -38,7 +38,7 @@ const CreateBoardContainer = styled.div`
 `
 
 const InviteButtonsContainer = styled.div`
-	margin: 5px 10px 10px 10px;
+	margin: 10px 5px;
 	display: -ms-flexbox;
 	display: flex;
 	-ms-flex-wrap: wrap;
@@ -56,7 +56,15 @@ const InviteButton = styled(Button)`
 const BoardTitle = styled.span`
 	font-size: large;
 	font-weight: 600;
-	padding-left: 15px;
+	text-align: center;
+	width: 200px;
+	min-width: 200px;
+	display: inline-block;
+	margin-top: 5px;
+	text-align: center;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	word-wrap: break-word;
 `
 
 const BoardContainer = styled.div`
@@ -67,7 +75,7 @@ const BoardContainer = styled.div`
 	font-weight: 600;
 	background-color: #557dff;
 	border-radius: 4px;
-
+	display: table;
 `
 
 const DeleteArea = styled.div`
@@ -127,6 +135,16 @@ const BoardCreatorSpan = styled.span`
 	text-align: center;
 	color: white;
 	font-weight: 600;
+`
+
+const BoardName = styled.span`
+	float: left;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: break-word;
+	width: 75%;
+	text-align: left;
+	word-wrap: break-word;
 `
 
 const BoardsPage = ({ dispatch }) => {
@@ -264,23 +282,28 @@ const BoardsPage = ({ dispatch }) => {
 																ref={dragProvided.innerRef}
 																{...dragProvided.draggableProps}
 																to={`/board/${board.id}`}
+																title={board.name}
 															>
 																<div
 																	className="dragHandle"
 																	{...dragProvided.dragHandleProps}
 																/>
 																<BoardButton
-																	style={{ justifyContent: 'left' }}
+																	style={{ justifyContent: 'left', height: 'auto' }}
 																	onClick={() => { OpenBoard(board) }}
 																>
-																	<MdDragHandle
-																		draggable="false"
-																		size={20}
-																		style={{
-																			position: 'relative', left: '0px', marginTop: '2px', marginRight: '30px', pointerEvents: 'none'
-																		}}
-																	/>
-																	{board.name}
+																	<div style={{ width: '110%' }}>
+																		<MdDragHandle
+																			draggable="false"
+																			size={20}
+																			style={{
+																				margin: '2px 20px 5px 0',
+																				pointerEvents: 'none',
+																				float: 'left'
+																			}}
+																		/>
+																		<BoardName>{board.name}</BoardName>
+																	</div>
 																</BoardButton>
 															</BoardLink>
 														)}
@@ -316,6 +339,7 @@ const BoardsPage = ({ dispatch }) => {
 																	success={newBoardName.length >= 3}
 																	onClick={createNewBoard}
 																	disabled={newBoardName.length < 3}
+																	title={newBoardName.length < 3 ? 'Name must be at least 3 characters long' : null}
 																>
 																	Create
 																</BoardCreatorButton>
@@ -366,11 +390,11 @@ const BoardsPage = ({ dispatch }) => {
 										<BoardContainer key={board.id}>
 											<BoardTitle>
 												{board.name}
-												<InviteButtonsContainer>
-													<InviteButton onClick={() => answerInvitation(board.id, true)} success>Join</InviteButton>
-													<InviteButton onClick={() => answerInvitation(board.id, false)} warning>Reject</InviteButton>
-												</InviteButtonsContainer>
 											</BoardTitle>
+											<InviteButtonsContainer>
+												<InviteButton onClick={() => answerInvitation(board.id, true)} success>Join</InviteButton>
+												<InviteButton onClick={() => answerInvitation(board.id, false)} warning>Reject</InviteButton>
+											</InviteButtonsContainer>
 										</BoardContainer>
 									))
 								}
