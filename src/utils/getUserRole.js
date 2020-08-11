@@ -1,3 +1,3 @@
-const getRole = (users, userId) => users.filter((user) => user.id === userId).role
+const getRole = (users, userId) => users.find((user) => user.id === userId).role
 
 export default getRole

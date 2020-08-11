@@ -116,7 +116,10 @@ const UserAvatar = ({
 	}
 
 	const tryLoadingGravatar = () => {
-		if (((loadedUser.avatar && loadedUser.avatar.gravatarEmail) || loadedUser.email) && ((loadedUser.avatar.avatarType !== prevType || loadedUser.id !== prevUser.id) || loadedUser.avatar.settingsChanged)) {
+		if (!loadedUser.avatar) {
+			setGravatar('initials')
+			setGravatarFailed(true)
+		} else if ((loadedUser.avatar.gravatarEmail || loadedUser.email) && ((loadedUser.avatar.avatarType !== prevType || loadedUser.id !== prevUser.id) || loadedUser.avatar.settingsChanged)) {
 			setPrevType(loadedUser.avatar.avatarType)
 			userService.getGravatar(md5(loadedUser.avatar.gravatarEmail || loadedUser.email), size * quality, loadedUser.avatar && loadedUser.avatar.avatarType)
 				.then((response) => {

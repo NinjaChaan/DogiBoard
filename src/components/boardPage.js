@@ -93,7 +93,7 @@ const BoardPage = ({ match, dispatch }) => {
 				lists: board.lists
 			}
 			console.log(board)
-			boardService.update(board.id, updatedBoard).then((response) => {
+			boardService.updateBoard(board.id, updatedBoard).then((response) => {
 			})
 		} else if (ignoreNextUpdate) {
 			setIgnoreNextUpdate(false)

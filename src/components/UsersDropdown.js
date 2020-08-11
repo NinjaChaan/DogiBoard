@@ -141,6 +141,7 @@ const UserInfoUsername = styled(UserName)`
 
 const EditProfileLink = styled.span`
 	color: rgb(100, 100, 100) !important;
+	margin-right: 10px;
 `
 
 const UsersDropdownStyle = styled(Dropdown)`
@@ -148,6 +149,38 @@ const UsersDropdownStyle = styled(Dropdown)`
 	@media ${(props) => props.theme.device.mobileL} {	
 		margin: none;
 	}
+`
+
+const RemoveUserButton = styled.span`
+	color: rgb(100,100,100) !important;
+	cursor: pointer;
+
+	&:hover{
+		text-decoration: underline;
+	}
+`
+
+const LeavePopUpContainer = styled.div`
+	display: flex;
+	margin-bottom: 5px;
+`
+
+const CloseButton = styled(Button)`
+	flex: 0 0 5%;
+	margin: 0 5px 0 15px;
+	border-radius: 20%;
+	max-width: 25px;
+	max-height: 30px;
+	padding: .2rem .75rem;
+`
+
+const LeaveText = styled.span`
+	flex: 0 0 85%;
+	text-align: center;
+`
+
+const LeaveButton = styled(Button)`
+	margin: 10px 0 0 0;
 `
 
 const UsersDropdown = () => {
@@ -164,6 +197,7 @@ const UsersDropdown = () => {
 	const [matchedUsers, setMatchedUsers] = useState([])
 	const [selectedUsers, setSelectedUsers] = useState([])
 	const [bigAvatar, setBigAvatar] = useState(false)
+	const [showSureToLeave, setShowSureToLeave] = useState(false)
 
 	useEffect(() => {
 		if (board && board.users) {
@@ -252,7 +286,7 @@ const UsersDropdown = () => {
 	}
 
 	return (
-		<div style={{ userSelect: 'none', display: 'flex', maxHeight: '45px' }} className="col">
+		<div style={{ userSelect: 'none', display: 'flex', maxHeight: '45px' }} className="col" onClick={() => { setShowSureToLeave(false) }}>
 			<UsersButtonContainer>
 				<UsersButton id="usersMenuButton" onClick={() => { setShowUsersMenu(!showUsersMenu) }}>Users</UsersButton>
 			</UsersButtonContainer>
@@ -268,7 +302,7 @@ const UsersDropdown = () => {
 										</div>
 									))}
 									<Dropdown callBack={setBigAvatar} bgColor="rgb(255, 255, 255)" show={showUserInfoMenu || false} setShowMenu={setShowUserInfoMenu} parentId={userInfoId} ids={userInfoIds} width={300} position={userInfoPos}>
-										{clickedUser && (
+										{clickedUser && !showSureToLeave && (
 											<UserInfoCardContainer>
 												<UsersUserButton link_transparent onClick={() => setBigAvatar(!bigAvatar)}>
 													<AvatarStyle update noBorderRadius={bigAvatar} user={clickedUser} size={bigAvatar ? '150' : '50'} quality={4} />
@@ -276,13 +310,39 @@ const UsersDropdown = () => {
 												<div className="col">
 													<UserInfoUsername>{(clickedUser && clickedUser.username) || 'Default username'}</UserInfoUsername>
 													{clickedUser && clickedUser.id === currentUser.id && (
-														<Link to={`/profile/${clickedUser.id}`}>
-															<EditProfileLink onClick={() => setShowUserInfoMenu(false)}> Edit profile </EditProfileLink>
-														</Link>
-														// ac.can(getRole(board.users, clickedUser.id)).updateOwn('profile').granted
+														<>
+															<Link to={`/profile/${clickedUser.id}`}>
+																<EditProfileLink onClick={() => setShowUserInfoMenu(false)}> Edit profile </EditProfileLink>
+															</Link>
+															<RemoveUserButton onClick={() => { setShowSureToLeave(true) }}>Leave board</RemoveUserButton>
+														</>
+													)}
+													{clickedUser && clickedUser.id !== currentUser.id && ac.can(getRole(board.users, currentUser.id)).updateOwn('board').granted && (
+														<RemoveUserButton onClick={() => { setShowSureToLeave(true) }}>Remove from board</RemoveUserButton>
 													)}
 												</div>
 											</UserInfoCardContainer>
+										)}
+										{clickedUser && showSureToLeave && (
+											<div>
+												<LeavePopUpContainer>
+													<LeaveText>
+														{clickedUser.id === currentUser.id ? (
+															'Are you sure you want to leave the board?'
+														) : (
+															'Are you sure you want to remove this user from the board?'
+														)}
+													</LeaveText>
+													<CloseButton warning_light onClick={() => { setShowSureToLeave(false) }}>✕</CloseButton>
+												</LeavePopUpContainer>
+												<LeaveButton warning>
+													{clickedUser.id === currentUser.id ? (
+														'Leave'
+													) : (
+														'Remove'
+													)}
+												</LeaveButton>
+											</div>
 										)}
 									</Dropdown>
 								</UsersContainer>
