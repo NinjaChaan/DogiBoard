@@ -89,7 +89,7 @@ const Dropdown = ({
 	// check if any provided ids element clicked
 	const idsContain = (target) => {
 		for (let i = 0; i < ids.length; i++) {
-			if (document.getElementById(ids[i]).contains(target)) {
+			if (document.getElementById(ids[i]) && document.getElementById(ids[i]).contains(target)) {
 				return true
 			}
 		}
@@ -105,7 +105,7 @@ const Dropdown = ({
 			setWidth(width)
 		}
 		// check if menu itself, parent of menu or any provided element clicked
-		if (menu.current.contains(e.target) || parent.contains(e.target) || (ids && idsContain(e.target))) {
+		if (menu.current.contains(e.target) || (parent && parent.contains(e.target)) || (ids && idsContain(e.target))) {
 			return
 		}
 		setShowMenu(false)

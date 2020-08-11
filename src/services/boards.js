@@ -55,6 +55,15 @@ const inviteUser = (id, userId) => {
 	return request.then((response) => response.data).catch((error) => (error.message))
 }
 
+const removeUser = (id, userId) => {
+	const request = axios.put(`${baseUrl}/removeUser/${id}`, userId, {
+		headers: {
+			Authorization: `Bearer ${store.getState().user.token}`
+		}
+	})
+	return request.then((response) => response.data).catch((error) => (error.message))
+}
+
 const respondToInvitation = (id, newObject) => {
 	const request = axios.put(`${baseUrl}/invitationResponse/${id}`, newObject, {
 		headers: {
@@ -76,6 +85,7 @@ export default {
 	updateBoard,
 	remove,
 	inviteUser,
+	removeUser,
 	respondToInvitation,
 	getUserRole
 }

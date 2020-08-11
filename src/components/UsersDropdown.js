@@ -285,6 +285,13 @@ const UsersDropdown = () => {
 		setShowUserInfoMenu(user !== clickedUser)
 	}
 
+	const removeUser = () => {
+		boardService.removeUser(board.id, { userId: clickedUser.id })
+			.then((response) => {
+				console.log('remove response', response)
+			})
+	}
+
 	return (
 		<div style={{ userSelect: 'none', display: 'flex', maxHeight: '45px' }} className="col" onClick={() => { setShowSureToLeave(false) }}>
 			<UsersButtonContainer>
@@ -335,7 +342,7 @@ const UsersDropdown = () => {
 													</LeaveText>
 													<CloseButton warning_light onClick={() => { setShowSureToLeave(false) }}>✕</CloseButton>
 												</LeavePopUpContainer>
-												<LeaveButton warning>
+												<LeaveButton warning onClick={removeUser}>
 													{clickedUser.id === currentUser.id ? (
 														'Leave'
 													) : (

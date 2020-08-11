@@ -161,7 +161,7 @@ boardRouter.put('/inviteUser/:id', async (request, response, next) => {
 				User.findById(body.userId).then((foundUser) => {
 					if (foundUser) {
 						const userToAdd = {
-							_id: mongoose.Types.ObjectId(body.userId),
+							id: body.userId,
 							role: 'user'
 						}
 						const board = ({
@@ -181,6 +181,64 @@ boardRouter.put('/inviteUser/:id', async (request, response, next) => {
 								})
 							} else {
 								response.status(400).json({ error: 'User already exists on this board' })
+							}
+						} else {
+							response.status(401).json({ error: 'You are not authorized to edit this board' })
+						}
+					} else {
+						response.status(404).json({ error: 'Couldn\'t find such user' })
+					}
+				}).catch((error) => {
+					response.status(404)
+					next(error)
+				})
+			} else {
+				response.status(404)
+			}
+		}).catch((error) => next(error))
+})
+
+boardRouter.put('/removeUser/:id', async (request, response, next) => {
+	const { body } = request
+
+	const user = await getUserUtil.getUser(request, response)
+
+	Board.findById(request.params.id)
+		.then((foundBoard) => {
+			if (foundBoard) {
+				User.findById(body.userId).then((foundUser) => {
+					if (foundUser) {
+						const lists = foundBoard.lists
+						console.log('lists before', lists)
+						for (let i = 0; i < foundBoard.lists.length; i++) {
+							for (let j = 0; j < foundBoard.lists[i].cards.length; j++) {
+								if (foundBoard.lists[i].cards[j].members) {
+									console.log('members before', foundBoard.lists[i].cards[j].members)
+									lists[i].cards[j].members = foundBoard.lists[i].cards[j].members.filter((u) => u !== body.userId)
+								}
+							}
+						}
+						console.log('lists after', lists)
+						const board = ({
+							...foundBoard.toJSON(),
+							users: foundBoard.users.filter((u) => u.id !== body.userId),
+							lists
+						})
+						console.log('board users after filter', foundBoard.users.filter((u) => u.id !== body.userId))
+						if (boardIncludesUser(foundBoard, user._id)) {
+							if (boardIncludesUser(foundBoard, foundUser._id)) {
+								Board.updateOne({ _id: request.params.id }, board).then(() => {
+									console.log('user boards after filter', foundUser.boards.filter((b) => b.id !== foundBoard.id))
+									const updatedUser = ({
+										...foundUser.toJSON(),
+										boards: foundUser.boards.filter((b) => b.id !== foundBoard.id)
+									})
+									User.updateOne({ _id: foundUser._id }, updatedUser).then(() => {
+										response.json({ response: `${foundUser.username} removed from ${foundBoard.name}`, data: updatedUser })
+									})
+								})
+							} else {
+								response.status(400).json({ error: 'User already doesn\'t exist on this board' })
 							}
 						} else {
 							response.status(401).json({ error: 'You are not authorized to edit this board' })
