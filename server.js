@@ -58,8 +58,10 @@ app.get('/', (req, res) => {
 app.get('/login', (req, res) => {
 	res.sendFile(path.join(__dirname, 'index.html'))
 })
+app.get('/signup', (req, res) => {
+	res.sendFile(path.join(__dirname, 'index.html'))
+})
 app.get('/boards', (req, res) => {
-	console.log('trying to boards')
 	res.sendFile(path.join(__dirname, 'index.html'))
 })
 app.get('/profile/*', (req, res) => {

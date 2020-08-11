@@ -88,6 +88,11 @@ const Page = ({ dispatch }) => {
 										? <Redirect to="/boards" />
 										: <LoginPage />}
 								</Route>
+								<Route path="/signup">
+									{(user.loggedIn && tokenChecked)
+										? <Redirect to="/boards" />
+										: <LoginPage />}
+								</Route>
 
 								{user.loggedIn && <Route path="/profile/:id" component={ProfilePage} />}
 

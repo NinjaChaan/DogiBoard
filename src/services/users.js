@@ -52,7 +52,7 @@ const getMany = (ids) => Promise.all(ids.map((id) => getOneCached(id))
 
 const create = (newObject) => {
 	const request = axios.post(baseUrl, newObject)
-	return request.then((response) => response.data)
+	return request.then((response) => response).catch((error) => error.response)
 }
 
 const update = (id, newObject) => {

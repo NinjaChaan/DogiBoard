@@ -16,7 +16,7 @@ usersRouter.post('/', async (request, response, next) => {
 	const { body } = request
 
 	if (body.password.length < 7) {
-		response.status(400).json({ error: 'Password is too short' })
+		response.status(400).json({ error: 'Password is too short (min 7 characters)' })
 	}
 
 	const passwordHash = await hashPassword(body.password)
@@ -40,7 +40,8 @@ usersRouter.post('/', async (request, response, next) => {
 				b: Math.floor(Math.random() * 256)
 			},
 			initials,
-			gravatarEmail: body.email
+			gravatarEmail: body.email,
+			avatarType: 'gravatar'
 		}
 	})
 

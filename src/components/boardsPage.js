@@ -258,7 +258,7 @@ const BoardsPage = ({ dispatch }) => {
 	return (
 		<div className="container" style={{ marginTop: '60px' }} onClick={closeCreateBoard}>
 			<DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
-				{boards.length > 0
+				{boards
 					&& (
 						<>
 							<Title>Boards</Title>

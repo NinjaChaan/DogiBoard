@@ -167,13 +167,15 @@ const TopBar = ({ dispatch }) => {
 								<UserMenuButton link_transparent id="profileMenuButton" onClick={() => { setShowProfileMenu(!showProfileMenu) }}><UserAvatar size="45" user={user} noBorder /></UserMenuButton>
 							</UserMenuContainer>
 							<Dropdown show={showProfileMenu || false} setShowMenu={setShowProfileMenu} parentId="profileMenuButton" width={200} position={{ top: '50px', right: '0px' }} noTopBorder>
-								<Link to={`/profile/${user.id}`}>
-									<LabelDropdownButton light onClick={() => setShowProfileMenu(false)}>
-										<ButtonContainer>
-											Profile
-										</ButtonContainer>
-									</LabelDropdownButton>
-								</Link>
+								{user && (
+									<Link to={`/profile/${user.id}`}>
+										<LabelDropdownButton light onClick={() => setShowProfileMenu(false)}>
+											<ButtonContainer>
+												Profile
+											</ButtonContainer>
+										</LabelDropdownButton>
+									</Link>
+								)}
 								<Link to="/login">
 									<LabelDropdownButton light onClick={LogoutButtonPressed}>
 										<ButtonContainer>
