@@ -272,7 +272,7 @@ const CardWindowContainer = ({ dispatch }) => {
 										<UsersContainer id="usersContainer">
 											{members.map((member) => (
 												<div key={member.id} style={{ margin: '0 3px' }}>
-													<UsersUserButton link_transparent id={`userButton-${member.id}`} key={member.id} onClick={() => { openUserInfoMenu(member) }}><UserAvatar user={member} size="40" noBorder /></UsersUserButton>
+													<UsersUserButton link_transparent="true" id={`userButton-${member.id}`} key={member.id} onClick={() => { openUserInfoMenu(member) }}><UserAvatar user={member} size="40" noBorder /></UsersUserButton>
 												</div>
 											))}
 											<Dropdown show={showUserMenu || false} setShowMenu={setShowUserMenu} parentId={userInfoId} width={300} position={userInfoPos}>

@@ -1,7 +1,6 @@
 require('dotenv').config()
 const _ = require('underscore')
 const boardRouter = require('express').Router()
-const mongoose = require('mongoose')
 const User = require('../models/user')
 const Board = require('../models/board')
 const getUserUtil = require('../src/utils/getUser')
@@ -129,10 +128,15 @@ boardRouter.post('/', async (request, response, next) => {
 
 	const user = await getUserUtil.getUser(request, response)
 
+	const userToAdd = {
+		role: 'admin',
+		id: user._id
+	}
+
 	const board = new Board({
 		name: body.name,
 		lists: body.lists || [],
-		users: [user._id],
+		users: [userToAdd],
 		creator: user._id
 	})
 

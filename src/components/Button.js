@@ -33,6 +33,7 @@ const Button = styled.button`
 		|| (props.link && props.theme.colors.link.backgroundColor)
 		|| (props.link_transparent && props.theme.colors.link_transparent.backgroundColor)
 		|| (props.disabled && props.theme.colors.disabled.backgroundColor)
+		|| (props.transparent && 'transparent')
 		|| props.theme.colors.primary.backgroundColor
 	};
 	
@@ -46,6 +47,7 @@ const Button = styled.button`
 		|| (props.link && props.theme.colors.link.color)
 		|| (props.link_transparent && props.theme.colors.link_transparent.color)
 		|| (props.disabled && props.theme.colors.disabled.color)
+		|| (props.transparent && props.theme.colors.primary.color)
 		|| props.theme.colors.primary.color
 	};
 	
@@ -60,6 +62,7 @@ const Button = styled.button`
 		|| (props.link && props.theme.colors.link.hover.backgroundColor)
 		|| (props.link_transparent && props.theme.colors.link_transparent.hover.backgroundColor)
 		|| (props.disabled && props.theme.colors.disabled.hover.backgroundColor)
+		|| (props.transparent && 'transparent')
 		|| (props.theme.colors.primary.hover.backgroundColor)
 	};
 
@@ -73,6 +76,7 @@ const Button = styled.button`
 		|| (props.link && props.theme.colors.link.hover.color)
 		|| (props.link_transparent && props.theme.colors.link_transparent.hover.color)
 		|| (props.disabled && props.theme.colors.disabled.hover.color)
+		|| (props.transparent && props.theme.colors.primary.color)
 		|| (props.theme.colors.primary.hover.color)
 	};
 		outline: none;
@@ -94,6 +98,7 @@ const Button = styled.button`
 		|| (props.link && props.theme.colors.link.focus.backgroundColor)
 		|| (props.link_transparent && props.theme.colors.link_transparent.focus.backgroundColor)
 		|| (props.disabled && props.theme.colors.disabled.focus.backgroundColor)
+		|| (props.transparent && 'transparent')
 		|| (props.theme.colors.primary.focus.backgroundColor)
 	};
 
@@ -107,6 +112,7 @@ const Button = styled.button`
 		|| (props.link && props.theme.colors.link.focus.color)
 		|| (props.link_transparent && props.theme.colors.link_transparent.focus.color)
 		|| (props.disabled && props.theme.colors.disabled.focus.color)
+		|| (props.transparent && props.theme.colors.primary.color)
 		|| (props.theme.colors.primary.focus.color)
 	};
 }

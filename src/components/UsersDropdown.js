@@ -286,6 +286,8 @@ const UsersDropdown = () => {
 	}
 
 	const removeUser = () => {
+		setShowSureToLeave(false)
+		setShowUserInfoMenu(false)
 		boardService.removeUser(board.id, { userId: clickedUser.id })
 			.then((response) => {
 				console.log('remove response', response)
