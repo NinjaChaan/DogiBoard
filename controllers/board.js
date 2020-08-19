@@ -223,19 +223,27 @@ boardRouter.put('/removeUser/:id', async (request, response, next) => {
 							}
 						}
 						console.log('lists after', lists)
+						const newUsers = foundBoard.users.filter((u) => u.id !== body.userId)
+						if (newUsers.length < 2) {
+							newUsers[Math.floor(Math.random() * newUsers.length)].role = 'admin'
+						}
 						const board = ({
 							...foundBoard.toJSON(),
-							users: foundBoard.users.filter((u) => u.id !== body.userId),
+							users: newUsers,
 							lists
 						})
 						console.log('board users after filter', foundBoard.users.filter((u) => u.id !== body.userId))
 						if (boardIncludesUser(foundBoard, user._id)) {
 							if (boardIncludesUser(foundBoard, foundUser._id)) {
 								Board.updateOne({ _id: request.params.id }, board).then(() => {
-									console.log('user boards after filter', foundUser.boards.filter((b) => b.id !== foundBoard.id))
+									console.log('found id', foundBoard.id)
+									console.log('first id', foundUser.boards[1])
+									console.log('first id stringi', JSON.stringify(foundUser.boards[1]))
+									console.log('equal?', _.isEqual(foundUser.boards[1], foundBoard._id))
+									console.log('user boards after filter', foundUser.boards.filter((b) => !_.isEqual(b, foundBoard._id)))
 									const updatedUser = ({
 										...foundUser.toJSON(),
-										boards: foundUser.boards.filter((b) => b.id !== foundBoard.id)
+										boards: foundUser.boards.filter((b) => !_.isEqual(b, foundBoard._id))
 									})
 									User.updateOne({ _id: foundUser._id }, updatedUser).then(() => {
 										response.json({ response: `${foundUser.username} removed from ${foundBoard.name}`, data: updatedUser })

@@ -129,7 +129,7 @@ usersRouter.put('/:id/boards', async (request, response) => {
 						boards: body.boards || foundUser.boards,
 					})
 					User.updateOne({ _id: request.params.id }, updatedUser).then(() => {
-						response.json({ response: `${foundUser.username} updated` })
+						response.json({ response: `${foundUser.username} updated`, data: updatedUser })
 					})
 				} else {
 					response.status(401).json({ error: 'You are not authorized to edit this user' })

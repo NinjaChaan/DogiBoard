@@ -198,11 +198,11 @@ const LoginPage = ({ dispatch }) => {
 
 	const checkPasswordValidity = () => {
 		const pass = document.getElementById('passwordField').value
-		let passAgain
+		let passAgain = null
 		if (document.getElementById('passwordFieldAgain')) {
 			passAgain = document.getElementById('passwordFieldAgain').value
 		}
-		if (pass.length > 0 && passAgain.length > 0) {
+		if (pass.length > 0 && passAgain &&  passAgain.length > 0) {
 			if (pass !== passAgain) {
 				setStatusType('error')
 				setStatusMessage('Password and password confirmation don\'t match')

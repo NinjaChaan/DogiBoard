@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { connect, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
@@ -12,7 +12,6 @@ import Button from './Button'
 import { setBoard, updateUser, updateBoards } from '../redux/actions/index'
 import boardService from '../services/boards'
 import userService from '../services/users'
-
 
 const BoardButton = styled(Button)`
 	height: max-content;
@@ -130,7 +129,8 @@ const BoardNameInput = styled.input`
 `
 
 const BoardRenameInput = styled.input`
-	width: 80%;
+	width: 78%;
+	height: 36px;
 	padding: .375rem .75rem;
 	padding-left: 0;
 	border-radius: 4px;
@@ -140,7 +140,7 @@ const BoardRenameInput = styled.input`
 	outline: none;
 	color: white;
 	font-weight: 600;
-
+	/* border: ${(props) => props.failedRename && 'solid rgba(255,0,0,0.75)'}; */
 	&::placeholder{
 		color: rgba(255,255,255,0.75);
 	}
@@ -329,7 +329,7 @@ const BoardsPage = ({ dispatch }) => {
 		const newBoard = {
 			name: newBoardName
 		}
-		boardService.createBoard(newBoard).then((res) => {
+		boardService.createBoard(newBoard).then(() => {
 			userService.getOne(user.id).then((u) => {
 				console.log(u)
 				dispatch(updateUser(u.data))
@@ -354,8 +354,28 @@ const BoardsPage = ({ dispatch }) => {
 		setShowHamburgerMenu(!showHamburgerMenu)
 	}
 
-	const leaveBoard = (board) => {
-
+	const leaveBoard = () => {
+		console.log(clickedBoard)
+		setShowSureToLeave(false)
+		setShowHamburgerMenu(false)
+		// const newUsers = clickedBoard.users.filter((u) => u.id !== user.id)
+		// newUsers[Math.floor(Math.random() * newUsers.length)].role = 'admin'
+		// const updatedBoard = {
+		// 	...clickedBoard,
+		// 	users: newUsers
+		// }
+		// console.log(updatedBoard)
+		// boardService.updateBoard(clickedBoard.id, updatedBoard).then((response) => {
+		// 	console.log(response)
+		// })
+		boardService.removeUser(clickedBoard.id, { userId: user.id })
+			.then((response) => {
+				console.log('remove response', response)
+				userService.getOne(user.id).then((u) => {
+					console.log(u)
+					dispatch(updateUser(u.data))
+				})
+			})
 	}
 
 	const removeBoard = (board) => {
@@ -363,12 +383,15 @@ const BoardsPage = ({ dispatch }) => {
 	}
 
 	const rename = (board) => {
-		console.log('reanme')
 		setRenaming(false)
-
 		if (newBoardName.length < 3) {
-			console.log('reanme bye')
-			console.log('new', newBoardName)
+			// if (newBoardName.length === 0) {
+			// 	setFailedRename(false)
+			// 	setRenaming(false)
+			// 	return
+			// }
+			// setFailedRename(true)
+			setNewBoardName('')
 			return
 		}
 
@@ -389,6 +412,7 @@ const BoardsPage = ({ dispatch }) => {
 			}
 		}
 		dispatch(updateUser(updatedUser))
+		setNewBoardName('')
 	}
 
 	const handleTextChange = (event) => {
@@ -399,7 +423,6 @@ const BoardsPage = ({ dispatch }) => {
 		const listener = (event) => {
 			if (event.code === 'Enter' || event.code === 'NumpadEnter') {
 				if (renaming && clickedBoard) {
-					console.log('haloo2')
 					rename(clickedBoard)
 				}
 			}
@@ -425,7 +448,7 @@ const BoardsPage = ({ dispatch }) => {
 											{...provided.droppableProps}
 										>
 											{
-												boards.map((board, index) => (
+												boards.map((board) => (
 													// <Draggable
 													// 	draggableId={board.id}
 													// 	index={index}
@@ -480,9 +503,10 @@ const BoardsPage = ({ dispatch }) => {
 
 															{renaming && board.id === clickedBoard.id && (
 																<BoardRenameInput
+																	id={`rename-${board.id}`}
 																	autoFocus
 																	onChange={handleTextChange}
-																	onBlur={() => { console.log('blur'); rename(board) }}
+																	onBlur={() => { rename(board) }}
 																	placeholder={board.name}
 																/>
 															)}
