@@ -341,25 +341,48 @@ boardRouter.put('/:id', async (request, response, next) => {
 		})
 })
 
-boardRouter.delete('/:id', async (request, response, next) => {
-	const user = await getUserUtil.getUser(request, response)
+boardRouter.delete('/:id', (request, response, next) => {
+	getUserUtil.getUser(request, response).then((user) => {
 
-	Board.findById(request.params.id)
-		.then((foundBoard) => {
-			if (foundBoard) {
-				if (_.isEqual(foundBoard.creator, user._id)) {
+		Board.findById(request.params.id)
+			.then((foundBoard) => {
+				if (foundBoard) {
+					for (let i = 0; i < foundBoard.users.length; i++) {
+						User.findById(foundBoard.users[i].id)
+							.then((foundUser) => {
+								if (foundUser) {
+									console.log(`${foundUser.id} boards before`, foundUser.boards)
+									console.log(foundUser.boards[1])
+									console.log(foundBoard._id)
+									console.log('equal? ', _.isEqual(foundUser.boards[1], foundBoard._id))
+									const updatedUser = ({
+										...foundUser.toJSON(),
+										boards: foundUser.boards ? foundUser.boards.filter((b) => !_.isEqual(b, foundBoard._id)) : [],
+										invites: foundUser.invites ? foundUser.invites.filter((b) => !_.isEqual(b, foundBoard._id)) : []
+									})
+									console.log(`${foundUser.id} boards after`, updatedUser.boards)
+									User.updateOne({ _id: foundUser._id }, updatedUser).then((res) => {
+										console.log('removed user', res)
+										// response.json({ response: `${foundUser.username} removed from ${foundBoard.name}`, data: updatedUser })
+									})
+								} else {
+									console.log('user not found?!?')
+								}
+							}).catch((error) => {
+								console.log(error)
+							})
+					}
 					Board.deleteOne({ _id: request.params.id }).then(() => {
-						response.status(200)
+						console.log('sent ok')
+						response.json({ status: 'ok' })
 					})
 				} else {
-					response.status(401).json({ error: 'You are not authorized to remove this board' })
+					console.log('foundboard not found', foundBoard)
+					console.log('request.params', request.params)
+					response.status(404)
 				}
-			} else {
-				console.log('foundboard not found', foundBoard)
-				console.log('request.params', request.params)
-				response.status(404)
-			}
-		})
+			})
+	})
 })
 
 module.exports = boardRouter

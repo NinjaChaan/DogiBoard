@@ -214,7 +214,6 @@ const LeavePopUpContainer = styled.div`
 
 const LeaveText = styled.span`
 	flex: 0 0 100%;
-	text-align: center;
 `
 const CloseButton = styled(Button)`
 	flex: 0 0 5%;
@@ -228,6 +227,11 @@ const CloseButton = styled(Button)`
 const LeaveButton = styled(Button)`
 	width: 45%;
 	margin: 0;
+`
+
+const WarningText = styled.span`
+	color: red;
+	font-weight: 600;
 `
 
 const BoardsPage = ({ dispatch }) => {
@@ -343,6 +347,7 @@ const BoardsPage = ({ dispatch }) => {
 
 	const clickHamburgerMenu = (board) => {
 		setShowSureToLeave(false)
+		setShowSureToRemove(false)
 		setClickedBoard(board)
 		const element = document.getElementById(`hamburgerButton-${board.id}`)
 		const rect = element.getBoundingClientRect()
@@ -357,6 +362,7 @@ const BoardsPage = ({ dispatch }) => {
 	const leaveBoard = () => {
 		console.log(clickedBoard)
 		setShowSureToLeave(false)
+		setShowSureToRemove(false)
 		setShowHamburgerMenu(false)
 		// const newUsers = clickedBoard.users.filter((u) => u.id !== user.id)
 		// newUsers[Math.floor(Math.random() * newUsers.length)].role = 'admin'
@@ -378,8 +384,19 @@ const BoardsPage = ({ dispatch }) => {
 			})
 	}
 
-	const removeBoard = (board) => {
+	const removeBoard = () => {
+		setShowSureToLeave(false)
+		setShowSureToRemove(false)
+		setShowHamburgerMenu(false)
 
+		boardService.remove(clickedBoard.id)
+			.then((response) => {
+				console.log('remove response', response)
+				userService.getOne(user.id).then((u) => {
+					console.log(u)
+					dispatch(updateUser(u.data))
+				})
+			})
 	}
 
 	const rename = (board) => {
@@ -547,7 +564,9 @@ const BoardsPage = ({ dispatch }) => {
 													<div>
 														<LeavePopUpContainer>
 															<LeaveText>
-																Are you sure you want to delete the board?
+																Are you certain you want to
+																<WarningText> permanently </WarningText>
+																delete this board?
 															</LeaveText>
 														</LeavePopUpContainer>
 														<div style={{ display: 'flex' }}>

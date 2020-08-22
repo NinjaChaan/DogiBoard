@@ -81,25 +81,27 @@ const Button = styled.button`
 	};
 		outline: none;
 	}
+
 	&:focus {
-	border: transparent;
-	outline: none;
-}
+		border: transparent;
+		outline: none;
+	}
+
 	&:active {
-	border: transparent;
-	outline: none;
-	background-color: ${(props) =>
-		(props.primary && props.theme.colors.primary.focus.backgroundColor)
-		|| (props.success && props.theme.colors.success.focus.backgroundColor)
-		|| (props.warning && props.theme.colors.warning.focus.backgroundColor)
-		|| (props.warning_light && !isMobile && props.theme.colors.warning_light.focus.backgroundColor)
-		|| (props.warning_light && isMobile && props.theme.colors.warning.focus.backgroundColor)
-		|| (props.light && props.theme.colors.light.focus.backgroundColor)
-		|| (props.link && props.theme.colors.link.focus.backgroundColor)
-		|| (props.link_transparent && props.theme.colors.link_transparent.focus.backgroundColor)
-		|| (props.disabled && props.theme.colors.disabled.focus.backgroundColor)
-		|| (props.transparent && 'transparent')
-		|| (props.theme.colors.primary.focus.backgroundColor)
+		border: transparent;
+		outline: none;
+		background-color: ${(props) =>
+			(props.primary && props.theme.colors.primary.focus.backgroundColor)
+			|| (props.success && props.theme.colors.success.focus.backgroundColor)
+			|| (props.warning && props.theme.colors.warning.focus.backgroundColor)
+			|| (props.warning_light && !isMobile && props.theme.colors.warning_light.focus.backgroundColor)
+			|| (props.warning_light && isMobile && props.theme.colors.warning.focus.backgroundColor)
+			|| (props.light && props.theme.colors.light.focus.backgroundColor)
+			|| (props.link && props.theme.colors.link.focus.backgroundColor)
+			|| (props.link_transparent && props.theme.colors.link_transparent.focus.backgroundColor)
+			|| (props.disabled && props.theme.colors.disabled.focus.backgroundColor)
+			|| (props.transparent && 'transparent')
+			|| (props.theme.colors.primary.focus.backgroundColor)
 	};
 
 	color: ${(props) =>
@@ -117,9 +119,12 @@ const Button = styled.button`
 	};
 }
 	&:visited {
-	border: transparent;
-	outline: none;
-}
+		border: transparent;
+		outline: none;
+	}
+	&:last-of-type {
+		margin-bottom: 0px;
+	}
 `
 
 export default Button

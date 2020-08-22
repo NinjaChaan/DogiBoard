@@ -74,8 +74,12 @@ const respondToInvitation = (id, newObject) => {
 }
 
 const remove = (id) => {
-	const request = axios.delete(`${baseUrl}/${id}`)
-	return request.then((response) => response.data).catch((error) => (error.message))
+	const request = axios.delete(`${baseUrl}/${id}`, {
+		headers: {
+			Authorization: `Bearer ${store.getState().user.token}`
+		}
+	})
+	return request.then((response) => response.data).catch((error) => console.log('ERROR', error.message))
 }
 
 export default {
